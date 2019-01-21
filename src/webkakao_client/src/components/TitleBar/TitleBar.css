@@ -1,0 +1,37 @@
+  .titleContainer div {
+    display: inline-block;
+    height: 50 px;
+    
+  }
+  
+  .inline {
+    display: inline-block;
+  }
+
+  .title {
+    width: 70%;
+    height: 100%;
+  }
+
+  .btn {
+    width: 10%;
+    height: 100%;
+    text-align: center;
+    margin: 2% 0% 0%;
+  }
+
+  .input {
+    width: 95%;
+    margin: 2.5%;
+    height: 100%;
+    line-height: 100%;
+  }
+  
+  .logo {
+    width: 25px;
+    height: 25px;
+  }
+
+  .border {
+    border: 1px solid black;
+  }
