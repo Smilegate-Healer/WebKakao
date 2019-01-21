@@ -10,8 +10,8 @@ class ListItem extends React.Component {
     const { item } = this.props
 
     return (
-      <div className="ListItem">
-        <div className="logoContainer">
+      <div className="ListItem" onClick={this.props.onClick}>
+        <div className="logoContainer" onClick={this.props.onLogoClick}>
           {item.logo}
         </div>
 

@@ -6,10 +6,28 @@ import './styles.scss'
 
 class ChatroomList extends React.Component {
 
+
+  _onItemClick = (e, idx) => {
+    alert('You click the chatroom -> open the chatroom ' + idx)
+  }
+
+  _onLogoClick = (e, idx) => {
+    alert('on logo click of ' + idx)
+    e.stopPropagation() // only for children click event 
+  }
+
   render() {
     return (
       <div className="List">
-        {this.props.chatrooms.map((v, idx) => <ListItem item={v} key={v.name}/>)}
+        {
+          this.props.chatrooms.map((v, idx) => 
+            <ListItem 
+              item={v} 
+              key={v.name} 
+              onClick={e => this._onItemClick(e, idx)}
+              onLogoClick={e => this._onLogoClick(e, idx)}
+              />
+          )}
       </div>
     )
   }
