@@ -1,6 +1,5 @@
 import React from 'react';
 import { Component } from 'react';
-import { observer } from 'mobx-react';
 import './TitleBar.css';
 import talkLogo from '../../resources/LeftContainer/TitleBar/talk.png';
 import settingLogo from '../../resources/LeftContainer/TitleBar/setting.png';
@@ -45,8 +44,8 @@ class Btn extends Component {
     render() {
         const logo = this._renderLogo();
         return (
-            <div className="inline btn" onClick={this.onClickButton}>
-                <img className="logo" src={logo} />
+            <div className="inline title_bar_btn" onClick={this.onClickButton}>
+                <img className="title_bar_logo" src={logo} />
             </div>
         );
     }

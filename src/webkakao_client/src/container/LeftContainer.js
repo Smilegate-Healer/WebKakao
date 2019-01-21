@@ -2,6 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import TitleBar from '../components/TitleBar/index';
 import './Container.css';
+import MenuBar from '../components/MenuBar/index';
 
 class LeftContainer extends Component {
 
@@ -19,8 +20,10 @@ class LeftContainer extends Component {
 
     render() {
         return (
-            <div className="LeftContainer">
+            <div className="LeftContainer inline">
                 <TitleBar className="titleBar"></TitleBar>
+                <div className="temp">temp</div>
+                <MenuBar className="menuBar"></MenuBar>
             </div>
         );
     }

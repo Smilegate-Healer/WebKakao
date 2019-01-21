@@ -17,8 +17,8 @@ class Title extends Component {
 
     render() {
         return (
-            <div className="inline title">
-                <input className="input"
+            <div className="inline title_bar_title">
+                <input className="title_bar_input"
                     placeholder={this.props.title}
                     value={this.state.name}
                     onChange={this.handleChange}

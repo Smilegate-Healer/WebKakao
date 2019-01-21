@@ -1,6 +1,5 @@
 import React from 'react';
 import { Component } from 'react';
-import { observer } from 'mobx-react';
 import Title from './Title';
 import Btn from './Btn'
 import './TitleBar.css';
@@ -32,10 +31,10 @@ class TitleBar extends Component {
     render() {
         return (
             <div className="titleContainer border">
-                <Title className="title" title={ this._renderTitle() }></Title>
-                <Btn className="btn" btnName={ this.state.firstBtn }></Btn>
-                <Btn className="btn" btnName={ this.state.secondBtn }></Btn>
-                <Btn className="btn" btnName={ this.state.thirdBtn }></Btn>
+                <Title className="title_bar_title" title={ this._renderTitle() }></Title>
+                <Btn className="title_bar_btn" btnName={ this.state.firstBtn }></Btn>
+                <Btn className="title_bar_btn" btnName={ this.state.secondBtn }></Btn>
+                <Btn className="title_bar_btn" btnName={ this.state.thirdBtn }></Btn>
                 {/* Btn<NewChatBtn className="price">{item.price}원</NewChatBtn>
                 <SettingBtn className="price">{item.price}원</SettingBtn>
                 <div className="count">{item.count}</div>
