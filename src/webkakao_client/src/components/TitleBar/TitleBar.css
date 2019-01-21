@@ -1,0 +1,38 @@
+  .titleContainer {
+    height: 50 px;
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  .inline {
+    display: inline-block;
+  }
+
+  .title_bar_title {
+    width: 60%;
+    height: 100%;
+  }
+
+  .title_bar_btn {
+    width: 13%;
+    height: 100%;
+    text-align: center;
+    margin: 3% 0% 0%;
+  }
+
+  .title_bar_input {
+    width: 95%;
+    margin: 2.5%;
+    height: 100%;
+    line-height: 100%;
+    box-sizing : border-box;
+  }
+  
+  .title_bar_logo {
+    width: 20px;
+    height: 20px;
+  }
+
+  .border {
+    border: 1px solid black;
+  }
