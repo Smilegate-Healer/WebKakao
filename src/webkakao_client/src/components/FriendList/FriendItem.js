@@ -9,8 +9,8 @@ class FriendItem extends React.Component {
     const { info } = this.props
 
     return (
-      <div className="Item">
-        <div className="profileContainer">
+      <div className="Item" onClick={this.props.onClick}>
+        <div className="profileContainer" onClick={this.props.onProfileClick}>
           {info.profileImg}
         </div>
 
@@ -28,7 +28,9 @@ class FriendItem extends React.Component {
 }
 
 FriendItem.propTypes = {
-  info: PropTypes.object
+  info: PropTypes.object,
+  onClick: PropTypes.func,
+  onProfileClick: PropTypes.func
 }
 
 export default FriendItem
