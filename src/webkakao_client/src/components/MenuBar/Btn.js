@@ -1,6 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
-import './MenuBar.css';
+import './MenuBar.scss';
 import friendListLogo from '../../resources/LeftContainer/MenuBar/person.png';
 import chatroomListLogo from '../../resources/LeftContainer/MenuBar/talk.png';
 import optionLogo from '../../resources/LeftContainer/MenuBar/option.png';
