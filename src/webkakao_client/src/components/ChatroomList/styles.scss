@@ -11,14 +11,16 @@ $violet: #7950f2;
 .List {
   display: flex;
   flex-direction: column;
-  width: '100%';
+  width: 100%;
+  height: 100%;
 }
 
 .ListItem {
   display: flex;
   flex-direction: row;
+  min-height: 70px;
   width: 100%;
-  height: 50px;
+  height: 70px;
   align-items: stretch;
   
   .logoContainer {

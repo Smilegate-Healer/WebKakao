@@ -21,3 +21,25 @@
     width: 20px;
     height: 20px;
   }
+
+.menuContaine {
+  height: 50px;
+
+  .border {
+    border: 1px solid black;
+  }
+
+  .menuBarBtn {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    margin: 2% 0% 0%;
+  }
+
+  .menuBarLogo {
+    width: 20px;
+    height: 20px;
+  }
+
+
+}

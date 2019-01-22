@@ -1,8 +1,9 @@
 import React from 'react';
 import { Component } from 'react';
 import TitleBar from '../components/TitleBar/index';
-import './Container.css';
+import './Container.scss';
 import MenuBar from '../components/MenuBar/index';
+import ChatroomList from '../components/ChatroomList'
 
 class LeftContainer extends Component {
 
@@ -20,10 +21,10 @@ class LeftContainer extends Component {
 
     render() {
         return (
-            <div className="LeftContainer inline">
-                <TitleBar className="titleBar"></TitleBar>
-                <div className="temp">temp</div>
+            <div style={{height: "100%", width: "100%"}}>
                 <MenuBar className="menuBar"></MenuBar>
+                <TitleBar className="titleBar"></TitleBar>
+                <ChatroomList className="ChatroomList"></ChatroomList>
             </div>
         );
     }

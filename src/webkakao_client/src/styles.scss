@@ -1,0 +1,20 @@
+.root {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  align-items: stretch;
+  justify-content: center;
+
+  .leftContainer {
+    display: flex;
+    flex-basis: 350px;
+    flex-shrink: 0;
+    height: 100%;
+  }
+
+  .rightContainer {
+    flex: 1;
+    flex-shrink: 0;
+    height: 100%;
+  }
+}
