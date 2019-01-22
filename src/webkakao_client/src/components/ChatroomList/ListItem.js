@@ -10,7 +10,7 @@ class ListItem extends React.Component {
     const { item } = this.props
 
     return (
-      <div className="ListItem" onClick={this.props.onClick}>
+      <li className="ListItem" onClick={this.props.onClick}>
         <div className="logoContainer" onClick={this.props.onLogoClick}>
           {item.logo}
         </div>
@@ -27,7 +27,7 @@ class ListItem extends React.Component {
         <div className="dateContainer">
           {item.date}
         </div>
-      </div>
+      </li>
     )
   }
 }
