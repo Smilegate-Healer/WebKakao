@@ -1,0 +1,21 @@
+
+.ChatItem {
+
+  display: flex;
+  flex-direction: column;
+  
+  .profileContainer {
+    flex: 1
+  }
+
+  .senderMsgContainer {
+    display: flex;
+    flex-direction: row;
+
+  }
+
+  .timeContainer {
+    flex: 2
+
+  }
+}
