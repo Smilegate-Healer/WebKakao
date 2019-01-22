@@ -2,6 +2,7 @@
     height: 50 px;
     text-align: center;
     vertical-align: middle;
+    justify-content: center;
   }
   
   .inline {
@@ -10,7 +11,7 @@
 
   .title_bar_title {
     width: 60%;
-    height: 100%;
+    height: 80%;
   }
 
   .title_bar_btn {

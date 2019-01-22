@@ -13,7 +13,7 @@ class FriendList extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={`${this.props.className}`}>
         {
           this.props.friends.map((v, idx) => 
             <FriendItem 

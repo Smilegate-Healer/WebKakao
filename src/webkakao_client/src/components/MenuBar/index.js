@@ -7,7 +7,7 @@ class MenuBar extends Component {
 
     render() {
         return (
-            <div className="menuContainer border">
+            <div className={`${this.props.className} menuContainer border`}>
                 <Btn className="menuBarLogo" btnName='friendList'></Btn>
                 <Btn className="menuBarLogo" btnName='chatroomList'></Btn>
                 <Btn className="menuBarLogo" btnName='option'></Btn>

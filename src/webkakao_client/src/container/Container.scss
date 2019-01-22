@@ -1,14 +1,19 @@
-.titleBar {
-  flex-basis: 40px;
-  flex-shrink: 0;
-  text-align: center;
-}
+.LeftContainer {
+  display: flex;
+  flex-direction: column;
 
-.menuBar {
-  flex-basis: 40px;
-  flex-shrink: 0;
-}
+  .titleBar {
+    flex-basis: 40px;
+    flex-shrink: 0;
+    text-align: center;
+  }
 
-.ChatroomList {
-  flex: 1;
+  .menuBar {
+    flex-basis: 40px;
+    flex-shrink: 0;
+  }
+
+  .chatroomList {
+    flex: 1;
+  }
 }

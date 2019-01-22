@@ -30,7 +30,7 @@ class TitleBar extends Component {
 
     render() {
         return (
-            <div className="titleContainer border">
+            <div className={`${this.props.className} titleContainer border}`}>
                 <Title className="title_bar_title" title={ this._renderTitle() }></Title>
                 <Btn className="title_bar_btn" btnName={ this.state.firstBtn }></Btn>
                 <Btn className="title_bar_btn" btnName={ this.state.secondBtn }></Btn>

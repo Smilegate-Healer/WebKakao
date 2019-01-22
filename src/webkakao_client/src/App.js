@@ -9,10 +9,10 @@ class App extends Component {
     return (
       <div className="root">
         <div className="leftContainer">
-          <LeftContainer className="leftContainer"/>
+          <LeftContainer/>
         </div>
         <div className="rightContainer">
-          <RightContainer className="rightConatiner"/>
+          <RightContainer/>
         </div>
       </div>
     );
