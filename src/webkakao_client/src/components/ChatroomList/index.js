@@ -18,7 +18,7 @@ class ChatroomList extends React.Component {
 
   render() {
     return (
-      <div className={`${this.props.className} List`}>
+      <div className="List">
         {
           this.props.chatrooms.map((v, idx) => 
             <ListItem 

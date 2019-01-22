@@ -17,9 +17,9 @@ class LeftContainer extends Component {
   render() {
     return (
       <div className="LeftContainer">
-        <MenuBar className="menuBar" />
-        <TitleBar className="titleBar" />
-        <ChatroomList className="chatroomList" />
+        <MenuBar  />
+        <TitleBar  />
+        <ChatroomList />
       </div>
     );
   }

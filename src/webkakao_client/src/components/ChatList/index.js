@@ -1,14 +1,15 @@
 import React from 'react'
+import ChatItem from './ChatItem'
 import './styles.scss'
 
 class ChatList extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="List">
         {
           this.props.chats.map((v, idx) => 
-            <ChatList 
+            <ChatItem
               chat={v}
               key={v.time}
             />
