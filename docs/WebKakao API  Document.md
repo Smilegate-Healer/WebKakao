@@ -144,10 +144,10 @@
   <br/>
   <br/>
 
-## 3. GET FRIEND INFO
-  - 친구의 상세 정보를 요청하는 API 입니다.
+## 3. GET USER INFO
+  - 사용자의 상세 정보를 요청하는 API 입니다.
 
-| URL | /api/friend/info    |
+| URL | /api/user/info    |
 |-----|---------------------|
 
 <br/>
@@ -204,7 +204,8 @@
 #### 4.1.1 Specification
 | Key Name       | Value Type | Description             | Required |
 |----------------|------------|-------------------------|----------|
-| user_idx       | long       |  상대방의 유저 인덱스   | y        |
+| from_user_idx       | long       |  요청자의 유저 인덱스   | y        |
+| to_user_idx       | long       |  상대방의 유저 인덱스   | y        |
 | state          | int        |  요청 친구 상태         | y        |
   - state -> 0 = 숨김/차단 해제,  1 = 숨김  , 2 = 차단
   
@@ -212,7 +213,8 @@
 #### 4.1.2 Request Example
 ```
 {  
-   "user_idx":1,
+   "from_user_idx":1,
+   "to_user_idx":2,
    "state":2
 }
 ```
