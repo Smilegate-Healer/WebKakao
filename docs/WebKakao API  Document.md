@@ -422,7 +422,7 @@
 #### 8.2.1 Param Specification
 | Param Key Name | Value Type | Description                         | Required |
 |----------------|------------|-------------------------------------|----------|
-|  empty param   |            |                                     |          |
+| -   |       -     |     -                                |      -    |
   
 #### 8.2.2 Response Example
 ```
