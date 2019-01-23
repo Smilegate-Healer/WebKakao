@@ -69,7 +69,7 @@
 | Param Key Name | Value Type | Description                  | Required |
 |----------------|------------|------------------------------|----------|
 | user_idx       | long       | 상대방의 유저 인덱스         | y        |
-| user_name      | String(?)  | 상대방의 이름                | y        |
+| name           | String(?)  | 상대방의 이름                | y        |
 | profile_img    | String(?)  | 상대방의 프로필 사진(base64) | y        |
 | status_msg     | String(?)  | 상대방의 상태 메세지         | y        |
   
@@ -81,7 +81,7 @@
    "message":"success",
    "param":{  
       "user_idx":1,
-      "user_name":"홍성문",
+      "name":"홍성문",
       "profile_img":"base64",
       "status_msg":"상태메세지"
    }
@@ -122,7 +122,7 @@
 | Param Key Name | Value Type | Description                  | Required |
 |----------------|------------|------------------------------|----------|
 | user_idx       | long       | 상대방의 유저 인덱스         | y        |
-| user_name      | String(?)  | 상대방의 이름                | y        |
+| name           | String(?)  | 상대방의 이름                | y        |
 | profile_img    | String(?)  | 상대방의 프로필 사진(base64) | y        |
 | status_msg     | String(?)  | 상대방의 상태 메세지         | y        |
   
@@ -134,7 +134,7 @@
    "message":"success",
    "param":{  
       "user_idx":1,
-      "user_name":"홍성문",
+      "name":"홍성문",
       "profile_img":"base64",
       "status_msg":"상태메세지"
    }
@@ -276,7 +276,7 @@
 | UserInfo Key Name | Value Type | Description                  | Required |
 |----------------|------------|------------------------------|----------|
 | user_idx       | long       | 상대방의 유저 인덱스         | y        |
-| user_name      | String(?)  | 상대방의 이름                | y        |
+| name           | String(?)  | 상대방의 이름                | y        |
 | profile_img    | String(?)  | 상대방의 프로필 사진(base64) | y        |
 | status_msg     | String(?)  | 상대방의 상태 메세지         | y        |
 
@@ -291,13 +291,13 @@
       "list":[  
          {  
             "user_idx":1,
-            "user_name":"홍성문",
+            "name":"홍성문",
             "profile_img":"base64",
             "status_msg":"상태메세지"
          },
          {  
             "user_idx":2,
-            "user_name":"조영호",
+            "name":"조영호",
             "profile_img":"base64",
             "status_msg":"상태메세지"
          }
