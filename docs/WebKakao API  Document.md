@@ -6,6 +6,9 @@
 <br/>
 
 ## Common Response Data Type
+
+<br/>
+
 #### Specification
 
 | Param Key Name | Value Type | Description        | Required |
@@ -14,7 +17,7 @@
 | message        | String(?)  | 결과에 대한 메세지     | y        |
 | param          |      -     | API에 따른 Parameter | y        |
 
-  
+<br/> 
   
 #### Response Data Example
 ```
@@ -37,6 +40,9 @@
 
 | URL | /api/friend/request |
 |-----|---------------------|
+
+
+<br/>
 
 ### 1.1 RequestBody  
   
@@ -91,6 +97,8 @@
 | URL | /api/friend/search |
 |-----|---------------------|
 
+<br/>
+
 ### 2.1 RequestBody  
   
 #### 2.1.1 Specification
@@ -142,6 +150,8 @@
 | URL | /api/friend/info    |
 |-----|---------------------|
 
+<br/>
+
 ### 3.1 RequestBody  
   
 #### 3.1.1 Specification
@@ -187,6 +197,8 @@
 | URL | /api/friend/status  |
 |-----|---------------------|
 
+<br/>
+
 ### 4.1 RequestBody  
   
 #### 4.1.1 Specification
@@ -231,6 +243,8 @@
   
 | URL | /api/friend/list    |
 |-----|---------------------|
+
+<br/>
 
 ### 5.1 RequestBody  
   
@@ -299,6 +313,8 @@
 | URL | /api/chatroom/request |
 |-----|-----------------------|
 
+<br/>
+
 ### 6.1 RequestBody  
   
 #### 6.1.1 Specification
@@ -345,6 +361,8 @@
   
 | URL | /api/chatroom/checkin |
 |-----|-----------------------|
+
+<br/>
 
 ### 7.1 RequestBody  
   
@@ -393,10 +411,11 @@
 ## 8. CHECK OUT CHATROOM
   - 채팅방을 나가는 API 입니다.
   
-  <br/>
   
 | URL | /api/chatroom/checkout |
 |-----|------------------------|
+
+<br/>
 
 ### 8.1 RequestBody  
   
