@@ -287,26 +287,27 @@
 {  
    "resultCode":0,
    "message":"success",
-   "param":[  
-      {  
-         "user_idx":1,
-         "user_name":"홍성문",
-         "profile_img":"base64",
-         "status_msg":"상태메세지"
-      },
-      {  
-         "user_idx":2,
-         "user_name":"조영호",
-         "profile_img":"base64",
-         "status_msg":"상태메세지"
-      },
-      ...
-   ]
+   "param":{  
+      "list":[  
+         {  
+            "user_idx":1,
+            "user_name":"홍성문",
+            "profile_img":"base64",
+            "status_msg":"상태메세지"
+         },
+         {  
+            "user_idx":2,
+            "user_name":"조영호",
+            "profile_img":"base64",
+            "status_msg":"상태메세지"
+         }
+      ]
+   }
 }
 ```
   
-  <br/>
-  <br/>
+<br/>
+<br/>
   
   
 ## 6. REQUEST CHATROOM
@@ -455,3 +456,74 @@
   
   <br/>
   <br/>
+  
+  
+## 9. GET CHATROOM LIST
+  - 채팅방 목록을 요청하는 API 입니다.
+  
+  
+| URL | /api/chatroom/list |
+|-----|------------------------|
+
+<br/>
+
+### 9.1 RequestBody  
+  
+#### 9.1.1 Specification
+| Key Name       | Value Type | Description             | Required |
+|----------------|------------|-------------------------|----------|
+| user_idx       | long       |  요청자의 유저 인덱스   | y        |
+  
+
+#### 9.1.2 Request Example
+```
+{  
+   "user_idx":1
+}
+```
+
+<br/>
+### 9.2 ResponseBody  
+
+#### 9.2.1 Param Specification
+| Param Key Name | Value Type | Description                         | Required |
+|----------------|----------------------|---------------------------|----------|
+| list           | List<ChatroomInfo>       | 채팅방 목록 리스트          |   y      |
+
+##### 9.2.2 ChatroomInfo Specification
+  
+| UserInfo Key Name | Value Type | Description                  | Required |
+|-------------------|------------|------------------------------|----------|
+| chatroom_idx      | long       | 채팅방의 인덱스                  | y        |
+| start_msg_idx     | long       | 채팅방 참여 시점의 메세지 인덱스     | y        |
+| last_msg_idx      | long       | 메세지 인덱스                   | y        |
+| last_read_msg_idx | long       | 마지막으로 읽은 메세지 인덱스       | y        |
+
+
+
+  
+  
+#### 9.2.3 Response Example
+```
+{  
+   "resultCode":0,
+   "message":"success",
+   "param":{  
+      "list":[  
+         {  
+            "chatroom_idx":1,
+            "start_msg_idx":1,
+            "last_msg_idx":25,
+            "last_read_msg_idx":25
+         },
+         {  
+            "chatroom_idx":2,
+            "start_msg_idx":10,
+            "last_msg_idx":15,
+            "last_read_msg_idx":12
+         }
+      ]
+   }
+}
+```
+
