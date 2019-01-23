@@ -34,6 +34,7 @@ public class RedisService {
 	public void insertMessage(Message message, Long chatroom_idx) {
 		
 		HashOperations<String, String, String> idx_hash = redisTemplate.opsForHash();
+		
 		HashOperations<String, String, List> msg_hash = redisTemplate.opsForHash();
 		
 		String id = idx_hash.get("chatroomInfo", Long.toString(chatroom_idx));
