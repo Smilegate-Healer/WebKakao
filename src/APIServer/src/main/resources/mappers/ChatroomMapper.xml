@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webkakao.database.ChatroomMaper">
+
+	<insert id="insertChatroom" parameterType="com.webkakao.api.meodel.request.RequestChatroom" useGeneratedKeys="true" keyProperty="chatroom_idx">
+    	insert into chat_room (
+    		creator_idx
+    	) 
+    	values (
+    		#{from_user_idx}
+    	)
+    </insert>
+    
+    <insert id="checkInChatroom" parameterType="Map">
+		insert into chatroom_member (
+    		chatroom_idx,
+    		user_idx,
+    		last_read_msg_idx,
+    		start_msg_idx
+    	) 
+    	values (
+    		#{chatroom_idx},
+    		#{user_idx},
+    		#{last_read_msg_idx},
+    		#{start_msg_idx}
+    	)
+	</insert>
+	
+	<select id="getLastMsgIdx" parameterType="Long" resultType="Long">
+		select 
+			last_msg_idx
+		from 
+			chat_room
+		where
+			chatroom_idx = #{chatroom_idx};
+	</select>
+	
+	<select id="getChatroomList" parameterType="Long" resultMap="com.webkakao.api.meodel.ChatroomInfo">
+		select 
+	    	start_msg_idx,
+	    	last_read_msg_idx,
+	    	chat_room.chatroom_idx,
+	    	chat_room.last_msg_idx
+		from
+			chatroom_member
+		left join
+			chat_room
+		on
+			chatroom_member.chatroom_idx = chat_room.chatroom_idx
+		where user_idx = #{user_idx}; 
+	</select>
+
+</mapper>

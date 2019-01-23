@@ -2,6 +2,7 @@ package com.webkakao.api.model.request;
 
 public class RequestChatroom {
 
+	private long chatroom_idx;
 	private long from_user_idx;
 	private long to_user_idx;
 
@@ -19,6 +20,14 @@ public class RequestChatroom {
 
 	public void setTo_user_idx(long to_user_idx) {
 		this.to_user_idx = to_user_idx;
+	}
+
+	public long getChatroom_idx() {
+		return chatroom_idx;
+	}
+
+	public void setChatroom_idx(long chatroom_idx) {
+		this.chatroom_idx = chatroom_idx;
 	}
 
 }

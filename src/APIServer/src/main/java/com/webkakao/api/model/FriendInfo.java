@@ -3,7 +3,7 @@ package com.webkakao.api.model;
 public class FriendInfo {
 
 	private long user_idx;
-	private String user_name;
+	private String name;
 	private String profile_img;
 	private String status_msg;
 
@@ -15,12 +15,12 @@ public class FriendInfo {
 		this.user_idx = user_idx;
 	}
 
-	public String getUser_name() {
-		return user_name;
+	public String getName() {
+		return name;
 	}
 
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getProfile_img() {
