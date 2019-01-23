@@ -45,10 +45,14 @@ public class ChatroomServiceImpl implements ChatroomService {
 			Map<String, Object> map = new HashMap<String, Object>();
 
 			map.put("chatroom_idx", param.getChatroom_idx());
-			map.put("creator_idx", param.getFrom_user_idx());
+			map.put("user_idx", param.getFrom_user_idx());
 			map.put("last_read_msg_idx", 0);
 			map.put("start_msg_idx", 0);
 
+			chatroomMapper.checkInChatroom(map);
+			
+			map.put("user_idx", param.getTo_user_idx());
+			
 			chatroomMapper.checkInChatroom(map);
 
 		} catch (Exception e) {

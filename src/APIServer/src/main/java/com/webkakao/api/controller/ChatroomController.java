@@ -32,7 +32,7 @@ public class ChatroomController {
 		
 	}
 	
-	@RequestMapping(value = "/checkIn", method = RequestMethod.POST)
+	@RequestMapping(value = "/checkin", method = RequestMethod.POST)
 	public ResponseEntity<APIResponseWrapper> checkInChatroom(@RequestBody CheckInChatroom param) {
 		
 		APIResponseWrapper response = chatroomService.checkInChatroom(param);
