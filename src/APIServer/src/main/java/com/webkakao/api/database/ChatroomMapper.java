@@ -3,11 +3,14 @@ package com.webkakao.api.database;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.webkakao.api.model.ChatroomInfo;
 import com.webkakao.api.model.request.CheckInChatroom;
 import com.webkakao.api.model.request.GetChatroomList;
 import com.webkakao.api.model.request.RequestChatroom;
 
+@Mapper
 public interface ChatroomMapper {
 
 	public void insertChatroom(RequestChatroom param);

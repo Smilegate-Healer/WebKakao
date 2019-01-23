@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.webkakao.database.FriendMapper">
+<mapper namespace="com.webkakao.api.database.FriendMapper">
 
-	<insert id="insertUser" parameterType="com.webkakao.api.meodel.request.RequestFriend">
+	<resultMap id="FriendInfo" type="com.webkakao.api.model.FriendInfo">
+		<result property="user_idx" column="user_idx" />
+		<result property="name" column="name" />
+		<result property="profile_img" column="profile_img" />
+		<result property="status_msg" column="status_msg" />
+	</resultMap>
+
+	<insert id="insertUser" parameterType="com.webkakao.api.model.request.RequestFriend">
     	insert into USER (
     		from_user_idx,
     		to_user_idx
@@ -14,7 +21,7 @@
     	)
     </insert>
     
-    <select id="getFriendInfo" parameterType="Long" resultType="com.webkakao.api.meodel.response.RequestFriendParam">
+    <select id="getFriendInfo" parameterType="Long" resultType="com.webkakao.api.model.response.RequestFriendParam">
 		select 
 			user_idx,
 			name,
@@ -26,7 +33,7 @@
 			user_idx = #{user_idx};
 	</select>
 	
-	<select id="searchFriend" parameterType="String" resultType="com.webkakao.api.meodel.response.SearchFriendParam">
+	<select id="searchFriend" parameterType="String" resultType="com.webkakao.api.model.response.SearchFriendParam">
 		select 
 			user_idx,
 			name,
@@ -35,37 +42,41 @@
 		from 
 			user
 		where
-			email = #{email};
+			email = #{value};
 	</select>
 	
-	<select id="getUserInfo" parameterType="Long" resultType="com.webkakao.api.meodel.response.GetUserInfoParam">
+	<select id="getUserInfo" parameterType="Long" resultType="com.webkakao.api.model.response.GetUserInfoParam">
 		select 
-			background_img
+			back_img
 		from 
 			user
 		where
 			user_idx = #{user_idx};
 	</select>
 	
-	<update id="updateFriendStatus" parameterType="com.webkakao.api.meodel.response.UpdateFriendStatus">
+	<update id="updateFriendStatus" parameterType="com.webkakao.api.model.request.UpdateFriendStatus">
 		update
-			user
+			friend
 		set
-			status = #{status}
+			state = #{state}
 		where
 			from_user_idx = #{from_user_idx} and to_user_idx = #{to_user_idx}
 	</update>
 	
-	<select id="getFriendList" parameterType="Long" resultMap="com.webkakao.api.meodel.FriendInfo">
+	<select id="getFriendList" parameterType="Long" resultMap="FriendInfo">
 		select 
 			user_idx,
 			name,
 			profile_img,
 			status_msg
-		from 
+        from 
+        	friend
+        left join
 			user
-		where
-			user_idx = #{user_idx};
+        on 
+        	to_user_idx = user.user_idx
+        where 
+			from_user_idx = #{user_idx};
 	</select>
 	
 </mapper>

@@ -52,7 +52,7 @@ public class FriendController {
 		
 	}
 	
-	@RequestMapping(value = "/info", method = RequestMethod.POST)
+	@RequestMapping(value = "/status", method = RequestMethod.POST)
 	public ResponseEntity<APIResponseWrapper> updateFriendStatus(@RequestBody UpdateFriendStatus param) {
 		
 		APIResponseWrapper response = friendService.updateFriendStatus(param);

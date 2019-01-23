@@ -17,7 +17,7 @@ import com.webkakao.api.service.ChatroomService;
 
 @Controller
 @CrossOrigin
-@RequestMapping("/api/friend") 
+@RequestMapping("/api/chatroom") 
 public class ChatroomController {
 
 	@Autowired

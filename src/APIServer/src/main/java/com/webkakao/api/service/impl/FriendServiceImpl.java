@@ -15,6 +15,7 @@ import com.webkakao.api.model.request.UpdateFriendStatus;
 import com.webkakao.api.model.response.GetFriendListParam;
 import com.webkakao.api.model.response.GetUserInfoParam;
 import com.webkakao.api.model.response.RequestFriendParam;
+import com.webkakao.api.model.response.SearchFriendParam;
 import com.webkakao.api.response.wrapper.APIResponseWrapper;
 import com.webkakao.api.service.FriendService;
 
@@ -64,7 +65,7 @@ public class FriendServiceImpl implements FriendService {
 		
 		APIResponseWrapper wrapper = createWrapper();
 
-		RequestFriendParam resultParam = friendMapper.searchFriend(param.getUser_email());
+		SearchFriendParam resultParam = friendMapper.searchFriend(param.getUser_email());
 		
 		if(resultParam != null) {
 			wrapper.setParam(resultParam);
@@ -84,12 +85,7 @@ public class FriendServiceImpl implements FriendService {
 
 		GetUserInfoParam resultParam = friendMapper.getUserInfo(param.getUser_idx());
 		
-		if(resultParam != null) {
-			wrapper.setParam(resultParam);
-		} else {
-			wrapper.setResultCode(103);
-			wrapper.setMessage("Invalid User");
-		}
+		wrapper.setParam(resultParam);
 
 		return wrapper;
 		

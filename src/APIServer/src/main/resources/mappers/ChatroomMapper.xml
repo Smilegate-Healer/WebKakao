@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.webkakao.database.ChatroomMaper">
+<mapper namespace="com.webkakao.api.database.ChatroomMapper">
 
-	<insert id="insertChatroom" parameterType="com.webkakao.api.meodel.request.RequestChatroom" useGeneratedKeys="true" keyProperty="chatroom_idx">
+	<resultMap id="ChatroomInfo" type="com.webkakao.api.model.ChatroomInfo">
+		<result property="chatroom_idx" column="chatroom_idx" />
+		<result property="start_msg_idx" column="start_msg_idx" />
+		<result property="last_msg_idx" column="last_msg_idx" />
+		<result property="last_read_msg_idx" column="last_read_msg_idx" />
+	</resultMap>
+
+
+	<insert id="insertChatroom" parameterType="com.webkakao.api.model.ChatroomInfo" useGeneratedKeys="true" keyProperty="chatroom_idx">
     	insert into chat_room (
     		creator_idx
     	) 
@@ -36,7 +44,7 @@
 			chatroom_idx = #{chatroom_idx};
 	</select>
 	
-	<select id="getChatroomList" parameterType="Long" resultMap="com.webkakao.api.meodel.ChatroomInfo">
+	<select id="getChatroomList" parameterType="Long" resultMap="ChatroomInfo">
 		select 
 	    	start_msg_idx,
 	    	last_read_msg_idx,
