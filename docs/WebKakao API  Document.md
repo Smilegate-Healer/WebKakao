@@ -212,7 +212,7 @@
 #### 4.2.1 Param Specification
 | Param Key Name | Value Type | Description                         | Required |
 |----------------|------------|-------------------------------------|----------|
-|  empty param   |            |                                     |          |
+|  -   |         -   |              -                       |    -      |
   
 #### 4.2.2 Response Example
 ```
@@ -376,7 +376,7 @@
 #### 7.2.1 Param Specification
 | Param Key Name | Value Type | Description                         | Required |
 |----------------|------------|-------------------------------------|----------|
-|  empty param   |            |                                     |          |
+|  - |          -  |              -                       |      -    |
   
 #### 7.2.2 Response Example
 ```
