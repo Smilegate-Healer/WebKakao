@@ -1,8 +1,12 @@
-// import CounterStore from './counter';
+import UserStore from './User';
+import Chatroom from './Chatroom';
+import View from './View';
 
 class RootStore {
   constructor() {
-    // this.counter = new CounterStore(this);
+    this.user = new UserStore(this)
+    this.chatroom = new Chatroom(this)
+    this.view = new View(this)
   }
 }
 
