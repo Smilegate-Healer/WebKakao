@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.webkakao.api.database.ChatroomMapper;
 import com.webkakao.api.model.ChatroomInfo;
 import com.webkakao.api.model.request.CheckInChatroom;
+import com.webkakao.api.model.request.CheckOutChatroom;
 import com.webkakao.api.model.request.GetChatroomList;
 import com.webkakao.api.model.request.RequestChatroom;
 import com.webkakao.api.model.response.GetChatroomListParam;
@@ -111,6 +112,17 @@ APIResponseWrapper wrapper = createWrapper();
 		resultParam.setList(list);
 		
 		wrapper.setParam(resultParam);
+
+		return wrapper;
+		
+	}
+
+	@Override
+	public APIResponseWrapper checkOutChatroom(CheckOutChatroom param) {
+
+		APIResponseWrapper wrapper = createWrapper();
+		
+		chatroomMapper.checkOutChatroom(param);
 
 		return wrapper;
 		

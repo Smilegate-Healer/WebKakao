@@ -58,5 +58,12 @@
 			chatroom_member.chatroom_idx = chat_room.chatroom_idx
 		where user_idx = #{user_idx}; 
 	</select>
+	
+	<delete id="checkOutChatroom" parameterType="com.webkakao.api.model.request.CheckOutChatroom">
+		delete from
+			chatroom_member
+		where
+			chatroom_idx = #{chatroom_idx} and user_idx = #{user_idx}
+	</delete>
 
 </mapper>

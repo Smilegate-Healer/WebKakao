@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.webkakao.api.model.request.CheckInChatroom;
+import com.webkakao.api.model.request.CheckOutChatroom;
 import com.webkakao.api.model.request.GetChatroomList;
 import com.webkakao.api.model.request.RequestChatroom;
 import com.webkakao.api.response.wrapper.APIResponseWrapper;
@@ -36,6 +37,15 @@ public class ChatroomController {
 	public ResponseEntity<APIResponseWrapper> checkInChatroom(@RequestBody CheckInChatroom param) {
 		
 		APIResponseWrapper response = chatroomService.checkInChatroom(param);
+		
+		return new ResponseEntity<APIResponseWrapper>(response, HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(value = "/checkout", method = RequestMethod.POST)
+	public ResponseEntity<APIResponseWrapper> checkInChatroom(@RequestBody CheckOutChatroom param) {
+		
+		APIResponseWrapper response = chatroomService.checkOutChatroom(param);
 		
 		return new ResponseEntity<APIResponseWrapper>(response, HttpStatus.OK);
 		
