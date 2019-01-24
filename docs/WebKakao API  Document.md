@@ -187,6 +187,10 @@
    "resultCode":0,
    "message":"success",
    "param":{  
+      "user_idx":1,
+      "name":"홍성문",
+      "profile_img":"base64",
+      "status_msg":"상태메세지"
       "background_img":"base64"
    }
 }
