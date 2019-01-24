@@ -47,6 +47,10 @@
 	
 	<select id="getUserInfo" parameterType="Long" resultType="com.webkakao.api.model.response.GetUserInfoParam">
 		select 
+			user_idx,
+			name,
+			profile_img,
+			status_msg
 			back_img
 		from 
 			user
