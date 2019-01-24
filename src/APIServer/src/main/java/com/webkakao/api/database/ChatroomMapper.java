@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.webkakao.api.model.ChatroomInfo;
+import com.webkakao.api.model.ChatroomUserList;
 import com.webkakao.api.model.request.CheckInChatroom;
 import com.webkakao.api.model.request.CheckOutChatroom;
 import com.webkakao.api.model.request.GetChatroomList;
@@ -25,5 +26,7 @@ public interface ChatroomMapper {
 	public List<ChatroomInfo> getChatroomList(GetChatroomList param);
 
 	public void checkOutChatroom(CheckOutChatroom param);
+
+	public List<ChatroomUserList> getChatroomUserList(long user_idx);
 
 }

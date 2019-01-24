@@ -174,6 +174,10 @@
 #### 3.2.1 Param Specification
 | Param Key Name | Value Type | Description                         | Required |
 |----------------|------------|-------------------------------------|----------|
+| user_idx       | long       | 상대방의 유저 인덱스         | y        |
+| name           | String(?)  | 상대방의 이름                | y        |
+| profile_img    | String(?)  | 상대방의 프로필 사진(base64) | y        |
+| status_msg     | String(?)  | 상대방의 상태 메세지         | y        |
 | background_img | String     | 상대방의 사용자 배경 이미지(Base64) | y        |
 
   
@@ -183,6 +187,10 @@
    "resultCode":0,
    "message":"success",
    "param":{  
+      "user_idx":1,
+      "name":"홍성문",
+      "profile_img":"base64",
+      "status_msg":"상태메세지"
       "background_img":"base64"
    }
 }
@@ -514,16 +522,53 @@
             "chatroom_idx":1,
             "start_msg_idx":1,
             "last_msg_idx":25,
-            "last_read_msg_idx":25
+            "last_read_msg_idx":25,
+            "chatroom_member":{
+               "list":[
+                  {
+                  	"user_idx": 1,
+                  	"name": "홍성문",
+                  	"profile_img":"base64",
+                  	"back_img":"base64",
+                  	"status_msg":"status"
+                  },
+                  {
+                  	"user_idx": 2,
+                  	"name": "조영호",
+                  	"profile_img":"base64",
+                  	"back_img":"base64",
+                  	"status_msg":"status"
+                  }
+               ]
+            }
          },
          {  
             "chatroom_idx":2,
             "start_msg_idx":10,
             "last_msg_idx":15,
-            "last_read_msg_idx":12
+            "last_read_msg_idx":12,
+            "chatroom_member":{
+               "list":[
+                  {
+                  	"user_idx": 1,
+                  	"name": "홍성문",
+                  	"profile_img":"base64",
+                  	"back_img":"base64",
+                  	"status_msg":"status"
+                  },
+                  {
+                  	"user_idx": 3,
+                  	"name": "정명지",
+                  	"profile_img":"base64",
+                  	"back_img":"base64",
+                  	"status_msg":"status"
+                  }
+               ]
+            }
          }
       ]
    }
 }
+
 ```
 

@@ -1,11 +1,22 @@
 package com.webkakao.api.model;
 
+import java.util.List;
+
 public class ChatroomInfo {
 
 	private long chatroom_idx;
 	private long start_msg_idx;
 	private long last_msg_idx;
 	private long last_read_msg_idx;
+	private List<ChatroomUserList> user_list;
+
+	public List<ChatroomUserList> getUser_list() {
+		return user_list;
+	}
+
+	public void setUser_list(List<ChatroomUserList> user_list) {
+		this.user_list = user_list;
+	}
 
 	public long getChatroom_idx() {
 		return chatroom_idx;

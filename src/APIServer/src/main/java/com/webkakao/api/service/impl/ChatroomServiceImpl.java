@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.webkakao.api.database.ChatroomMapper;
 import com.webkakao.api.model.ChatroomInfo;
+import com.webkakao.api.model.ChatroomUserList;
 import com.webkakao.api.model.request.CheckInChatroom;
 import com.webkakao.api.model.request.CheckOutChatroom;
 import com.webkakao.api.model.request.GetChatroomList;
@@ -51,9 +52,9 @@ public class ChatroomServiceImpl implements ChatroomService {
 			map.put("start_msg_idx", 0);
 
 			chatroomMapper.checkInChatroom(map);
-			
+
 			map.put("user_idx", param.getTo_user_idx());
-			
+
 			chatroomMapper.checkInChatroom(map);
 
 		} catch (Exception e) {
@@ -72,14 +73,14 @@ public class ChatroomServiceImpl implements ChatroomService {
 
 	@Override
 	public APIResponseWrapper checkInChatroom(CheckInChatroom param) {
-		
+
 		APIResponseWrapper wrapper = createWrapper();
 		RequestChatroomParam resultParam = null;
-		
+
 		try {
 
 			long last_msg_idx = chatroomMapper.getLastMsgIdx(param.getChatroom_idx());
-			
+
 			Map<String, Object> map = new HashMap<String, Object>();
 
 			map.put("chatroom_idx", param.getChatroom_idx());
@@ -98,34 +99,36 @@ public class ChatroomServiceImpl implements ChatroomService {
 		wrapper.setParam(resultParam);
 
 		return wrapper;
-		
+
 	}
 
 	@Override
 	public APIResponseWrapper getChatroomList(GetChatroomList param) {
-		
-APIResponseWrapper wrapper = createWrapper();
-		
-		List<ChatroomInfo> list = chatroomMapper.getChatroomList(param);
 
+		APIResponseWrapper wrapper = createWrapper();
+
+		List<ChatroomInfo> list = chatroomMapper.getChatroomList(param);
 		GetChatroomListParam resultParam = new GetChatroomListParam();
 		resultParam.setList(list);
 		
+		List<ChatroomUserList> user_list = chatroomMapper.getChatroomUserList(param.getUser_idx());
+		resultParam.setChatroomUserList(user_list, param.getUser_idx());
+
 		wrapper.setParam(resultParam);
 
 		return wrapper;
-		
+
 	}
 
 	@Override
 	public APIResponseWrapper checkOutChatroom(CheckOutChatroom param) {
 
 		APIResponseWrapper wrapper = createWrapper();
-		
+
 		chatroomMapper.checkOutChatroom(param);
 
 		return wrapper;
-		
+
 	}
 
 }

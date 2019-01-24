@@ -9,7 +9,15 @@
 		<result property="last_msg_idx" column="last_msg_idx" />
 		<result property="last_read_msg_idx" column="last_read_msg_idx" />
 	</resultMap>
-
+	
+	<resultMap id="ChatroomUserList" type="com.webkakao.api.model.ChatroomUserList">
+		<result property="chatroom_idx" column="chatroom_idx" />
+		<result property="user_idx" column="user_idx" />
+		<result property="name" column="name" />
+		<result property="profile_img" column="profile_img" />
+		<result property="start_msg_idx" column="start_msg_idx" />
+		<result property="last_read_msg_idx" column="last_read_msg_idx" />
+	</resultMap>
 
 	<insert id="insertChatroom" parameterType="com.webkakao.api.model.ChatroomInfo" useGeneratedKeys="true" keyProperty="chatroom_idx">
     	insert into chat_room (
@@ -66,4 +74,16 @@
 			chatroom_idx = #{chatroom_idx} and user_idx = #{user_idx}
 	</delete>
 
+	<select id="getChatroomUserList" parameterType="Long" resultMap="ChatroomUserList">
+		select
+			A.chatroom_idx, A.user_idx, B.name, B.profile_img, A.start_msg_idx, A.last_read_msg_idx
+		from
+			chatroom_member A
+		join
+			user B
+		on
+			A.user_idx = B.user_idx
+		where A.chatroom_idx in (select chatroom_idx from chatroom_member where user_idx = #{value});
+	</select>
+	
 </mapper>
