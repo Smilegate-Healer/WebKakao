@@ -5,6 +5,7 @@ export default class Chatroom {
     this.root = root
   }
 
+
   /**
    * Array of json object
    * 
@@ -18,13 +19,19 @@ export default class Chatroom {
    * joinMembers: the array of join members
    * 
    * 
+   *
+   */
+  @observable chatroomList = dummy
+
+  /**
+   * 
    * Chat Object
+   * chatroomid: [chats]
    * 
    * sender: the sender of this message
    * img: TODO: base64 or the index of the array of images locally stored
    * msg: the message
    * time: the time of the chat
-   *
    */
   @observable chatroomList
 
@@ -37,7 +44,10 @@ export default class Chatroom {
   initChatroomList = (data) => {
     // TODO: set chatroom list
     this.chatroomList = data;
+  }
 
+  @observable chats = {
+    1: dummyChats
   }
 
   /**
@@ -83,3 +93,59 @@ export default class Chatroom {
     // if success => add to the chatList in the chatroomList
   }
 }
+
+const dummy = [
+  {
+    "chatroom_idx": 1,
+    "start_msg_idx": 1,
+    "last_msg_idx": 15,
+    "last_read_msg_idx": 15,
+    "user_list": [
+      {
+        "chatroom_idx": 1,
+        "user_idx": 2,
+        "name": "조영호",
+        "profile_img": "base64",
+        "start_msg_idx": 10,
+        "last_read_msg_idx": 10
+      },
+      {
+        "chatroom_idx": 1,
+        "user_idx": 3,
+        "name": "정명지",
+        "profile_img": "base64",
+        "start_msg_idx": 5,
+        "last_read_msg_idx": 1
+      }
+    ]
+  },
+  {
+    "chatroom_idx": 4,
+    "start_msg_idx": 0,
+    "last_msg_idx": 0,
+    "last_read_msg_idx": 0,
+    "user_list": [
+      {
+        "chatroom_idx": 4,
+        "user_idx": 2,
+        "name": "조영호",
+        "profile_img": "base64",
+        "start_msg_idx": 0,
+        "last_read_msg_idx": 0
+      },
+    ]
+  }
+]
+
+const dummyChats = [
+  {
+    user_idx: 2,
+    msg: "첫번째 메시지 입니다",
+    type: "plain",
+  },
+  {
+    user_idx: 3,
+    msg: "두번쨰 메시지 입니다",
+    type: "plain",
+  }
+] 

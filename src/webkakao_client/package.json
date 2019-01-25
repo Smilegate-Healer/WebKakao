@@ -51,14 +51,18 @@
     "react-app-polyfill": "^0.2.0",
     "react-dev-utils": "^7.0.1",
     "react-dom": "^16.7.0",
+    "react-stomp": "^4.1.0",
     "resolve": "1.8.1",
     "sass-loader": "7.1.0",
+    "sockjs-client": "^1.3.0",
+    "stompjs": "^2.3.3",
     "style-loader": "0.23.0",
     "terser-webpack-plugin": "1.1.0",
     "url-loader": "1.1.1",
     "webpack": "4.19.1",
     "webpack-dev-server": "3.1.14",
     "webpack-manifest-plugin": "2.0.4",
+    "webstomp-client": "^1.2.6",
     "workbox-webpack-plugin": "3.6.3"
   },
   "scripts": {
@@ -134,5 +138,6 @@
         }
       ]
     ]
-  }
+  },
+  "proxy": "http://localhost:8080"
 }
