@@ -1,0 +1,116 @@
+CREATE TABLE `webkakao`.`user` (
+  `user_idx` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'User Index',
+  `email` VARCHAR(100) NOT NULL COMMENT '사용자 이메일',
+  `password` VARCHAR(100) NOT NULL COMMENT '사용자 패스워드',
+  `name` VARCHAR(45) NOT NULL COMMENT '사용자 이름',
+  `profile_img` MEDIUMTEXT NULL COMMENT '프로필 이미지',
+  `back_img` MEDIUMTEXT NULL COMMENT '배경 이미지',
+  `status_msg` VARCHAR(50) COMMENT '상태 메세지',
+  `state` VARCHAR(45) NOT NULL DEFAULT 0 COMMENT '사용자 계정 상태\n0 : Enable\n1 : Disable\n',
+  PRIMARY KEY (`user_idx`),
+  UNIQUE INDEX `idx_UNIQUE` (`user_idx` ASC) VISIBLE,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE);
+
+ALTER TABLE `webkakao`.`user` 
+ADD COLUMN `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `state`,
+ADD COLUMN `access_time` TIMESTAMP NULL AFTER `timestamp`;
+
+ALTER TABLE `webkakao`.`user` 
+CHANGE COLUMN `access_time` `access_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ;
+
+CREATE TABLE `webkakao`.`file` (
+  `file_idx` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '파일 인덱스',
+  `sender_idx` INT(10) UNSIGNED NOT NULL COMMENT '보내는 사람  인덱스',
+  `chatroom_idx` INT UNSIGNED NOT NULL COMMENT '채팅방 인덱스\n' ,
+  `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `data_url` VARCHAR(200) NOT NULL COMMENT '데이터  URL',
+  PRIMARY KEY (`file_idx`),
+  UNIQUE INDEX `file_idx_UNIQUE` (`file_idx` ASC) VISIBLE,
+  INDEX `sender_idx` (`sender_idx` ASC) VISIBLE,
+  CONSTRAINT `sender_idx`
+    FOREIGN KEY (`sender_idx`)
+    REFERENCES `webkakao`.`user` (`user_idx`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE `webkakao`.`chat_room` (
+  `chatroom_idx` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `recent_time` TIMESTAMP NOT NULL COMMENT '최근 메세지 전송 시간',
+  `creator_idx` INT UNSIGNED NOT NULL COMMENT '채팅방을 만든 사람의 인덱스',
+  `msg_object_id` VARCHAR(200) NOT NULL,
+  `last_msg_idx` INT NOT NULL,
+  `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`chatroom_idx`),
+  INDEX `creator_idx_idx` (`creator_idx` ASC) VISIBLE,
+  CONSTRAINT `creator_idx`
+    FOREIGN KEY (`creator_idx`)
+    REFERENCES `webkakao`.`user` (`user_idx`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+ALTER TABLE `webkakao`.`chat_room` 
+CHANGE COLUMN `recent_time` `recent_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '최근 메세지 전송 시간' ;
+
+
+CREATE TABLE `webkakao`.`chatroom_member` (
+  `chatroom_idx` INT UNSIGNED NOT NULL COMMENT '채팅방 인덱스',
+  `user_idx` INT UNSIGNED NOT NULL COMMENT '사용자 인덱스',
+  `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_read_msg_idx` INT NOT NULL DEFAULT 0,
+  `start_msg_idx` INT NOT NULL,
+  PRIMARY KEY (`chatroom_idx`),
+  INDEX `user_idx_idx` (`user_idx` ASC) VISIBLE,
+  CONSTRAINT `chatroom_idx`
+    FOREIGN KEY (`chatroom_idx`)
+    REFERENCES `webkakao`.`chat_room` (`chatroom_idx`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `user_idx`
+    FOREIGN KEY (`user_idx`)
+    REFERENCES `webkakao`.`user` (`user_idx`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+ALTER TABLE `webkakao`.`chatroom_member` 
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`chatroom_idx`, `user_idx`);
+
+
+CREATE TABLE `webkakao`.`friend` (
+  `from_user_idx` INT UNSIGNED NOT NULL COMMENT '친구 요청자의 사용자 인덱스\n',
+  `to_user_idx` INT UNSIGNED NOT NULL COMMENT '친구의 인덱스',
+  `state` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '친구 상태\n0 : 친구\n1 : 숨김\n2 : 차단',
+  PRIMARY KEY (`from_user_idx`, `to_user_idx`));
+
+
+ALTER TABLE `webkakao`.`friend` 
+ADD INDEX `to_user_idx_idx` (`to_user_idx` ASC) VISIBLE;
+
+ALTER TABLE `webkakao`.`friend` 
+ADD CONSTRAINT `from_user_idx`
+  FOREIGN KEY (`from_user_idx`)
+  REFERENCES `webkakao`.`user` (`user_idx`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `to_user_idx`
+  FOREIGN KEY (`to_user_idx`)
+  REFERENCES `webkakao`.`user` (`user_idx`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+INSERT INTO `webkakao`.`user` (`email`, `password`, `name`, `profile_img`, `back_img`) VALUES ('test1@test.test', '1234', '홍성문', 'base64', 'url');
+INSERT INTO `webkakao`.`user` (`email`, `password`, `name`, `profile_img`, `back_img`) VALUES ('test2@test.test', '1234', '조영호', 'base64', 'url');
+INSERT INTO `webkakao`.`user` (`email`, `password`, `name`, `profile_img`, `back_img`) VALUES ('test3@test.test', '1234', '정명지', 'base64', 'url');
+
+INSERT INTO `webkakao`.`chat_room` (`creator_idx`, `msg_object_id`, `last_msg_idx`) VALUES ('1', '5c46ba507d152a16a7d5dfb3', '15');
+
+INSERT INTO `webkakao`.`chatroom_member` (`chatroom_idx`, `user_idx`, `last_read_msg_idx`, `start_msg_idx`) VALUES ('1', '1', '15', '1');
+INSERT INTO `webkakao`.`chatroom_member` (`chatroom_idx`, `user_idx`, `last_read_msg_idx`, `start_msg_idx`) VALUES ('1', '2', '10', '10');
+INSERT INTO `webkakao`.`chatroom_member` (`chatroom_idx`, `user_idx`, `last_read_msg_idx`, `start_msg_idx`) VALUES ('1', '3', '1', '5');
+
+INSERT INTO `webkakao`.`friend` (`from_user_idx`, `to_user_idx`) VALUES ('1', '2');
+INSERT INTO `webkakao`.`friend` (`from_user_idx`, `to_user_idx`) VALUES ('1', '3');
+INSERT INTO `webkakao`.`friend` (`from_user_idx`, `to_user_idx`) VALUES ('2', '1');
+INSERT INTO `webkakao`.`friend` (`from_user_idx`, `to_user_idx`) VALUES ('2', '3');
+INSERT INTO `webkakao`.`friend` (`from_user_idx`, `to_user_idx`) VALUES ('3', '1');
+INSERT INTO `webkakao`.`friend` (`from_user_idx`, `to_user_idx`) VALUES ('3', '2');

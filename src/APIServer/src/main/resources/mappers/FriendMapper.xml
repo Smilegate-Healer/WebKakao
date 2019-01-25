@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webkakao.api.database.FriendMapper">
+
+	<resultMap id="FriendInfo" type="com.webkakao.api.model.FriendInfo">
+		<result property="user_idx" column="user_idx" />
+		<result property="name" column="name" />
+		<result property="profile_img" column="profile_img" />
+		<result property="status_msg" column="status_msg" />
+	</resultMap>
+
+	<insert id="insertUser" parameterType="com.webkakao.api.model.request.RequestFriend">
+    	insert into USER (
+    		from_user_idx,
+    		to_user_idx
+    	) 
+    	values (
+    		#{from_user_idx},
+    		#{to_user_idx}
+    	)
+    </insert>
+    
+    <select id="getFriendInfo" parameterType="Long" resultType="com.webkakao.api.model.response.RequestFriendParam">
+		select 
+			user_idx,
+			name,
+			profile_img,
+			status_msg
+		from 
+			user
+		where
+			user_idx = #{user_idx};
+	</select>
+	
+	<select id="searchFriend" parameterType="String" resultType="com.webkakao.api.model.response.SearchFriendParam">
+		select 
+			user_idx,
+			name,
+			profile_img,
+			status_msg
+		from 
+			user
+		where
+			email = #{value};
+	</select>
+	
+	<select id="getUserInfo" parameterType="Long" resultType="com.webkakao.api.model.response.GetUserInfoParam">
+		select 
+			user_idx,
+			name,
+			profile_img,
+			status_msg
+			back_img
+		from 
+			user
+		where
+			user_idx = #{user_idx};
+	</select>
+	
+	<update id="updateFriendStatus" parameterType="com.webkakao.api.model.request.UpdateFriendStatus">
+		update
+			friend
+		set
+			state = #{state}
+		where
+			from_user_idx = #{from_user_idx} and to_user_idx = #{to_user_idx}
+	</update>
+	
+	<select id="getFriendList" parameterType="Long" resultMap="FriendInfo">
+		select 
+			user_idx,
+			name,
+			profile_img,
+			status_msg
+        from 
+        	friend
+        left join
+			user
+        on 
+        	to_user_idx = user.user_idx
+        where 
+			from_user_idx = #{user_idx};
+	</select>
+	
+</mapper>
