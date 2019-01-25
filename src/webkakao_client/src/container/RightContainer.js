@@ -3,6 +3,7 @@ import { Component } from "react";
 import "./Container.scss";
 import ChatList from '../components/ChatList'
 import ChatBar from "../components/ChatBar";
+import ChatInput from "../components/ChatInput";
 
 class RightContainer extends Component {
   state = {
@@ -14,6 +15,7 @@ class RightContainer extends Component {
       <div className="RightContainer">
         <ChatBar/>
         <ChatList/>
+        <ChatInput/>
       </div>
     )
   }
