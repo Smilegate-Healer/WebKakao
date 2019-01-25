@@ -9,6 +9,7 @@
 
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   
   .profileContainer {
     flex: 1
@@ -17,7 +18,6 @@
   .senderMsgContainer {
     display: flex;
     flex-direction: row;
-
   }
 
   .timeContainer {

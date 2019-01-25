@@ -8,7 +8,22 @@ public class ChatroomInfo {
 	private long start_msg_idx;
 	private long last_msg_idx;
 	private long last_read_msg_idx;
+	private String chatroom__name;
+	private String logo;
+	
 	private List<ChatroomUserList> user_list;
+	
+	public ChatroomInfo() {
+		this.logo = "default";
+	}
+
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
 
 	public List<ChatroomUserList> getUser_list() {
 		return user_list;

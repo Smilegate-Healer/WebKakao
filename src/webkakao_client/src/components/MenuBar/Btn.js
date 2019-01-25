@@ -4,7 +4,10 @@ import './MenuBar.scss';
 import friendListLogo from '../../resources/LeftContainer/MenuBar/person.png';
 import chatroomListLogo from '../../resources/LeftContainer/MenuBar/talk.png';
 import optionLogo from '../../resources/LeftContainer/MenuBar/option.png';
+import { inject, observer } from 'mobx-react';
 
+@inject('stores')
+@observer
 class Btn extends Component {
 
     _renderLogo = () => {
@@ -28,10 +31,14 @@ class Btn extends Component {
     onClickButton = () => {
         switch (this.props.btnName) {
             case 'friendList':
-                alert('friendList');
+            // alert('friendList');
+                debugger;
+                this.props.stores.view.showFriendsList();
                 break;
             case 'chatroomList':
-            alert('chatroomList');
+            // alert('chatroomList');
+            debugger;
+                this.props.stores.view.showChatroomList();
                 break;
             case 'option':
             alert('option');

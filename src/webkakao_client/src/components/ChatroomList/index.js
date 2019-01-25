@@ -1,11 +1,11 @@
 import React from 'react'
 import ListItem from './ListItem';
 import './styles.scss'
+import { inject, observer } from 'mobx-react';
 
-
-
+@inject('stores')
+@observer
 class ChatroomList extends React.Component {
-
 
   _onItemClick = (e, idx) => {
     alert('You click the chatroom -> open the chatroom ' + idx)
@@ -17,10 +17,12 @@ class ChatroomList extends React.Component {
   }
 
   render() {
+    const list = this.props.stores.chatroom.chatroomList;
+    if(list) {
     return (
+      
       <div className="List">
-        {
-          this.props.chatrooms.map((v, idx) => 
+          {list.map((v, idx) => 
             <ListItem 
               item={v} 
               key={v.name} 
@@ -28,9 +30,23 @@ class ChatroomList extends React.Component {
               onLogoClick={e => this._onLogoClick(e, idx)}
               />
           )}
+          {/* {this.props.chatrooms.map((v, idx) => 
+            <ListItem 
+              item={v} 
+              key={v.name} 
+              onClick={e => this._onItemClick(e, idx)}
+              onLogoClick={e => this._onLogoClick(e, idx)}
+              />
+          )} */}
       </div>
     )
   }
+  else {
+    return (
+      <div></div>
+    )
+} 
+}
 }
 
 
@@ -81,6 +97,5 @@ ChatroomList.defaultProps = {
     }
   ]
 }
-
 
 export default ChatroomList

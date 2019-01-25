@@ -6,20 +6,20 @@ class FriendItem extends React.Component {
 
   render() {
 
-    const { info } = this.props
+    const { user } = this.props
 
     return (
       <div className="Item" onClick={this.props.onClick}>
         <div className="profileContainer" onClick={this.props.onProfileClick}>
-          {info.profileImg}
+          {user.profile_img}
         </div>
 
         <div className="nameStatusMsgContainer">
           <div className="name">
-            {info.name}
+            {user.name}
           </div>
           <div className="statusMsg">
-            {info.statusMsg}
+            {user.status_msg}
           </div>
         </div>
       </div>
