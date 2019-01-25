@@ -13,9 +13,15 @@ class RightContainer extends Component {
   render() {
     return (
       <div className="RightContainer">
-        <ChatBar/>
-        <ChatList/>
-        <ChatInput/>
+        <div className="chatBarContainer">
+          <ChatBar/>
+        </div>
+        <div className="chatListContainer">
+          <ChatList/>
+        </div>
+        <div className="chatInputContainer">
+          <ChatInput/>
+        </div>
       </div>
     )
   }

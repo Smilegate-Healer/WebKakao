@@ -4,25 +4,32 @@ import SockJS from 'sockjs-client'
 import Stomp from 'webstomp-client'
 import SendBtn from './SendBtn';
 import { TextField } from '@material-ui/core'
+import { inject } from 'mobx-react'
 
-var sock = new SockJS("/gs-guide-websocket")
-var stompClient = Stomp.over(sock)
-
-stompClient.connect({}, frame => {
-  console.log('conneted to the socket')
-  stompClient.subscribe("/topic/chatroom/1234", (msg) => {
-    console.log(msg)
-  })
-})
-
+// TODO: action으로 분리할 것
+@inject("stores")
 class ChatInput extends React.Component {
+
+  componentWillMount() {
+    var sock = new SockJS("/gs-guide-websocket")
+    var stompClient = Stomp.over(sock)
+    this.stompClient = stompClient
+    
+    this.stompClient.connect({}, frame => {
+      console.log('conneted to the socket')
+      stompClient.subscribe("/topic/chatroom/1", (msg) => {
+        this.props.stores.chatroom.chats[1].push(JSON.parse(msg.body))
+        console.log(msg)
+      })
+    })
+  }
 
   state = {
     inputText: ''
   }
 
   _onClickSendBtn = e => {
-    stompClient.send("/chat/1234", JSON.stringify({
+    this.stompClient.send("/chat/1", JSON.stringify({
       userId: "i am user id", 
       msg: this.state.inputText,
       type: "plain"
@@ -51,7 +58,9 @@ class ChatInput extends React.Component {
 
   }
 
+
   render() {
+
     return (
       <div className="ChatInputContainer">
         <TextField 

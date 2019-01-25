@@ -6,7 +6,6 @@ class ChatItem extends React.Component {
   render() {
     const { chat } = this.props
 
-
     return(
       <div className="ChatItem">
         <div className="profileContainer">
@@ -15,7 +14,8 @@ class ChatItem extends React.Component {
 
         <div className="senderMsgContainer">
           <div>
-            {chat.sender}
+            {/* {chat.sender} */}
+            {chat.userId}
           </div> 
           <div>
             {chat.msg}
