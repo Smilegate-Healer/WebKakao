@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import LoginTemplate from './LoginTemplate';
 import LoginForm from './LoginForm';
 
-class App extends Component {
+class Login extends Component {
   handleCreate = (data) => {
     console.log(data);
   }
