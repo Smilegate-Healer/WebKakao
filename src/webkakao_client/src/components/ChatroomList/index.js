@@ -1,7 +1,6 @@
 import React from 'react'
 import ListItem from './ListItem';
 import './styles.scss'
-import axios from '../../util/api';
 import { inject, observer } from 'mobx-react';
 
 @inject('stores')
