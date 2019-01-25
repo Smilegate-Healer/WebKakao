@@ -1,4 +1,4 @@
-import { observable, action} from 'mobx'
+import { observable, action, computed } from 'mobx'
 
 export default class Chatroom {
   constructor(root) {
@@ -26,7 +26,19 @@ export default class Chatroom {
    * time: the time of the chat
    *
    */
-  @observable chatroomList = []
+  @observable chatroomList
+
+  /**
+   * set chatroom list chatroom list 
+   * 
+   * Using axious
+   */
+  @action
+  initChatroomList = (data) => {
+    // TODO: set chatroom list
+    this.chatroomList = data;
+
+  }
 
   /**
    * Update the whole chatroom list 

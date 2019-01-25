@@ -8,7 +8,6 @@ class ListItem extends React.Component {
 
   render() {
     const { item } = this.props
-
     return (
       <li className="ListItem" onClick={this.props.onClick}>
         <div className="logoContainer" onClick={this.props.onLogoClick}>
@@ -17,10 +16,10 @@ class ListItem extends React.Component {
 
         <div className="nameMsgContainer">
           <div className="name">
-            {item.name}
+            {item.chatroom_idx}
           </div>
           <div className="msg">
-            {item.latestMsg}
+            {item.last_msg_idx}
           </div>
         </div>
 

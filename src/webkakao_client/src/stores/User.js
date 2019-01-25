@@ -1,6 +1,7 @@
 import { observable, action } from 'mobx';
 
 export default class User {
+
   @observable isLogin = false
   @observable userInfo = null
   @observable friendList = [] 
@@ -8,6 +9,14 @@ export default class User {
   constructor(root) {
     // from index
     this.root = root;
+  }
+
+  @action
+  initFriendList = (data) => {
+
+    // TODO: set chatroom list
+    this.friendList = data;
+
   }
 
   @action login = () => {
