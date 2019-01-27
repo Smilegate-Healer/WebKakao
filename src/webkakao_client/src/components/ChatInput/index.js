@@ -29,10 +29,10 @@ class ChatInput extends React.Component {
   }
 
   _onClickSendBtn = e => {
-    this.stompClient.send("/chat/1", JSON.stringify({
-      userId: "i am user id", 
+    this.stompClient.send("/chatroom/1", JSON.stringify({
+      sender: "i am user id", 
       msg: this.state.inputText,
-      type: "plain"
+      msg_type: "m"
     })) 
 
     // flush the input

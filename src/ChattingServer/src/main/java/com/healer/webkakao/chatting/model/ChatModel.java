@@ -1,6 +1,7 @@
 package com.healer.webkakao.chatting.model;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.*;
 
 @Getter
@@ -9,14 +10,17 @@ import lombok.*;
 @AllArgsConstructor
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NON_PRIVATE)
 public class ChatModel {
-  @JsonProperty("userId")
-  private String userId;
+  @JsonProperty("sender")
+  private String sender;
 
   @JsonProperty("msg")
   private String msg;
 
-  @JsonProperty("type")
-  private String type;
+  @JsonProperty("msg_type")
+  private String msg_type;
+
+  private long msg_idx = 0;
+  private long timestamp = 0;
 
   /**
    * {
