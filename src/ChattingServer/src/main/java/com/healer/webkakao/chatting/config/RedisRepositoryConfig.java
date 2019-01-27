@@ -56,9 +56,15 @@ public class RedisRepositoryConfig {
 
   @Bean
   public ChannelTopic topic() {
-    return new ChannelTopic("chatroom-");
+    return new ChannelTopic("chatroom");
   }
 
+
+  /**
+   * Make a Pattern topic for chatrooms
+   *
+   * @return PatternTopic
+   */
   @Bean
   public PatternTopic pTopic() {
     // Chatroom pattren

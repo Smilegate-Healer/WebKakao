@@ -22,5 +22,4 @@ public class RedisListenerService implements MessageListener {
     log.debug("message:" + message.toString() + " channel:" + new String(message.getChannel()) + " pattern:" + new String(pattern));
     simpMessagingTemplate.convertAndSend("/topic/" + new String(message.getChannel()), message.toString());
   }
-
 }
