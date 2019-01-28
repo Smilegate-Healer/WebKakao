@@ -1,4 +1,4 @@
-package com.healer.webkakao.chatting.model;
+package com.webkakao.model.database.mongo;
 
 import java.util.List;
 

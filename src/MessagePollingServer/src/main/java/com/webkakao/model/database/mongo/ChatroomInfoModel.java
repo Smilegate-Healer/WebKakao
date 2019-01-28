@@ -1,4 +1,4 @@
-package com.healer.webkakao.chatting.model;
+package com.webkakao.model.database.mongo;
 
 import java.io.Serializable;
 
@@ -20,5 +20,4 @@ public class ChatroomInfoModel implements Serializable {
   private String object_id;
   private long last_msg_idx;
   private String last_msg;
-  
 }

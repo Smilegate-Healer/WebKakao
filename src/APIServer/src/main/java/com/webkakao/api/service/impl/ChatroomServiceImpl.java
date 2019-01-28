@@ -10,20 +10,29 @@ import org.springframework.stereotype.Service;
 import com.webkakao.api.database.ChatroomMapper;
 import com.webkakao.api.model.ChatroomInfo;
 import com.webkakao.api.model.ChatroomUserList;
+import com.webkakao.api.model.ChatsModel;
 import com.webkakao.api.model.request.CheckInChatroom;
 import com.webkakao.api.model.request.CheckOutChatroom;
 import com.webkakao.api.model.request.GetChatroomList;
 import com.webkakao.api.model.request.RequestChatroom;
 import com.webkakao.api.model.response.GetChatroomListParam;
 import com.webkakao.api.model.response.RequestChatroomParam;
+import com.webkakao.api.repository.ChatsMongoRepository;
 import com.webkakao.api.response.wrapper.APIResponseWrapper;
 import com.webkakao.api.service.ChatroomService;
+import com.webkakao.api.service.redis.RedisService;
 
 @Service("chatroomService")
 public class ChatroomServiceImpl implements ChatroomService {
 
 	@Autowired
 	private ChatroomMapper chatroomMapper;
+
+	@Autowired
+	private RedisService redisService;
+
+	@Autowired
+	private ChatsMongoRepository mongoRepository;
 
 	public APIResponseWrapper createWrapper() {
 
@@ -41,7 +50,13 @@ public class ChatroomServiceImpl implements ChatroomService {
 		RequestChatroomParam resultParam = null;
 
 		try {
-
+			
+			//create new chatsmodel object
+			ChatsModel nextChats = ChatsModel.builder()
+	                .pre_id("null")
+	                .build();
+			String object_id = mongoRepository.insert(nextChats).get_id();
+			param.setMsg_object_id(object_id);
 			chatroomMapper.insertChatroom(param);
 
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -56,6 +71,9 @@ public class ChatroomServiceImpl implements ChatroomService {
 			map.put("user_idx", param.getTo_user_idx());
 
 			chatroomMapper.checkInChatroom(map);
+			
+			//insert redis chatroomInfo
+			redisService.addNewChatroom(param.getChatroom_idx(), object_id);
 
 		} catch (Exception e) {
 			wrapper.setResultCode(111);
@@ -110,7 +128,7 @@ public class ChatroomServiceImpl implements ChatroomService {
 		List<ChatroomInfo> list = chatroomMapper.getChatroomList(param);
 		GetChatroomListParam resultParam = new GetChatroomListParam();
 		resultParam.setList(list);
-		
+
 		List<ChatroomUserList> user_list = chatroomMapper.getChatroomUserList(param.getUser_idx());
 		resultParam.setChatroomUserList(user_list, param.getUser_idx());
 

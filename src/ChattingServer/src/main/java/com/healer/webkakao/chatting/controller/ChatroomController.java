@@ -13,7 +13,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
-import sun.misc.JavaIOAccess;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,18 +49,18 @@ public class ChatroomController {
     message.setMsg_idx(lastMsgIdx + 1);
     // TODO: Which time do I set???
     message.setTimestamp(System.currentTimeMillis());
-    chatroomService.updateLastMsgIdx(chatroomId, lastMsgIdx + 1);
+    chatroomService.updateLastMsg(chatroomId, lastMsgIdx + 1, message.getMsg());
 
     String msgStr = objectMapper.writeValueAsString(message);
 
     // Add the message into the List of Redis
-    log.debug("Add the message into the list of Redis");
+//    log.debug("Add the message into the list of Redis");
     String chatroomIdStr = String.valueOf(chatroomId);
     redisTemplate.opsForList().rightPush(chatroomIdStr, msgStr);
 
     chatroomService.moveToMongo(chatroomIdStr, MAX_SIZE);
 
-    log.debug("Publish the message to Redis");
+//    log.debug("Publish the message to Redis");
     redisTemplate.convertAndSend("chatroom/" + chatroomId, objectMapper.writeValueAsString(message)); // Send the content of the message using Pub/Sub
   }
 }

@@ -1,4 +1,4 @@
-package com.healer.webkakao.chatting.model;
+package com.webkakao.api.model;
 
 import java.util.List;
 
