@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import com.webkakao.model.request.PollingRequest;
 import com.webkakao.model.response.PollingResponse;
@@ -29,5 +30,14 @@ public class MessagePollingController {
 		return new ResponseEntity<PollingResponse>(response, HttpStatus.OK);
 		
 	}
+	
+	 @RequestMapping(value = "/longpolling", method = RequestMethod.POST)
+	  public DeferredResult<PollingResponse> readTests() {
+		 
+	    final DeferredResult<PollingResponse> result = new DeferredResult<>();
+	    
+	    return result;
+	    
+	 }
 	
 }
