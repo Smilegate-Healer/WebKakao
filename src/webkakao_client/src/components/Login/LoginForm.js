@@ -29,7 +29,7 @@ class LoginForm extends Component {
         });
     }
 
-/*
+
     handleSubmit = (e) => {
         // 페이지 리로딩 방지
         e.preventDefault();
@@ -41,7 +41,7 @@ class LoginForm extends Component {
             password: ''
         })
     }
-*/
+
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
