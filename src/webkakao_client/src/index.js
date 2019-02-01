@@ -4,6 +4,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'mobx-react';
 import Stores from './stores'
+import { CssBaseline } from '@material-ui/core'
 
 const stores = new Stores()
 

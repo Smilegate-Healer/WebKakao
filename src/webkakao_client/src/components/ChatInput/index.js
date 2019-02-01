@@ -3,14 +3,14 @@ import "./styles.scss"
 import SockJS from 'sockjs-client'
 import Stomp from 'webstomp-client'
 import SendBtn from './SendBtn';
-import { TextField } from '@material-ui/core'
+import { TextField, InputBase } from '@material-ui/core'
 import { inject } from 'mobx-react'
 
 // TODO: action으로 분리할 것
 @inject("stores")
 class ChatInput extends React.Component {
 
-  componentWillMount() {
+  componentDidMount(props) {
     var sock = new SockJS("/gs-guide-websocket")
     var stompClient = Stomp.over(sock)
     this.stompClient = stompClient
@@ -59,29 +59,26 @@ class ChatInput extends React.Component {
     })
   }
 
-  componentDidMount() {
-
-  }
-
 
   render() {
 
     return (
       <div className="ChatInputContainer">
-        <TextField 
+        <InputBase
           className="input"
           variant="outlined"
           margin="dense"
           onChange={this._onInputChange}
           onKeyPress={this._onEnter}
           value={this.state.inputText}
+          endAdornment={<SendBtn onClick={this._onClickSendBtn}/>}
         />
 
-        <div className="sendBtn">
+        {/* <div className="sendBtn">
           <SendBtn
             onClick={this._onClickSendBtn}
           />
-        </div>
+        </div> */}
       </div>
     )
   }

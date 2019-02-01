@@ -11,6 +11,9 @@
   justify-content: center;
   align-items: center;
 
+  background-color: white;
+  padding: 10px;
+
   .input {
     flex: 1;
     width: 100%;
@@ -28,4 +31,9 @@
 
 .SendBtn {
   margin: 2px; 
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+  flex-grow: 0;
+  justify-content: center;
 }
