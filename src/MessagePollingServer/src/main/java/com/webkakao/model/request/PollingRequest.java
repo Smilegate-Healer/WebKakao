@@ -1,16 +1,24 @@
 package com.webkakao.model.request;
 
-import java.util.List;
-
 public class PollingRequest {
 	
-	private Long[] rooms;
+	private long user_idx;
+	
+	public long getUser_idx() {
+		return user_idx;
+	}
 
-	public Long[] getRooms() {
+	public void setUser_idx(long user_idx) {
+		this.user_idx = user_idx;
+	}
+
+	private long[] rooms;
+
+	public long[] getRooms() {
 		return rooms;
 	}
 
-	public void setRooms(Long[] rooms) {
+	public void setRooms(long[] rooms) {
 		this.rooms = rooms;
 	}
 
