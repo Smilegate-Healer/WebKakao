@@ -66,7 +66,6 @@ class ChatInput extends React.Component {
       <div className="ChatInputContainer">
         <InputBase
           className="input"
-          variant="outlined"
           margin="dense"
           onChange={this._onInputChange}
           onKeyPress={this._onEnter}

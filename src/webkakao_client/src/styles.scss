@@ -1,3 +1,5 @@
+
+
 .root {
   display: flex;
   width: 100vw;
@@ -5,12 +7,17 @@
   align-items: stretch;
   justify-content: center;
 
+  overflow: hidden;
+  position: fixed;
+
   .leftContainer {
     flex-basis: 350px;
     flex-shrink: 0;
     height: 100%;
     background-color: white;
     padding: 10px;
+
+    border-right: 1px solid #dcdcdc;
   }
 
   .rightContainer {
@@ -20,3 +27,4 @@
     background-color: rgb(172, 193, 209);
   }
 }
+

@@ -1,9 +1,11 @@
 .ChatBar {
 
   width: 100%;
-  height: 48px;
+  height: 50px;
   display: flex;
   flex-direction: row;
+
+  padding: 2px;
 
   .backButtonContainer {
     flex: 0;
