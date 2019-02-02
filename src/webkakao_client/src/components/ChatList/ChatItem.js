@@ -1,5 +1,6 @@
 import React from 'react'
 import './styles.scss'
+import PropTypes from 'prop-types'
 
 class ChatItem extends React.Component {
 
@@ -14,8 +15,7 @@ class ChatItem extends React.Component {
 
         <div className="senderMsgContainer">
           <div>
-            {/* {chat.sender} */}
-            {chat.userId}
+            {chat.sender}
           </div> 
           <div>
             {chat.msg}
@@ -23,11 +23,16 @@ class ChatItem extends React.Component {
         </div>
 
         <div className="timeContainer">
-            {chat.time}
+            {chat.timestamp}
         </div>
       </div>
     )
   }
 }
+
+ChatItem.propTypes = {
+  chat: PropTypes.object,
+}
+
 
 export default ChatItem

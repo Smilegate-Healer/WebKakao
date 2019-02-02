@@ -9,11 +9,14 @@
     flex-basis: 350px;
     flex-shrink: 0;
     height: 100%;
+    background-color: white;
+    padding: 10px;
   }
 
   .rightContainer {
     flex: 1;
     flex-shrink: 0;
     height: 100%;
+    background-color: rgb(172, 193, 209);
   }
 }

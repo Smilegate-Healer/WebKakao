@@ -15,7 +15,7 @@ class ChatList extends React.Component {
           chatroom.chats[view.selectedChatroom].map((v, idx) => 
             <ChatItem
               chat={v}
-              key={v.time}
+              key={idx}
             />
           )
         }
