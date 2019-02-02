@@ -114,8 +114,10 @@ export default class Chatroom {
    * 
    * Using long polling
    */
-  @action updateWholeChatroomList = () => {
+  @action updateWholeChatroomList = (data) => {
     // TODO: long polling  
+    debugger;
+    
   }
 
 

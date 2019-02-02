@@ -19,12 +19,12 @@ class ListItem extends React.Component {
             {item.chatroom_idx}
           </div>
           <div className="msg">
-            {item.last_msg_idx}
+            {item.last_msg}
           </div>
         </div>
 
         <div className="dateContainer">
-          {item.date}
+          {/* {item.date} */}
         </div>
       </li>
     )

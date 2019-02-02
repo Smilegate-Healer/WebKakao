@@ -25,7 +25,7 @@ class ChatroomList extends React.Component {
           {list.map((v, idx) => 
             <ListItem 
               item={v} 
-              key={v.name} 
+              key={v.chatroom_idx} 
               onClick={e => this._onItemClick(e, idx)}
               onLogoClick={e => this._onLogoClick(e, idx)}
               />

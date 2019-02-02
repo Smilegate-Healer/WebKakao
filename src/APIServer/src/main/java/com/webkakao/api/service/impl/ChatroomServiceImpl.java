@@ -30,6 +30,7 @@ public class ChatroomServiceImpl implements ChatroomService {
 
 	@Autowired
 	private RedisService redisService;
+	
 
 	@Autowired
 	private ChatsMongoRepository mongoRepository;
@@ -132,6 +133,9 @@ public class ChatroomServiceImpl implements ChatroomService {
 		List<ChatroomUserList> user_list = chatroomMapper.getChatroomUserList(param.getUser_idx());
 		resultParam.setChatroomUserList(user_list, param.getUser_idx());
 
+		//TODO: Get Last Msg 
+		redisService.getLastMsg(list);
+		
 		wrapper.setParam(resultParam);
 
 		return wrapper;
