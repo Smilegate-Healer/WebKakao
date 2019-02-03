@@ -11,17 +11,8 @@ import { inject } from 'mobx-react'
 class ChatInput extends React.Component {
 
   componentDidMount(props) {
-    var sock = new SockJS("/gs-guide-websocket")
-    var stompClient = Stomp.over(sock)
-    this.stompClient = stompClient
-    
-    this.stompClient.connect({}, frame => {
-      console.log('conneted to the socket')
-      stompClient.subscribe("/topic/chatroom/1", (msg) => {
-        this.props.stores.chatroom.chats[1].push(JSON.parse(msg.body))
-        console.log(msg)
-      })
-    })
+    const { stores } = this.props
+    stores.chatroom.openChatroom(stores.view.selectedChatroom)
   }
 
   state = {
@@ -30,11 +21,11 @@ class ChatInput extends React.Component {
   }
 
   _onClickSendBtn = e => {
-    this.stompClient.send("/chatroom/1", JSON.stringify({
+    this.props.stores.chatroom.sendChat(this.props.stores.view.selectedChatroom, {
       sender: this.state.sender === 1 ? 2 : 1,
       msg: this.state.inputText,
       msg_type: "m"
-    })) 
+    }) 
 
     this.setState({
       sender: this.state.sender === 1 ? 2 : 1

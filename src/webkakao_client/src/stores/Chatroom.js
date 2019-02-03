@@ -1,4 +1,6 @@
 import { observable, action } from 'mobx'
+import SockJS from 'sockjs-client'
+import Stomp from 'webstomp-client'
 
 const dummy = [
   {
@@ -60,6 +62,23 @@ const dummyChats = [
   }
 ] 
 
+const dummyChats2 = [
+  {
+    sender: 2,
+    msg: "세번째 메시지 입니다",
+    msg_type: "m",
+    timestamp: "1234",
+    msg_idx: "1"
+  },
+  {
+    sender: 3,
+    msg: "네번째 메시지 입니다",
+    msg_type: "m",
+    msg_idx: "2",
+    timestamp: "1235"
+  } 
+]
+
 
 export default class Chatroom {
   constructor(root) {
@@ -95,8 +114,20 @@ export default class Chatroom {
    * time: the time of the chat
    */
   @observable chats = {
-    1: dummyChats
+    1: dummyChats,
+    2: dummyChats2
   }
+
+  @observable stompClient = null
+
+  /**
+   * Boolean 
+   * if the socket is connected to the server
+   * then true
+   * else false
+   * 
+   */
+  @observable isConnected = false
 
   /**
    * set chatroom list chatroom list 
@@ -139,16 +170,45 @@ export default class Chatroom {
   /**
    * Connect the chatroom with Websocket
    */
-  @action openChatroom = () => {
+  @action openChatroom = (chatroomId) => {
     // TODO: Open the web socket for the chatroom
+
+    this.stompClient = Stomp.over(new SockJS("/gs-guide-websocket"))         
+
+    this.stompClient.connect({}, frame => {
+      console.log("Successfully Connected")
+      console.log(frame)
+      this.isConnected = true
+      this.stompClient.subscribe("/topic/chatroom/" + chatroomId, msg => {
+        this.chats[chatroomId].push(JSON.parse(msg.body))
+        console.log(msg)
+      })
+    })
+  }
+
+  /**
+   * Leave the Chatroom
+   */
+  @action leaveChatroom = () => {
+    console.log("Disconnecting from the chatroom server")
+    this.stompClient.disconnect(() => {
+      console.log("Successfully disconnected")
+      this.stompClient = null
+      this.isConnected = false
+    })
   }
 
   /**
    * Send a chat
-   * TODO: chatroom idx or id
    */
-  @action sendChat = (whichChatroom) => {
-    // TODO: send a chat through websocket
-    // if success => add to the chatList in the chatroomList
+  @action sendChat = (chatroomId, content) => {
+    if(this.stompClient === null || this.isConnected === false) {
+      console.error("No valid connection between server and client")
+      this.stompClient = null
+      this.isConnected = false
+      return 
+    }
+
+    this.stompClient.send("/chatroom/" + chatroomId, JSON.stringify(content))
   }
 }
