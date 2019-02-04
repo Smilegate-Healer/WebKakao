@@ -21,7 +21,6 @@ class ChatroomList extends React.Component {
     // TODO: Complete the logic of making list item
     
     return (
-              key={v.chatroom_idx} 
       <ListItem
         item={v}
         key={idx}
