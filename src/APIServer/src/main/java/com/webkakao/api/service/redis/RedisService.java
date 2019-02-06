@@ -1,5 +1,6 @@
 package com.webkakao.api.service.redis;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.webkakao.api.model.ChatroomInfo;
-import com.webkakao.api.model.ChatroomUserList;
 import com.webkakao.api.model.redis.ChatroomInfoModel;
 import com.webkakao.api.repository.ChatroomInfoRedisRepository;
 
@@ -39,7 +39,7 @@ public class RedisService {
 			return false;
 
 		ChatroomInfoModel chatroomInfoModel = ChatroomInfoModel.builder().chatroom_id(chatroomId).object_id(objectId)
-				.last_msg_idx(1) // start from 1
+				.last_msg_idx(1).timestamp(new Date().getTime()).last_msg("") // start from 1
 				.build();
 
 		chatroomInfoRepository.save(chatroomInfoModel);
