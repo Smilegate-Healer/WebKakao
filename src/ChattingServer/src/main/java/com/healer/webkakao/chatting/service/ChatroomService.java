@@ -2,11 +2,11 @@ package com.healer.webkakao.chatting.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -68,7 +68,7 @@ public class ChatroomService {
 			return false;
 
 		ChatroomInfoModel chatroomInfoModel = ChatroomInfoModel.builder().chatroom_id(chatroomId)
-				.object_id(chatroom.get().getObject_id()).last_msg_idx(lastMsgIdx).last_msg(msg).build();
+				.object_id(chatroom.get().getObject_id()).last_msg_idx(lastMsgIdx).last_msg(msg).timestamp(new Date().getTime()).build();
 
 		log.debug("Save the changed chatroominfo into Redis");
 		redisRepository.save(chatroomInfoModel);
