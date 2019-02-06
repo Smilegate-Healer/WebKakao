@@ -1,24 +1,30 @@
 package com.webkakao.model.response;
 
-import java.util.List;
-
-import com.webkakao.model.PollingData;
-
 public class PollingResponse {
 
-	// private List<PollingData> data;
-	//
-	// public List<PollingData> getData() {
-	// return data;
-	// }
-	//
-	// public void setData(List<PollingData> data) {
-	// this.data = data;
-	// }
-
+	private int resultCode;
 	private long chatroom_idx;
 	private long last_msg_idx;
 	private String last_msg;
+	private long timestamp;
+	
+	
+
+	public long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public int getResultCode() {
+		return resultCode;
+	}
+
+	public void setResultCode(int resultCode) {
+		this.resultCode = resultCode;
+	}
 
 	public long getChatroom_idx() {
 		return chatroom_idx;

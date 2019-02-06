@@ -3,6 +3,7 @@ package com.webkakao.service.impl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,10 +85,12 @@ public class PollingServiceImpl implements PollingService {
 			throws JsonParseException, JsonMappingException, IOException {
 
 		PollingResponse response = new PollingResponse();
+		response.setResultCode(0);
 		response.setChatroom_idx(chatroom_idx);
 		ChatModel message = objectMapper.readValue(msg, ChatModel.class);
 		response.setLast_msg_idx(message.getMsg_idx());
 		response.setLast_msg(message.getMsg());
+		response.setTimestamp(new Date().getTime());
 
 		List<DeferredResult<PollingResponse>> list = response_map.get(chatroom_idx);
 

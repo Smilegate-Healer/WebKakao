@@ -52,6 +52,9 @@ public class MessagePollingController {
 	    result.onTimeout(new Runnable() {
 			@Override
 			public void run() {
+				PollingResponse response = new PollingResponse();
+				response.setResultCode(100);
+				result.setResult(response);
 				pollingService.removeDeferredResult(param.getUser_idx(), result);
 			}
 		});

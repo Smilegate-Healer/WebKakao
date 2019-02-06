@@ -20,4 +20,5 @@ public class ChatroomInfoModel implements Serializable {
   private String object_id;
   private long last_msg_idx;
   private String last_msg;
+  private long timestamp;
 }
