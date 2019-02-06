@@ -28,6 +28,7 @@ class Title extends Component {
   //     </div>
   //   );
   // }
+  
   render() {
     return (
       <Typography

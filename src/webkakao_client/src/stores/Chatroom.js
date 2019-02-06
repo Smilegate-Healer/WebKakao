@@ -102,6 +102,8 @@ export default class Chatroom {
    *
    */
   @observable chatroomList = dummy
+  @observable pollingAxios = null
+  @observable chatroomAxios = null
 
   /**
    * 
@@ -145,10 +147,37 @@ export default class Chatroom {
    * 
    * Using long polling
    */
-  @action updateWholeChatroomList = (data) => {
-    // TODO: long polling  
+  @action updateWholeChatroomList = () => {
+    this.pollingAxios.post("http://localhost:8082/message/longpolling", { 
+        user_idx: 1,
+        rooms: [1]
+      }).then(res => {
+        if(res.data.resultCode === 0) {
+          // alert(res.data.chatroom_idx + ' : ' + res.data.last_msg_idx + ' : ' + res.data.last_msg);
+          this.updatePollingdata(res.data);
+        }
+        return this.root.chatroom.updateWholeChatroomList();
+      }).catch(err => {
+        console.log(err);
+        setTimeout(function() { this.root.chatroom.updateWholeChatroomList() }, 10000)
+        // return this.root.chatroom.updateWholeChatroomList();
+      })
+  }
+
+/**
+   * Delete the chatroom 
+   * 
+   * Both the local and the server or just on local or server
+   */
+  @action updatePollingdata = (data) => {
     debugger;
-    
+    for(var i=0; i<this.chatroomList.length; i++) {
+      if(this.chatroomList[i].chatroom_idx === data.chatroom_idx) {
+        this.chatroomList[i].last_msg_idx = data.last_msg_idx;
+        this.chatroomList[i].last_msg = data.last_msg;
+        this.chatroomList[i].timestamp = data.timestamp;
+      }
+    }
   }
 
 
@@ -174,7 +203,6 @@ export default class Chatroom {
    */
   @action openChatroom = (chatroomId) => {
     // TODO: Open the web socket for the chatroom
-
     this.stompClient = Stomp.over(new SockJS("/gs-guide-websocket"))         
 
     this.stompClient.connect({}, frame => {

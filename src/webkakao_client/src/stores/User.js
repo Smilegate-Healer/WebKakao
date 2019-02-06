@@ -16,7 +16,7 @@ export default class User {
   }
 
   @observable authorizedAxios = null
-  @observable pollingAxios = null
+  @observable friendAxios = null
 
   @observable isLogin = false
   @observable userInfo = dummyUser
@@ -53,10 +53,34 @@ export default class User {
       }
     })
 
-    this.pollingAxios = axios.create({
+    this.friendAxios = axios.create({
       //baseURL: this._domain,
       // baseURL: "localhost:8081",
       timeout: 30000,
+      headers: {
+        // ...this._axiosHeaders, // TODO: right??
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        // "Authorization": `Bearer` + this.userInfo.token
+      }
+    })
+
+    this.root.chatroom.chatroomAxios = axios.create({
+      //baseURL: this._domain,
+      // baseURL: "localhost:8081",
+      timeout: 30000,
+      headers: {
+        // ...this._axiosHeaders, // TODO: right??
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        // "Authorization": `Bearer` + this.userInfo.token
+      }
+    })
+
+    this.root.chatroom.pollingAxios = axios.create({
+      //baseURL: this._domain,
+      // baseURL: "localhost:8081",
+      timeout: 60000,
       headers: {
         // ...this._axiosHeaders, // TODO: right??
         "Accept": "application/json",
@@ -79,8 +103,7 @@ export default class User {
   }
 
   @action getFriendList = () => {
-    // debugger;
-    this.authorizedAxios.post("http://localhost:8081/api/friend/list", { // TODO: REST???
+    this.friendAxios.post("http://localhost:8081/api/friend/list", { // TODO: REST???
       user_idx: 1
     }).then(res => {
       console.log(res)
@@ -91,45 +114,90 @@ export default class User {
   }
 
   @action getChatroomList = () => {
-    // debugger;
-    this.authorizedAxios.post('http://localhost:8081/api/chatroom/list', {
+    this.root.chatroom.chatroomAxios.post('http://localhost:8081/api/chatroom/list', {
       user_idx: 1
     }).then(res => {
       console.log(res)
       if (res.data.resultCode === 0) {
         this.root.chatroom.initChatroomList(res.data.param.list)
-
-        this.polling1();
-
+        this.root.chatroom.updateWholeChatroomList();
       }
     }).catch(err => console.error(err))
   }
 
-  polling1(data) {
-      this.pollingAxios.post("http://localhost:8082/message/longpolling", { 
-        user_idx: 1,
-        rooms: [1]
-      }).then(res => {
-        // alert(res.data.chatroom_idx + ' : ' + res.data.last_msg_idx + ' : ' + res.data.last_msg);
-        this.root.chatroom.updateWholeChatroomList(res.data);
-        this.polling2();
-      }).catch(err => {
-        console.error(err);
-        this.polling2();
-      })
+  /**
+   * request friend 
+   * 
+   * Using axious
+   * param : {
+   *  from_user_idx : data,
+   *  to_user_idx : data
+   * }
+   */
+  @action
+  requestFriend = (data) => {
+    this.friendAxios.post("http://localhost:8081/api/friend/request", data).then(res => {
+      console.log(res)
+      if (res.data.resultCode === 0) {
+        this.initFriendList(res.data.param.list)
+      }
+    }).catch(err => console.error(err))
   }
 
-  polling2(data) {
-      this.pollingAxios.post("http://localhost:8082/message/longpolling", { 
-        user_idx: 1,
-        rooms: [1]
-      }).then(res => {
-        // alert(res.data.chatroom_idx + ' : ' + res.data.last_msg_idx + ' : ' + res.data.last_msg);
-        this.root.chatroom.updateWholeChatroomList(res.data);
-        this.polling1();
-      }).catch(err => {
-        console.error(err);
-        this.polling1();
-      })
+  /**
+   * update friends info
+   * 
+   * Using axious
+   * param : {  
+   *  from_user_idx: 1,
+   *  to_user_idx: 2,
+   *  state: 2
+   *  }
+   */
+  @action
+  updateFriend = (data) => {
+    this.friendAxios.post("http://localhost:8081/api/friend/status", data).then(res => {
+      console.log(res)
+      if (res.data.resultCode === 0) {
+        this.initFriendList(res.data.param.list)
+      }
+    }).catch(err => console.error(err))
   }
+
+  /**
+   * search friend by email
+   * 
+   * Using axious
+   * param : { 
+   *  user_email: email
+   * }
+   */
+  @action
+  searchFriend = (data) => {
+    this.friendAxios.post("http://localhost:8081/api/friend/search", data).then(res => {
+      console.log(res)
+      if (res.data.resultCode === 0) {
+        this.initFriendList(res.data.param.list)
+      }
+    }).catch(err => console.error(err))
+  }
+
+  /**
+   * get user info by user_idx
+   * 
+   * Using axious
+   * param : { 
+   *  user_idx: idx
+   * }
+   */
+  @action
+  getUserInfo = (data) => {
+    this.friendAxios.post("http://localhost:8081/api/user/info", data).then(res => {
+      console.log(res)
+      if (res.data.resultCode === 0) {
+        this.initFriendList(res.data.param.list)
+      }
+    }).catch(err => console.error(err))
+  }
+  
 }
