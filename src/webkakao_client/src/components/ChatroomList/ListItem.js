@@ -3,7 +3,8 @@ import PropTypes, { string, number } from 'prop-types'
 import './styles.scss'
 import { Person, } from '@material-ui/icons'
 import { Typography } from '@material-ui/core'
-import DateForamtter from '../../utils/DateFormatter'
+import DateFormatter from '../../utils/DateFormatter'
+import ChatroomNameFormatter from '../../utils/ChatroomNameFormatter'
 import { observer } from 'mobx-react';
 
 @observer
@@ -21,7 +22,8 @@ class ListItem extends React.Component {
   render() {
     const { item } = this.props
 
-    const date = DateForamtter.getKoreanDate(item.timestamp)
+    const date = DateFormatter.getKoreanDate(item.timestamp)
+    const chatroomName = ChatroomNameFormatter.getChatroomName(item.user_list, item.chatroom_name)
     return (
       <li className="ListItem" onClick={this.props.onClick}>
         <div className="logoContainer" onClick={this.props.onLogoClick}>
@@ -35,7 +37,7 @@ class ListItem extends React.Component {
             <Typography 
               variant="body1" 
               color="textPrimary">
-              {item.chatroomName} {/* TODO: 채팅방 이름 로직 추가 */}
+              {chatroomName} {/* TODO: 채팅방 이름 로직 추가 */}
             </Typography>
           </div>
           <div className="msg">
