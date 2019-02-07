@@ -18,6 +18,7 @@ import com.webkakao.api.model.request.CheckOutChatroom;
 import com.webkakao.api.model.request.GetChatroomList;
 import com.webkakao.api.model.request.GetChatroomMessage;
 import com.webkakao.api.model.request.RequestChatroom;
+import com.webkakao.api.model.request.UpdateChatroomName;
 import com.webkakao.api.model.response.GetChatroomListParam;
 import com.webkakao.api.model.response.GetChatroomMessageParam;
 import com.webkakao.api.model.response.RequestChatroomParam;
@@ -69,7 +70,7 @@ public class ChatroomServiceImpl implements ChatroomService {
 			map.put("user_idx", param.getFrom_user_idx());
 			map.put("last_read_msg_idx", 0);
 			map.put("start_msg_idx", 0);
-
+			
 			chatroomMapper.checkInChatroom(map);
 
 			map.put("user_idx", param.getTo_user_idx());
@@ -106,12 +107,12 @@ public class ChatroomServiceImpl implements ChatroomService {
 			Map<String, Object> map = new HashMap<String, Object>();
 
 			map.put("chatroom_idx", param.getChatroom_idx());
-			map.put("creator_idx", param.getFrom_user_idx());
+			map.put("user_idx", param.getTo_user_idx());
 			map.put("last_read_msg_idx", last_msg_idx);
 			map.put("start_msg_idx", last_msg_idx);
-
+			
 			chatroomMapper.checkInChatroom(map);
-
+			
 		} catch (Exception e) {
 			wrapper.setResultCode(111);
 			wrapper.setMessage("Insert Error");
@@ -191,6 +192,17 @@ public class ChatroomServiceImpl implements ChatroomService {
 		wrapper.setParam(resultParam);
 
 		return wrapper;
+	}
+
+	@Override
+	public APIResponseWrapper updateChatroomName(UpdateChatroomName param) {
+		
+		APIResponseWrapper wrapper = createWrapper();
+
+		chatroomMapper.updateChatroomName(param);
+
+		return wrapper;
+
 	}
 
 }
