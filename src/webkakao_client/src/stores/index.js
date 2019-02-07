@@ -10,10 +10,16 @@ class RootStore {
     this.view = new View(this)
 
     reaction(() => this.view.selectedChatroom, selectedChatroom => {
-      this.chatroom.leaveChatroom()
-      if(selectedChatroom !== null) {
-        this.chatroom.openChatroom(selectedChatroom)
-      }
+      this.chatroom.openSocket()
+        .then(() => {
+          if(selectedChatroom !== null) 
+            this.chatroom.moveToAnother(selectedChatroom)
+          else 
+            this.chatroom.stompSubscription.unsubcribe()
+        })
+        .catch(() => {
+          console.error("ERROR while opening socket")
+        })
     })
   }
 }

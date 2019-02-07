@@ -121,6 +121,7 @@ export default class Chatroom {
   }
 
   @observable stompClient = null
+  stompSubscription = null
 
   /**
    * Boolean 
@@ -199,38 +200,66 @@ export default class Chatroom {
   }
 
   /**
-   * Connect the chatroom with Websocket
+   * Establish connection to Chatting server
    */
-  @action openChatroom = (chatroomId) => {
-    // TODO: Open the web socket for the chatroom
-    this.stompClient = Stomp.over(new SockJS("/gs-guide-websocket"))         
+  @action openSocket = () => {
+    return new Promise((resolve, reject) => {
+      if(this.stompClient !== null && this.isConnected === true) {
+        resolve()
+        return
+      }
+      this.stompClient = Stomp.over(new SockJS("/gs-guide-websocket"))         
 
-    this.stompClient.connect({}, frame => {
-      console.log("Successfully Connected")
-      console.log(frame)
-      this.isConnected = true
-      this.stompClient.subscribe("/topic/chatroom/" + chatroomId, msg => {
-        this.chats[chatroomId].push(JSON.parse(msg.body))
-        console.log(msg)
+      this.stompClient.connect({}, frame => {
+        console.log("Successfully Connected")
+        console.log(frame)
+        this.isConnected = true
+        resolve()
+      }, err => {
+        console.error(err)
+        this.isConnected = false
+        this.stompClient = null
+        this.stompSubscription = null
+        reject()
       })
-    }, err => {
-      console.error(err)
     })
   }
 
   /**
-   * Leave the Chatroom
+   * Disconnect from the Chatting server
    */
-  @action leaveChatroom = () => {
+  @action closeSocket = () => {
     if(this.stompClient === null || this.isConnected === false) return
     console.log("Disconnecting from the chatroom server")
     this.stompClient.disconnect(() => {
       console.log("Successfully disconnected")
       this.stompClient = null
       this.isConnected = false
+      this.stompSubscription = null
     })
   }
 
+  /**
+   * Change from Chatroom A to B
+   * ie. Subscription changes
+   */
+  @action moveToAnother = (chatroomId) => {
+    console.log("Move to another chatroom")
+    if(this.stompClient === null || this.isConnected === false) {
+      console.error("No STOMP client or connection")
+      this.closeSocket()
+      return
+    }
+
+    if(this.stompSubscription !== null) 
+      this.stompSubscription.unsubscribe()
+
+    this.stompSubscription = this.stompClient.subscribe("/topic/chatroom/" + chatroomId, msg => {
+      this.chats[chatroomId].push(JSON.parse(msg.body))
+      console.log(msg)
+    })
+
+  }
   /**
    * Send a chat
    */
