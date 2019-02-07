@@ -64,7 +64,7 @@ public class RedisService {
 				ChatroomInfoModel model = object.get();
 				list.get(i).setLast_msg(model.getLast_msg());
 				// TODO: Timestamp Setting
-				// list.get(i).setTimestamp(model.get);
+				list.get(i).setTimestamp(model.getTimestamp());
 			}
 
 			// TODO: Default Msg Setting
