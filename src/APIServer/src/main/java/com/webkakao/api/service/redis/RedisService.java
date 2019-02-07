@@ -1,5 +1,6 @@
 package com.webkakao.api.service.redis;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -7,7 +8,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webkakao.api.model.ChatModel;
 import com.webkakao.api.model.ChatroomInfo;
 import com.webkakao.api.model.redis.ChatroomInfoModel;
@@ -24,8 +26,8 @@ public class RedisService {
 	@Autowired
 	private RedisTemplate redisTemplate;
 
-	// @Autowired
-	// private ObjectMapper objectMapper;
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	// @Autowired
 	// private RedisTemplate<String, Object> redisTemplate;
@@ -49,8 +51,8 @@ public class RedisService {
 	public List<ChatModel> getChatroomMessage(long chatroom_idx) {
 
 		List<ChatModel> data = redisTemplate.opsForList().range(chatroom_idx, 0, -1);
-
-		return data;
+		List<ChatModel> newData = objectMapper.convertValue(data, new TypeReference<List<ChatModel>>(){});
+		return newData;
 
 	}
 
