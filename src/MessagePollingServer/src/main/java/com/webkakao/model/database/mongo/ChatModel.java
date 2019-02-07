@@ -1,4 +1,4 @@
-package com.healer.webkakao.chatting.model;
+package com.webkakao.model.database.mongo;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

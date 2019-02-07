@@ -11,11 +11,16 @@ class ChatItem extends React.Component {
 
   _renderMine() {
     const { chat } = this.props
-
+    const time = new Date(chat.timestamp);
+    let hour = time.getHours();
+    const AMPM = hour >= 12 ? '오전' : '오후';
+    hour = hour % 12;
+    const minute = time.getMinutes();
+    const fullTime = AMPM + " " + hour + ":" + minute;
     return (
       <div className="ChatItem ChatItemMine">
         <div className="timeContainer timeMine">
-          <Typography variant="caption">{chat.timestamp}</Typography>
+          <Typography variant="caption">{fullTime}</Typography>
         </div>
         
         <div className="senderMsgContainer senderMsgContainerMine">
@@ -31,7 +36,12 @@ class ChatItem extends React.Component {
 
   _renderNotMine() {
     const { chat } = this.props;
-
+    const time = new Date(chat.timestamp);
+    let hour = time.getHours();
+    const AMPM = hour >= 12 ? '오전' : '오후';
+    hour = hour % 12;
+    const minute = time.getMinutes();
+    const fullTime = AMPM + " " + hour + ":" + minute;
     return (
       <div className="ChatItem">
         <div className="profileContainer">
@@ -52,7 +62,7 @@ class ChatItem extends React.Component {
         </div>
 
         <div className="timeContainer">
-          <Typography variant="caption">{chat.timestamp}</Typography>
+          <Typography variant="caption">{fullTime}</Typography>
         </div>
       </div>
     );

@@ -1,4 +1,4 @@
-package com.healer.webkakao.chatting.model;
+package com.webkakao.api.model;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

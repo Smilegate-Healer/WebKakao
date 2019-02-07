@@ -12,8 +12,10 @@ import {
   MessageOutlined,
   MoreHorizOutlined
 } from '@material-ui/icons'
+import { inject, observer } from "mobx-react";
 
-
+@inject("stores")
+@observer
 class MenuBar extends Component {
   // render() {
   //   return (
@@ -33,12 +35,29 @@ class MenuBar extends Component {
     value: 0
   }
 
+  onClickButton = (value) => {
+    this.setState({value:value})
+    switch (value) {
+        case 0:
+            this.props.stores.view.showFriendsList();
+            break;
+        case 1:
+            this.props.stores.view.showChatroomList();
+            break;
+        case 2:
+            this.props.stores.view.showOption();
+            break;
+        default:
+        alert('default');
+    }
+  }
+
   render() {
     return(
       <div className="menuContainer">
         <Tabs
           value={this.state.value}
-          onChange={(e, v) => this.setState({value: v})}
+          onChange={(e, v) => this.onClickButton(v)}
           variant="fullWidth"
           indicatorColor="primary"
           textColor="primary">

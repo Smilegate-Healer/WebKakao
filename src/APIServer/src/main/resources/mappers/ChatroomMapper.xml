@@ -21,10 +21,12 @@
 
 	<insert id="insertChatroom" parameterType="com.webkakao.api.model.ChatroomInfo" useGeneratedKeys="true" keyProperty="chatroom_idx">
     	insert into chat_room (
-    		creator_idx
+    		creator_idx,
+    		msg_object_id
     	) 
     	values (
-    		#{from_user_idx}
+    		#{from_user_idx},
+    		#{msg_object_id}
     	)
     </insert>
     

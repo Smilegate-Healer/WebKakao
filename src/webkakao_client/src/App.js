@@ -10,9 +10,9 @@ import { CssBaseline } from '@material-ui/core';
 class App extends Component {
 
   componentWillMount() {
-    // this.props.stores.user.login() // TODO: Test
-    // this.props.stores.user.getFriendList()
-    // this.props.stores.user.getChatroomList()
+    this.props.stores.user.login() // TODO: Test
+    this.props.stores.user.getFriendList()
+    this.props.stores.user.getChatroomList()
   }
 
   render() {
