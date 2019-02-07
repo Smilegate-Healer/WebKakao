@@ -24,7 +24,7 @@ export default class View {
    * TODO: The index or id of the chatroom
    */
   // @observable selectedChatroom = null
-  @observable selectedChatroom = 1
+  @observable selectedChatroom = null
 
   constructor(root) {
     this.root = root

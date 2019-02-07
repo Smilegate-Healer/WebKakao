@@ -7,23 +7,31 @@ import { inject, observer } from "mobx-react"
 @observer
 class ChatList extends React.Component {
 
-  render() {
+  _renderItems = () => {
     const { view, chatroom } = this.props.stores
+
+    if(!view.selectedChatroom || !chatroom.chats[view.selectedChatroom]) return 
+
+    console.log(chatroom.chats[view.selectedChatroom])
+    debugger
+    
+    return chatroom.chats[view.selectedChatroom].data.map((v, idx) => {
+      var isMine = idx%2 === 0 ? true : false
+
+      return (
+        <ChatItem
+          chat={v}
+          key={idx}
+          isMine={isMine}
+        />
+      )
+    })
+  }
+
+  render() {
     return (
       <div className="List">
-        {
-          chatroom.chats[view.selectedChatroom].map((v, idx) =>  {
-            var isMine = idx%2 === 0 ? true : false
-
-            return (
-              <ChatItem
-                chat={v}
-                key={idx}
-                isMine={isMine}
-              />
-            )
-          })
-        }
+        { this._renderItems()}
       </div>
     )
   }

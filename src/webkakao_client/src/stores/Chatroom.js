@@ -116,8 +116,6 @@ export default class Chatroom {
    * time: the time of the chat
    */
   @observable chats = {
-    1: dummyChats,
-    4: dummyChats2
   }
 
   @observable stompClient = null
@@ -199,7 +197,7 @@ export default class Chatroom {
 
     this.chatroomAxios.post("http://localhost:8081/api/chatroom/message", reqData).then(res => {
       if(res.data.resultCode === 0) {
-        if(this.chats[chatroom_idx]) {
+        if(!this.chats[chatroom_idx]) {
           this.chats[chatroom_idx] = res.data.param;
         } else {
           this.chats[chatroom_idx].data.unshift(res.data.param.data);
@@ -284,7 +282,7 @@ export default class Chatroom {
       this.stompSubscription.unsubscribe()
 
     this.stompSubscription = this.stompClient.subscribe("/topic/chatroom/" + chatroomId, msg => {
-      this.chats[chatroomId].push(JSON.parse(msg.body))
+      this.chats[chatroomId].data.push(JSON.parse(msg.body))
       console.log(msg)
     })
 

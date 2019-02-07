@@ -1,10 +1,12 @@
 package com.webkakao.api.service.redis;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.webkakao.api.model.ChatsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -50,9 +52,17 @@ public class RedisService {
 	
 	public List<ChatModel> getChatroomMessage(long chatroom_idx) {
 
-		List<ChatModel> data = redisTemplate.opsForList().range(chatroom_idx, 0, -1);
-		List<ChatModel> newData = objectMapper.convertValue(data, new TypeReference<List<ChatModel>>(){});
-		return newData;
+		List<String> data = redisTemplate.opsForList().range(chatroom_idx, 0, -1);
+		List<ChatModel> result = new ArrayList<>();
+		try {
+			for(int i = 0; i < data.size(); i++) {
+				ChatModel chatModel = objectMapper.readValue(data.get(i), ChatModel.class);
+				result.add(chatModel);
+			}
+		} catch(IOException e) {
+			result.clear();
+		}
+		return result;
 
 	}
 

@@ -10,6 +10,9 @@ class RootStore {
     this.view = new View(this)
 
     reaction(() => this.view.selectedChatroom, selectedChatroom => {
+      if(selectedChatroom !== null) this.chatroom.getChatroomMessage(selectedChatroom)
+
+
       this.chatroom.openSocket()
         .then(() => {
           if(selectedChatroom !== null) 
