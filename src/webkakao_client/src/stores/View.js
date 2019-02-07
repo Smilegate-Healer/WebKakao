@@ -79,16 +79,5 @@ export default class View {
     this.selectedChatroom = null
   }
 
-  /**
-   * 
-   */
-  @computed get onSelectedChatroomChange() {
-    console.debug("On SelectedChatroom Change")
-    this.root.chatroomleaveChatroom()
-    if(this.root.view.selectedChatroom !== null) {
-      console.debug("Set a new connection")
-      this.openChatroom(this.root.view.selectedChatroom)
-    } 
-  }
   
 }

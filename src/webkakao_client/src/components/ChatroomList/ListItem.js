@@ -4,8 +4,9 @@ import './styles.scss'
 import { Person, } from '@material-ui/icons'
 import { Typography } from '@material-ui/core'
 import DateForamtter from '../../utils/DateFormatter'
+import { observer } from 'mobx-react';
 
-
+@observer
 class ListItem extends React.Component {
 
   static defaultProps = {
@@ -34,7 +35,7 @@ class ListItem extends React.Component {
             <Typography 
               variant="body1" 
               color="textPrimary">
-              {item.chatroomName} {/* TODO */}
+              {item.chatroomName} {/* TODO: 채팅방 이름 로직 추가 */}
             </Typography>
           </div>
           <div className="msg">

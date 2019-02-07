@@ -170,7 +170,7 @@ export default class Chatroom {
    * Both the local and the server or just on local or server
    */
   @action updatePollingdata = (data) => {
-    debugger;
+    // debugger;
     for(var i=0; i<this.chatroomList.length; i++) {
       if(this.chatroomList[i].chatroom_idx === data.chatroom_idx) {
         this.chatroomList[i].last_msg_idx = data.last_msg_idx;
