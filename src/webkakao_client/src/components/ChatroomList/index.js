@@ -2,6 +2,7 @@ import React from "react";
 import ListItem from "./ListItem";
 import "./styles.scss";
 import { inject, observer } from "mobx-react";
+import DateForamtter from '../../utils/DateFormatter'
 
 @inject("stores")
 @observer
@@ -18,7 +19,7 @@ class ChatroomList extends React.Component {
 
   _renderItem = (v, idx) => {
     // TODO: Complete the logic of making list item
-    
+
     return (
       <ListItem
         item={v}

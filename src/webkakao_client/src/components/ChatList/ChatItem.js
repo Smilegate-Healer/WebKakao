@@ -3,6 +3,8 @@ import "./styles.scss";
 import PropTypes from "prop-types";
 import { Person } from "@material-ui/icons";
 import { Typography } from "@material-ui/core";
+import DateFormatter from '../../utils/DateFormatter'
+
 
 class ChatItem extends React.Component {
   static defaultProps = {
@@ -11,12 +13,8 @@ class ChatItem extends React.Component {
 
   _renderMine() {
     const { chat } = this.props
-    const time = new Date(chat.timestamp);
-    let hour = time.getHours();
-    const AMPM = hour >= 12 ? '오전' : '오후';
-    hour = hour % 12;
-    const minute = time.getMinutes();
-    const fullTime = AMPM + " " + hour + ":" + minute;
+    var fullTime = DateFormatter.getKoreanDate(chat.timestamp)
+
     return (
       <div className="ChatItem ChatItemMine">
         <div className="timeContainer timeMine">
@@ -36,12 +34,7 @@ class ChatItem extends React.Component {
 
   _renderNotMine() {
     const { chat } = this.props;
-    const time = new Date(chat.timestamp);
-    let hour = time.getHours();
-    const AMPM = hour >= 12 ? '오전' : '오후';
-    hour = hour % 12;
-    const minute = time.getMinutes();
-    const fullTime = AMPM + " " + hour + ":" + minute;
+    var fullTime = DateFormatter.getKoreanDate(chat.timestamp)
     return (
       <div className="ChatItem">
         <div className="profileContainer">

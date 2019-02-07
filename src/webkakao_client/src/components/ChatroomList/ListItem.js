@@ -3,6 +3,7 @@ import PropTypes, { string, number } from 'prop-types'
 import './styles.scss'
 import { Person, } from '@material-ui/icons'
 import { Typography } from '@material-ui/core'
+import DateForamtter from '../../utils/DateFormatter'
 
 
 class ListItem extends React.Component {
@@ -10,19 +11,21 @@ class ListItem extends React.Component {
   static defaultProps = {
     item: {
       chatroomName: "기본이름",
-      logo: '',
-      lastMsg: "마지막 메시지 입니다.",
-      date: "2019/01/01"
+      logo: null,
+      last_msg: "마지막 메시지 입니다.",
+      timestamp: 1234123412342312
     }
   }
 
   render() {
     const { item } = this.props
+
+    const date = DateForamtter.getKoreanDate(item.timestamp)
     return (
       <li className="ListItem" onClick={this.props.onClick}>
         <div className="logoContainer" onClick={this.props.onLogoClick}>
           {
-            item.logo ? item.logo : <Person fontSize="large"/>
+            item.logo && item.logo !== 'default' ? item.logo : <Person fontSize="large"/>
           }
         </div>
 
@@ -31,19 +34,19 @@ class ListItem extends React.Component {
             <Typography 
               variant="body1" 
               color="textPrimary">
-              {item.chatroomName}
+              {item.chatroomName} {/* TODO */}
             </Typography>
           </div>
           <div className="msg">
             <Typography variant="body2" color="textSecondary">
-              {item.lastMsg}
+              {item.last_msg}
             </Typography>
           </div>
         </div>
 
         <div className="dateContainer">
           <Typography variant="body2" className="date">
-            {item.date}
+            {date}
           </Typography>
         </div>
       </li>
@@ -53,10 +56,10 @@ class ListItem extends React.Component {
 
 ListItem.propTypes = {
   item: PropTypes.objectOf({
-    chatroomName: string,
-    logo: string,
-    lastMsg: string,
-    date: string
+    chatroomName: PropTypes.string,
+    logo: PropTypes.string,
+    lastMsg: PropTypes.string,
+    date: PropTypes.string
   })
 }
 

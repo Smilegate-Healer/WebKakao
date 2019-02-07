@@ -5,8 +5,8 @@ import { autorun, reaction } from 'mobx';
 
 class RootStore {
   constructor() {
-    this.user = new UserStore(this)
     this.chatroom = new Chatroom(this)
+    this.user = new UserStore(this)
     this.view = new View(this)
 
     reaction(() => this.view.selectedChatroom, selectedChatroom => {

@@ -159,7 +159,7 @@ export default class Chatroom {
         return this.root.chatroom.updateWholeChatroomList();
       }).catch(err => {
         console.log(err);
-        setTimeout(function() { this.root.chatroom.updateWholeChatroomList() }, 10000)
+        setTimeout(() => this.updateWholeChatroomList(), 10000)
         // return this.root.chatroom.updateWholeChatroomList();
       })
   }
