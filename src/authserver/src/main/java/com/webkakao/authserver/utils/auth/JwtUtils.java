@@ -15,9 +15,9 @@ import static com.auth0.jwt.JWT.require;
 @Slf4j
 public class JwtUtils {
 
-    private static final String ISSUER = "DoITSOPT";
+    private static final String ISSUER = "WebKakao";
 
-    private static final String SECRET = "vji2k@#49c!@!@#$knvldkm3$";
+    private static final String SECRET = "df;93Q%@$Gwoih43eg34Q%ajknr13627";
 
     /**
      * 토큰 생성

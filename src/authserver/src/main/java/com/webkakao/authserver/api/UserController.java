@@ -33,7 +33,7 @@ public class UserController {
      * @param signUpReq
      * @return ResponseEntity
      */
-    @PostMapping("/signup")
+    @PostMapping("signup")
     public ResponseEntity signUp(@RequestBody final SignUpReq signUpReq){
         try{
             return new ResponseEntity<>(userService.save(signUpReq), HttpStatus.OK);
@@ -42,5 +42,7 @@ public class UserController {
             return new ResponseEntity<>(FAIL_DEFAULT_RES, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 
 }

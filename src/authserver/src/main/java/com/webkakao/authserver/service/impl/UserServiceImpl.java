@@ -8,7 +8,6 @@ import com.webkakao.authserver.service.UserService;
 import com.webkakao.authserver.utils.EncryptedPassword;
 import com.webkakao.authserver.utils.ResponseMessage;
 import com.webkakao.authserver.utils.StatusCode;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,9 +24,6 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(final UserMapper userMapper) {
         this.userMapper = userMapper;
     }
-    public static final int saltbytesize = 512;
-    public static final int hashbytesize = 512;
-    public static final int iterations = 1000;
 
 
     /**
@@ -45,14 +41,8 @@ public class UserServiceImpl implements UserService {
 
             if(user==null){
                 try{
-                    SecureRandom sR = new SecureRandom();
-
-                    byte[] pws = new byte[saltbytesize];
-
-                    sR.nextBytes(pws);
-
                     String rawPassword = signUpReq.getPassword();
-                    String encodedPassword = new EncryptedPassword().getEncryptedPassword(rawPassword, pws, iterations, hashbytesize);
+                    String encodedPassword = new EncryptedPassword().getEncryptedPassword(rawPassword);
                     signUpReq.setPassword(encodedPassword);
 
                     userMapper.save(signUpReq);
@@ -68,6 +58,12 @@ public class UserServiceImpl implements UserService {
         return DefaultRes.res(StatusCode.BAD_REQUEST,ResponseMessage.FAIL_CREATED_USER);
     }
 
+    /**
+     * user_idx로 회원조회
+     *
+     * @param userIdx
+     * @return
+     */
     @Override
     public DefaultRes<User> findByUserIdx(int userIdx) {
         //사용자 조회
@@ -76,4 +72,8 @@ public class UserServiceImpl implements UserService {
         return DefaultRes.res(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER);
 
     }
+
+
+
+
 }

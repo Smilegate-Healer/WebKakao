@@ -6,19 +6,18 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 
 public class EncryptedPassword {
 
-    private static final int desiredKeyLen = 512;
+    private static final int desiredKeyLen = 512; //hash size
+    public static final int saltbytesize = 512;
+    public static final int iterations = 1000;
 
-    public static String getEncryptedPassword(
-            String password,
-            byte[] salt,
-            int iterations,
-            int derivedKeyLength
-    ) throws NoSuchAlgorithmException, InvalidKeySpecException {
+
+    public static String getEncryptedPassword(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
 //        KeySpec spec = new PBEKeySpec(
 //                password.toCharArray(),
 //                salt,
@@ -27,6 +26,8 @@ public class EncryptedPassword {
 //        );
         if (password == null || password.length() == 0)
             throw new IllegalArgumentException("Empty passwords are not supported.");
+
+        byte[] salt = new byte[saltbytesize];
 
         SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
         SecretKey key = f.generateSecret(new PBEKeySpec(password.toCharArray(), salt, iterations, desiredKeyLen));

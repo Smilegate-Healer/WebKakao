@@ -31,8 +31,8 @@ public interface UserMapper {
      * @param password  비밀번호
      * @return User
      */
-    @Select("SLECT * FROM user WHERE email=#{email} AND password=#{password}")
-    User findByEmailAndPassword(@Param("emial") final String email, @Param("password") final String password);
+    @Select("SELECT * FROM user WHERE email=#{email} AND password=#{password}")
+    User findByEmailAndPassword(@Param("email") final String email, @Param("password") final String password);
 
     /**
      * idx값으로 회원찾기
