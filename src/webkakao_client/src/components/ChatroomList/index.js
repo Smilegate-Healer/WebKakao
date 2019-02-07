@@ -20,6 +20,8 @@ class ChatroomList extends React.Component {
   _renderItem = (v, idx) => {
     // TODO: Complete the logic of making list item
 
+    console.log(v)
+
     return (
       <ListItem
         item={v}
