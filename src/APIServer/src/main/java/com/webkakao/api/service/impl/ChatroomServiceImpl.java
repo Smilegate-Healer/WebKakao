@@ -18,6 +18,7 @@ import com.webkakao.api.model.request.CheckOutChatroom;
 import com.webkakao.api.model.request.GetChatroomList;
 import com.webkakao.api.model.request.GetChatroomMessage;
 import com.webkakao.api.model.request.RequestChatroom;
+import com.webkakao.api.model.request.UpdateChatroomName;
 import com.webkakao.api.model.response.GetChatroomListParam;
 import com.webkakao.api.model.response.GetChatroomMessageParam;
 import com.webkakao.api.model.response.RequestChatroomParam;
@@ -191,6 +192,17 @@ public class ChatroomServiceImpl implements ChatroomService {
 		wrapper.setParam(resultParam);
 
 		return wrapper;
+	}
+
+	@Override
+	public APIResponseWrapper updateChatroomName(UpdateChatroomName param) {
+		
+		APIResponseWrapper wrapper = createWrapper();
+
+		chatroomMapper.updateChatroomName(param);
+
+		return wrapper;
+
 	}
 
 }

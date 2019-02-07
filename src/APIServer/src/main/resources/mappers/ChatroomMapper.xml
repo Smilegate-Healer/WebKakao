@@ -98,4 +98,12 @@
 			chatroom_idx = #{value}
 	</select>
 	
+	<update id="updateChatroomName" parameterType="com.webkakao.api.model.request.UpdateChatroomName">
+		update
+			chat_room
+		set
+			chatroom_name = #{chatroom_name}
+		where
+			chatroom_idx = #{chatroom_idx}
+	</update>
 </mapper>
