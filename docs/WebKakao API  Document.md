@@ -332,13 +332,17 @@
 | Key Name       | Value Type | Description             | Required |
 |----------------|------------|-------------------------|----------|
 | from_user_idx  | long       |  요청자의 유저 인덱스   | y        |
+| from_user_name | String       |  요청자의 유저 이름   | y        |
 | to_user_idx    | long       |  상대방의 유저 인덱스   | y        |
+| to_user_name   | String       |  요청자의 유저 이름   | y        |
 
 #### 6.1.2 Request Example
 ```
 {  
    "from_user_idx":1,
-   "to_user_idx":2
+   "from_user_name":"홍성문",
+   "to_user_idx":2,
+   "to_user_name":"조영호"
 }
 ```
 
