@@ -55,7 +55,7 @@ class ListItem extends React.Component {
 }
 
 ListItem.propTypes = {
-  item: PropTypes.objectOf({
+  item: PropTypes.shape({
     chatroomName: PropTypes.string,
     logo: PropTypes.string,
     lastMsg: PropTypes.string,

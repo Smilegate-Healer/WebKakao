@@ -70,7 +70,7 @@ class ChatItem extends React.Component {
 }
 
 ChatItem.propTypes = {
-  chat: PropTypes.objectOf({
+  chat: PropTypes.shape({
     profile: PropTypes.string,
     sender: PropTypes.string,
     timestamp: PropTypes.string,
