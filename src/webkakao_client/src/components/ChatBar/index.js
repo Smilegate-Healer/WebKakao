@@ -3,6 +3,10 @@ import "./styles.scss"
 import ChatBarBtn from './ChatBarBtn';
 import { Typography } from '@material-ui/core'
 import PropTypes from 'prop-types'
+import { inject, observer } from 'mobx-react'
+
+@inject("stores")
+@observer
 
 class ChatBar extends React.Component {
 
@@ -23,8 +27,13 @@ class ChatBar extends React.Component {
     alert("menu button click")
   }
 
+  getChatroomName() {
+    const { view, chatroom } = this.props.stores
+    return chatroom.getChatroomName(view.selectedChatroom);
+  }
 
   render() {
+    const chatroomName = this.getChatroomName();
     return (
       <div className="ChatBar">
         <div className="backButtonContainer">
@@ -32,7 +41,7 @@ class ChatBar extends React.Component {
         </div>
         <div className="nameContainer">
           <Typography variant="h6" >
-            {this.props.chatroomName}
+            {chatroomName}
           </Typography>
         </div>
         <div className="rightButtonsContainer">
