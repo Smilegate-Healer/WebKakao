@@ -166,9 +166,8 @@ export default class Chatroom {
   }
 
 /**
-   * Delete the chatroom 
+   * update polling data
    * 
-   * Both the local and the server or just on local or server
    */
   @action updatePollingdata = (data) => {
     // debugger;
@@ -181,6 +180,36 @@ export default class Chatroom {
     }
   }
 
+  /**
+   * get chatroom message
+   * 
+   * Both the local and the server or just on local or server
+   */
+  @action getChatroomMessage = (chatroom_idx) => {
+
+    let object_id = null;
+    if(this.chats[chatroom_idx]) {
+      object_id = this.chats[chatroom_idx].object_id;
+    } 
+
+    const reqData = {
+      chatroom_idx : chatroom_idx,
+      object_id : object_id
+    }
+
+    this.chatroomAxios.post("http://localhost:8081/api/chatroom/message", reqData).then(res => {
+      if(res.data.resultCode === 0) {
+        if(this.chats[chatroom_idx]) {
+          this.chats[chatroom_idx] = res.data.param;
+        } else {
+          this.chats[chatroom_idx].data.unshift(res.data.param.data);
+          this.chats[chatroom_idx].object_id = res.data.param.object_id;
+        }
+      }
+    }).catch(err => {
+        console.log(err);
+    })
+  }
 
   /**
    * Delete the chatroom 
