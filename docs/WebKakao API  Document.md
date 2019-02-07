@@ -400,6 +400,7 @@
 ```
 
 <br/>
+
 ### 7.2 ResponseBody  
   
 #### 7.2.1 Param Specification
@@ -447,6 +448,7 @@
 ```
 
 <br/>
+
 ### 8.2 ResponseBody  
   
 #### 8.2.1 Param Specification
@@ -493,12 +495,13 @@
 ```
 
 <br/>
+
 ### 9.2 ResponseBody  
 
 #### 9.2.1 Param Specification
 | Param Key Name | Value Type | Description                         | Required |
 |----------------|----------------------|---------------------------|----------|
-| list           | List<ChatModel>       | 채팅방 대화 리스트          |   y      |
+| data           | List<ChatModel>       | 채팅방 대화 리스트          |   y      |
 | pre_object_id           | String       | 이전 대화 object id          |   y      |
 
 ##### 9.2.2 ChatroomInfo Specification
@@ -521,7 +524,7 @@
    "resultCode":0,
    "message":"success",
    "param":{  
-      "list":[  
+      "data":[  
          {  
             "msg_idx":1,
             "timestamp":1549437575423,
@@ -569,6 +572,7 @@
 ```
 
 <br/>
+
 ### 10.2 ResponseBody  
 
 #### 10.2.1 Param Specification
