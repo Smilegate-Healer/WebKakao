@@ -35,10 +35,11 @@ $msgSize: 24px;
     margin-left: 4px;
     margin-top: 2px;
 
-    flex: 1;
+    flex: 0;
 
     display: flex;
     flex-direction: column;
+    flex-basis: auto;
     
     .sender {
       flex-basis: $nameSize;

@@ -1,5 +1,5 @@
 import {
-  observable, action
+  observable, action, computed
 } from 'mobx'
 
 export default class View {
@@ -58,8 +58,9 @@ export default class View {
    * currently idx
    */
   @action showChatroom = (chatroomIdx) => {
+    console.debug("Set chatroom to " + chatroomIdx)
     this.rightView = this.views.chatList
-    this.selectChatroom = chatroomIdx
+    this.selectedChatroom = chatroomIdx
   }
 
   /**
@@ -67,7 +68,7 @@ export default class View {
    */
   @action hideChatroom = () => {
     this.rightView = this.views.emptyChatList
-    this.selectChatroom = null
+    this.selectedChatroom = null
   }
 
   /**
@@ -75,6 +76,19 @@ export default class View {
    */
   @action showSettings = () => { 
     this.rightView = this.views.settings
-    this.selectChatroom = null
+    this.selectedChatroom = null
   }
+
+  /**
+   * 
+   */
+  @computed get onSelectedChatroomChange() {
+    console.debug("On SelectedChatroom Change")
+    this.root.chatroomleaveChatroom()
+    if(this.root.view.selectedChatroom !== null) {
+      console.debug("Set a new connection")
+      this.openChatroom(this.root.view.selectedChatroom)
+    } 
+  }
+  
 }

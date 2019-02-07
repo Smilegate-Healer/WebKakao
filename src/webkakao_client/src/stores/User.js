@@ -17,13 +17,16 @@ export default class User {
 
   @observable authorizedAxios = null
 
-  @observable isLogin = false 
+  @observable isLogin = true  // test
   @observable userInfo = dummyUser
   @observable friendList = [] 
 
   constructor(root) {
     // from index
     this.root = root;
+
+    // TODO: test
+    this.login()
   }
 
   @action

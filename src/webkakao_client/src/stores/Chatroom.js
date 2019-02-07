@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx'
+import { observable, action, reaction, computed} from 'mobx'
 import SockJS from 'sockjs-client'
 import Stomp from 'webstomp-client'
 
@@ -115,7 +115,7 @@ export default class Chatroom {
    */
   @observable chats = {
     1: dummyChats,
-    2: dummyChats2
+    4: dummyChats2
   }
 
   @observable stompClient = null
@@ -173,7 +173,22 @@ export default class Chatroom {
   @action openChatroom = (chatroomId) => {
     // TODO: Open the web socket for the chatroom
 
-    this.stompClient = Stomp.over(new SockJS("/gs-guide-websocket"))         
+    var socket = new SockJS("/gs-guide-websocket")
+
+    socket.onopen = () => {
+      console.log("On socket open")
+    }
+
+    socket.onclose = () => {
+      console.log("On socket close")
+    }
+
+    socket.onmessage = e => {
+      console.log("On socket message")
+      console.log(e)
+    }
+
+    this.stompClient = Stomp.over(socket)
 
     this.stompClient.connect({}, frame => {
       console.log("Successfully Connected")
@@ -183,6 +198,8 @@ export default class Chatroom {
         this.chats[chatroomId].push(JSON.parse(msg.body))
         console.log(msg)
       })
+    }, err => {
+      console.error(err)
     })
   }
 
@@ -190,6 +207,7 @@ export default class Chatroom {
    * Leave the Chatroom
    */
   @action leaveChatroom = () => {
+    if(this.stompClient === null || this.isConnected === false) return
     console.log("Disconnecting from the chatroom server")
     this.stompClient.disconnect(() => {
       console.log("Successfully disconnected")
@@ -211,4 +229,5 @@ export default class Chatroom {
 
     this.stompClient.send("/chatroom/" + chatroomId, JSON.stringify(content))
   }
+  
 }

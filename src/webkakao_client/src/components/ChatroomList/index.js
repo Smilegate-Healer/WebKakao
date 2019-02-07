@@ -7,7 +7,8 @@ import { inject, observer } from "mobx-react";
 @observer
 class ChatroomList extends React.Component {
   _onItemClick = (e, idx) => {
-    alert("You click the chatroom -> open the chatroom " + idx);
+    // alert("You click the chatroom -> open the chatroom " + idx);
+    this.props.stores.view.showChatroom(idx)
   };
 
   _onLogoClick = (e, idx) => {
@@ -16,15 +17,13 @@ class ChatroomList extends React.Component {
   };
 
   _renderItem = (v, idx) => {
-    v = undefined // TODO: 
-
     // TODO: Complete the logic of making list item
     
     return (
       <ListItem
         item={v}
         key={idx}
-        onClick={e => this._onItemClick(e, idx)}
+        onClick={e => this._onItemClick(e, v.chatroom_idx)}
         onLogoClick={e => this._onLogoClick(e, idx)}
       />
     )
