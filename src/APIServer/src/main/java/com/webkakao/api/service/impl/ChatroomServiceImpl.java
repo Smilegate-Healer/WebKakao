@@ -3,19 +3,23 @@ package com.webkakao.api.service.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.webkakao.api.database.ChatroomMapper;
+import com.webkakao.api.model.ChatModel;
 import com.webkakao.api.model.ChatroomInfo;
 import com.webkakao.api.model.ChatroomUserList;
 import com.webkakao.api.model.ChatsModel;
 import com.webkakao.api.model.request.CheckInChatroom;
 import com.webkakao.api.model.request.CheckOutChatroom;
 import com.webkakao.api.model.request.GetChatroomList;
+import com.webkakao.api.model.request.GetChatroomMessage;
 import com.webkakao.api.model.request.RequestChatroom;
 import com.webkakao.api.model.response.GetChatroomListParam;
+import com.webkakao.api.model.response.GetChatroomMessageParam;
 import com.webkakao.api.model.response.RequestChatroomParam;
 import com.webkakao.api.repository.ChatsMongoRepository;
 import com.webkakao.api.response.wrapper.APIResponseWrapper;
@@ -30,7 +34,6 @@ public class ChatroomServiceImpl implements ChatroomService {
 
 	@Autowired
 	private RedisService redisService;
-	
 
 	@Autowired
 	private ChatsMongoRepository mongoRepository;
@@ -151,6 +154,43 @@ public class ChatroomServiceImpl implements ChatroomService {
 
 		return wrapper;
 
+	}
+
+	@Override
+	public APIResponseWrapper getChatroomMessage(GetChatroomMessage param) {
+		
+		APIResponseWrapper wrapper = createWrapper();
+		
+		GetChatroomMessageParam resultParam = new GetChatroomMessageParam();
+
+		if(param.getObject_id() == null) {
+			
+			List<ChatModel> redisData = redisService.getChatroomMessage(param.getChatroom_idx());
+			String object_id = chatroomMapper.getMongoObjectId(param.getChatroom_idx());
+			
+			Optional<ChatsModel> mongoModelOptional = mongoRepository.findById(object_id);
+			ChatsModel mongoModel = mongoModelOptional.get();
+			List<ChatModel> mongoData = mongoModel.getData();
+			
+			mongoData.addAll(redisData);
+		
+			resultParam.setData(mongoData);
+			resultParam.setPre_object_id(mongoModel.getPre_id());
+			
+		} else {
+			
+			Optional<ChatsModel> mongoModelOptional = mongoRepository.findById(param.getObject_id());
+			ChatsModel mongoModel = mongoModelOptional.get();
+			List<ChatModel> mongoData = mongoModel.getData();
+			
+			resultParam.setData(mongoData);
+			resultParam.setPre_object_id(mongoModel.getPre_id());
+			
+		}
+		
+		wrapper.setParam(resultParam);
+
+		return wrapper;
 	}
 
 }

@@ -85,7 +85,17 @@
 			user B
 		on
 			A.user_idx = B.user_idx
-		where A.chatroom_idx in (select chatroom_idx from chatroom_member where user_idx = #{value});
+		where 
+			A.chatroom_idx in (select chatroom_idx from chatroom_member where user_idx = #{value});
+	</select>
+	
+	<select id="getMongoObjectId" parameterType="Long" resultType="String">
+		select
+			msg_object_id
+		from
+			chat_room
+		where 
+			chatroom_idx = #{value}
 	</select>
 	
 </mapper>
