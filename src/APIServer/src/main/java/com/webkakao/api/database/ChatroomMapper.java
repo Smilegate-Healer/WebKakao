@@ -29,4 +29,6 @@ public interface ChatroomMapper {
 
 	public List<ChatroomUserList> getChatroomUserList(long user_idx);
 
+	public String getMongoObjectId(long chatroom_idx);
+
 }
