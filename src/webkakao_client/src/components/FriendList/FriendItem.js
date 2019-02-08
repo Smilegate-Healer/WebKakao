@@ -16,7 +16,6 @@ class FriendItem extends React.Component {
           {
             user.profile_img && user.profile_img !== 'default' ? user.profile_img : <Person fontSize="large"/>
           }
-          {user.profile_img}
         </div>
 
         <div className="nameStatusMsgContainer">

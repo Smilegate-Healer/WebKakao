@@ -116,8 +116,7 @@ export default class Chatroom {
    * msg: the message
    * time: the time of the chat
    */
-  @observable chats = {
-  }
+  @observable chats = { }
 
   @observable stompClient = null
   stompSubscription = null
@@ -262,7 +261,7 @@ export default class Chatroom {
         }
       }
     }).catch(err => {
-        console.log(err);
+        console.error(err);
     })
   }
 
@@ -305,6 +304,7 @@ export default class Chatroom {
         this.stompClient = null
         this.stompSubscription = null
         reject()
+        // TODO: Retry???
       })
     })
   }
