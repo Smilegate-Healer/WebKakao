@@ -12,7 +12,8 @@ public class ChatroomInfo {
 	private String logo;
 	private String last_msg;
 	private long timestamp;
-	
+	private List<ChatroomUserList> user_list;
+
 	public long getTimestamp() {
 		return timestamp;
 	}
@@ -37,10 +38,8 @@ public class ChatroomInfo {
 		this.last_msg = last_msg;
 	}
 
-	private List<ChatroomUserList> user_list;
-	
 	public ChatroomInfo() {
-		this.logo = "default";
+		this.logo = "";
 	}
 
 	public String getLogo() {

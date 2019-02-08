@@ -77,7 +77,8 @@ public class ChatroomServiceImpl implements ChatroomService {
 			map.put("start_msg_idx", 0);
 			
 			chatroomMapper.checkInChatroom(map);
-
+			
+			resultParam = chatroomMapper.getChatroomInfo(param.getChatroom_idx());
 			map.put("user_idx", param.getTo_user_idx());
 
 			chatroomMapper.checkInChatroom(map);
@@ -91,10 +92,7 @@ public class ChatroomServiceImpl implements ChatroomService {
 			wrapper.setMessage("Insert Error");
 			return wrapper;
 		}
-
-		resultParam = new RequestChatroomParam();
-		resultParam.setChatroom_idx(param.getChatroom_idx());
-
+		
 		wrapper.setParam(resultParam);
 
 		return wrapper;
@@ -180,9 +178,13 @@ public class ChatroomServiceImpl implements ChatroomService {
 			ChatsModel mongoModel = mongoModelOptional.get();
 			List<ChatModel> mongoData = mongoModel.getData();
 			
-			mongoData.addAll(redisData);
-		
-			resultParam.setData(mongoData);
+			if(mongoData != null) {
+				mongoData.addAll(redisData);
+				resultParam.setData(mongoData);
+			} else {
+				resultParam.setData(redisData);
+			}
+			
 			resultParam.setPre_object_id(mongoModel.getPre_id());
 			
 		} else {

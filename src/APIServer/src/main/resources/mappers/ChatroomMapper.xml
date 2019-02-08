@@ -55,6 +55,25 @@
 			chatroom_idx = #{chatroom_idx};
 	</select>
 	
+	<select id="getChatroomInfo" parameterType="Long" resultType="com.webkakao.api.model.response.RequestChatroomParam">
+		select 
+	    	start_msg_idx,
+	    	last_read_msg_idx,
+	    	chat_room.chatroom_idx,
+	    	chat_room.last_msg_idx,
+	    	chat_room.chatroom_name,
+	    	UNIX_TIMESTAMP(chat_room.timestamp)
+		from
+			chatroom_member
+		left join
+			chat_room
+		on
+			chatroom_member.chatroom_idx = chat_room.chatroom_idx
+			
+		where 
+			chat_room.chatroom_idx = #{chatroom_idx};
+	</select>
+	
 	<select id="getChatroomList" parameterType="Long" resultMap="ChatroomInfo">
 		select 
 	    	start_msg_idx,

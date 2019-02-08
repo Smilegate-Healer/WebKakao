@@ -12,6 +12,7 @@ import com.webkakao.api.model.request.CheckOutChatroom;
 import com.webkakao.api.model.request.GetChatroomList;
 import com.webkakao.api.model.request.RequestChatroom;
 import com.webkakao.api.model.request.UpdateChatroomName;
+import com.webkakao.api.model.response.RequestChatroomParam;
 
 @Mapper
 public interface ChatroomMapper {
@@ -33,5 +34,7 @@ public interface ChatroomMapper {
 	public String getMongoObjectId(long chatroom_idx);
 
 	public void updateChatroomName(UpdateChatroomName param);
+
+	public RequestChatroomParam getChatroomInfo(long chatroom_idx);
 
 }
