@@ -57,8 +57,6 @@ $msgSize: 24px;
 
       padding: 6px;
       background-color: white;
-
-    //TODO: Arrow
     }
 
   }
@@ -83,6 +81,7 @@ $msgSize: 24px;
 
 .ChatItemMine {
   justify-content: flex-end;
+  flex-basis: auto;
 
   .timeMine {
     justify-content: flex-end;

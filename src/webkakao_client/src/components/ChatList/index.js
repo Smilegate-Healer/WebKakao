@@ -11,9 +11,6 @@ class ChatList extends React.Component {
     const { view, chatroom } = this.props.stores
 
     if(!view.selectedChatroom || !chatroom.chats[view.selectedChatroom]) return 
-
-    console.log(chatroom.chats[view.selectedChatroom])
-    debugger
     
     return chatroom.chats[view.selectedChatroom].data.map((v, idx) => {
       var isMine = idx%2 === 0 ? true : false

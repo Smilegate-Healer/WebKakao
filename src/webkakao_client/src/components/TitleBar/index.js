@@ -3,6 +3,11 @@ import { Component } from "react";
 import Title from "./Title";
 import Btn from "./Btn";
 import "./TitleBar.scss";
+import { observer, inject } from "mobx-react";
+
+
+@inject("stores")
+@observer
 class TitleBar extends Component {
   state = {
     menu_type: "FriendList",
@@ -13,34 +18,24 @@ class TitleBar extends Component {
   };
 
   _renderTitle = () => {
+    const { view } = this.props.stores
+
     let title;
-    switch (this.state.menu_type) {
-      case "ChatroomList":
-        title = "chat";
+    switch (view.leftView) {
+      case view.views.chatroomList:
+        title = "Chats"
         break;
-      case "FriendList":
-        title = "friend";
+      case view.views.friendList:
+        title = "Friends"
+        break;
+      case view.views.option:
+        title = "More"
         break;
       default:
-        title = null;
+        title = '';
     }
     return title;
   };
-
-  // render() {
-  //   return (
-  //     <div className={`${this.props.className} titleContainer border}`}>
-  //       <Title className="title_bar_title" title={this._renderTitle()} />
-  //       <Btn className="title_bar_btn" btnName={this.state.firstBtn} />
-  //       <Btn className="title_bar_btn" btnName={this.state.secondBtn} />
-  //       <Btn className="title_bar_btn" btnName={this.state.thirdBtn} />
-  //       {/* Btn<NewChatBtn className="price">{item.price}원</NewChatBtn>
-  //               <SettingBtn className="price">{item.price}원</SettingBtn>
-  //               <div className="count">{item.count}</div>
-  //               <div className="return" onClick={() => onTake(item.name)}>갖다놓기 </div> */}
-  //     </div>
-  //   );
-  // }
 
   render() {
     return (

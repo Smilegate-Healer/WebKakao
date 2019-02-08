@@ -13,6 +13,8 @@
   .leftContainer {
     flex-basis: 350px;
     flex-shrink: 0;
+    flex-grow: 0;
+    width: 350px;
     height: 100%;
     background-color: white;
     padding: 10px;
@@ -25,6 +27,9 @@
     flex-shrink: 0;
     height: 100%;
     background-color: rgb(172, 193, 209);
+
+    // TODO: 한 대화가 너무 길 경우 범위를 벗어남
+    overflow: hidden;
   }
 }
 

@@ -28,7 +28,7 @@ class LeftContainer extends Component {
         <div className="titleBar">
           <TitleBar/>
         </div>
-        <div className="chatroomList">
+        <div className="list">
           {leftList}
         </div>
         <Divider/>

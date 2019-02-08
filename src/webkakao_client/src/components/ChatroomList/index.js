@@ -8,7 +8,6 @@ import DateForamtter from '../../utils/DateFormatter'
 @observer
 class ChatroomList extends React.Component {
   _onItemClick = (e, idx) => {
-    // alert("You click the chatroom -> open the chatroom " + idx);
     this.props.stores.view.showChatroom(idx)
   };
 
@@ -18,10 +17,6 @@ class ChatroomList extends React.Component {
   };
 
   _renderItem = (v, idx) => {
-    // TODO: Complete the logic of making list item
-
-    console.log(v)
-
     return (
       <ListItem
         item={v}

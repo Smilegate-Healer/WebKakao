@@ -13,6 +13,7 @@
   height: 70px;
   align-items: stretch;
 
+
   &:hover {
     background-color: rgb(96.1%, 96.1%, 96.1%);
   }
@@ -30,7 +31,9 @@
   .nameMsgContainer {
     flex: 1;
     display: flex;
+
     flex-direction: column;
+    overflow: hidden; // 최근 메시지의 길이가 길더라도 고정된 폭을 제공
 
     .name {
       flex-grow: 0;

@@ -1,6 +1,7 @@
 .LeftContainer {
   display: flex;
   flex-direction: column;
+  width: 100%;
   height: 100%;
 
   .titleBar {
@@ -14,8 +15,10 @@
     flex-shrink: 0;
   }
 
-  .chatroomList {
+  .list {
     flex: 1;
+
+    overflow: hidden;
   }
 }
 

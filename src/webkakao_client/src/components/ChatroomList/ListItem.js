@@ -36,12 +36,16 @@ class ListItem extends React.Component {
           <div className="name">
             <Typography 
               variant="body1" 
-              color="textPrimary">
-              {chatroomName} {/* TODO: 채팅방 이름 로직 추가 */}
+              color="textPrimary"
+              noWrap={true}>
+              {chatroomName} 
             </Typography>
           </div>
           <div className="msg">
-            <Typography variant="body2" color="textSecondary">
+            <Typography 
+              variant="body2" 
+              color="textSecondary" 
+              noWrap={true}>
               {item.last_msg}
             </Typography>
           </div>

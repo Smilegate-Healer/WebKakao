@@ -15,19 +15,6 @@ class Title extends Component {
       [e.target.keyword]: e.target.value
     });
   };
-
-  // render() {
-  //   return (
-  //     <div className="inline title_bar_title">
-  //       <input
-  //         className="title_bar_input"
-  //         placeholder={this.props.title}
-  //         value={this.state.name}
-  //         onChange={this.handleChange}
-  //       />
-  //     </div>
-  //   );
-  // }
   
   render() {
     return (
@@ -42,7 +29,7 @@ class Title extends Component {
 }
 
 Title.PropTypes = {
-  title: PropTypes.string
+  title: PropTypes.string.isRequired
 }
 
 export default Title;
