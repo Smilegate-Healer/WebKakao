@@ -94,8 +94,10 @@ public class PollingServiceImpl implements PollingService {
 
 		List<DeferredResult<PollingResponse>> list = response_map.get(chatroom_idx);
 
-		for (int i = 0; i < list.size(); i++) {
-			list.get(i).setResult(response);
+		if (list != null) {
+			for (int i = 0; i < list.size(); i++) {
+				list.get(i).setResult(response);
+			}
 		}
 
 	}
