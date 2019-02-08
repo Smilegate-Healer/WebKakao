@@ -1,6 +1,7 @@
 import { observable, action, reaction, computed} from 'mobx'
 import SockJS from 'sockjs-client'
 import Stomp from 'webstomp-client'
+import ChatroomNameFormatter from '../utils/ChatroomNameFormatter'
 
 const dummy = [
   {
@@ -174,6 +175,19 @@ export default class Chatroom {
         this.chatroomList[i].last_msg_idx = data.last_msg_idx;
         this.chatroomList[i].last_msg = data.last_msg;
         this.chatroomList[i].timestamp = data.timestamp;
+      }
+    }
+  }
+
+  /**
+   * get chatroom name
+   * 
+   */
+  @action getChatroomName = (chatroom_idx) => {
+    // debugger;
+    for(var i=0; i<this.chatroomList.length; i++) {
+      if(this.chatroomList[i].chatroom_idx === chatroom_idx) {
+        return ChatroomNameFormatter.getChatroomName(this.chatroomList[i].user_list, this.chatroomList[i].chatroom_name)
       }
     }
   }

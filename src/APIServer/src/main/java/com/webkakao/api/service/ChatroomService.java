@@ -5,6 +5,7 @@ import com.webkakao.api.model.request.CheckOutChatroom;
 import com.webkakao.api.model.request.GetChatroomList;
 import com.webkakao.api.model.request.GetChatroomMessage;
 import com.webkakao.api.model.request.RequestChatroom;
+import com.webkakao.api.model.request.UpdateChatroomName;
 import com.webkakao.api.response.wrapper.APIResponseWrapper;
 
 public interface ChatroomService {
@@ -18,5 +19,7 @@ public interface ChatroomService {
 	APIResponseWrapper checkOutChatroom(CheckOutChatroom param);
 
 	APIResponseWrapper getChatroomMessage(GetChatroomMessage param);
+
+	APIResponseWrapper updateChatroomName(UpdateChatroomName param);
 
 }
