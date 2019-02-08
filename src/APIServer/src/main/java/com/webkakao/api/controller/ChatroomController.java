@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.webkakao.api.model.request.CheckInChatroom;
 import com.webkakao.api.model.request.CheckOutChatroom;
 import com.webkakao.api.model.request.GetChatroomList;
+import com.webkakao.api.model.request.GetChatroomMessage;
 import com.webkakao.api.model.request.RequestChatroom;
+import com.webkakao.api.model.request.UpdateChatroomName;
 import com.webkakao.api.response.wrapper.APIResponseWrapper;
 import com.webkakao.api.service.ChatroomService;
 
@@ -51,10 +53,28 @@ public class ChatroomController {
 		
 	}
 	
+	@RequestMapping(value = "/message", method = RequestMethod.POST)
+	public ResponseEntity<APIResponseWrapper> getChatroomMessage(@RequestBody GetChatroomMessage param) {
+		
+		APIResponseWrapper response = chatroomService.getChatroomMessage(param);
+		
+		return new ResponseEntity<APIResponseWrapper>(response, HttpStatus.OK);
+		
+	}
+	
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	public ResponseEntity<APIResponseWrapper> getChatroomList(@RequestBody GetChatroomList param) {
 		
 		APIResponseWrapper response = chatroomService.getChatroomList(param);
+		
+		return new ResponseEntity<APIResponseWrapper>(response, HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(value = "/name", method = RequestMethod.POST)
+	public ResponseEntity<APIResponseWrapper> updateChatroomName(@RequestBody UpdateChatroomName param) {
+		
+		APIResponseWrapper response = chatroomService.updateChatroomName(param);
 		
 		return new ResponseEntity<APIResponseWrapper>(response, HttpStatus.OK);
 		

@@ -22,8 +22,9 @@
     height: 20px;
   }
 
-.menuContaine {
-  height: 50px;
+.menuContainer {
+  width: 100%;
+
 
   .border {
     border: 1px solid black;
@@ -39,6 +40,11 @@
   .menuBarLogo {
     width: 20px;
     height: 20px;
+  }
+
+  .tab {
+    min-width: 72px;
+    width: 72px;
   }
 
 

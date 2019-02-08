@@ -1,5 +1,5 @@
 import {
-  observable, action
+  observable, action, computed
 } from 'mobx'
 
 export default class View {
@@ -14,8 +14,9 @@ export default class View {
     
   }
 
-  @observable leftView = "ChatroomList"
-  @observable rightView = "ChatList"
+  @observable leftView = this.views.friendList
+  @observable menuBarIdx = 0
+  @observable rightView = this.views.chatList
   /**
    * TODO: Define which views want to show
    */
@@ -24,7 +25,7 @@ export default class View {
    * TODO: The index or id of the chatroom
    */
   // @observable selectedChatroom = null
-  @observable selectedChatroom = 1
+  @observable selectedChatroom = null
 
   constructor(root) {
     this.root = root
@@ -33,22 +34,25 @@ export default class View {
   /**
    *  Show friend list  
    */
-  @action showFriendsList = () => {
+  @action showFriendsList = (idx) => {
     this.leftView = this.views.friendList
+    this.menuBarIdx = idx
   }
 
   /**
    *  Show chatroom list 
    */
-  @action showChatroomList = () => {
+  @action showChatroomList = (idx) => {
     this.leftView = this.views.chatroomList
+    this.menuBarIdx = idx
   }
 
   /**
    *  Show option
    */
-  @action showOption = () => {
+  @action showOption = (idx) => {
     this.leftView = this.views.option
+    this.menuBarIdx = idx
   }
 
   /**
@@ -58,8 +62,9 @@ export default class View {
    * currently idx
    */
   @action showChatroom = (chatroomIdx) => {
+    console.debug("Set chatroom to " + chatroomIdx)
     this.rightView = this.views.chatList
-    this.selectChatroom = chatroomIdx
+    this.selectedChatroom = chatroomIdx
   }
 
   /**
@@ -67,7 +72,7 @@ export default class View {
    */
   @action hideChatroom = () => {
     this.rightView = this.views.emptyChatList
-    this.selectChatroom = null
+    this.selectedChatroom = null
   }
 
   /**
@@ -75,6 +80,8 @@ export default class View {
    */
   @action showSettings = () => { 
     this.rightView = this.views.settings
-    this.selectChatroom = null
+    this.selectedChatroom = null
   }
+
+  
 }

@@ -6,6 +6,7 @@ import MenuBar from "../components/MenuBar/index";
 import ChatroomList from "../components/ChatroomList";
 import FriendList from "../components/FriendList"
 import { inject, observer } from 'mobx-react';
+import { Divider } from '@material-ui/core'
 
 @inject('stores')
 @observer
@@ -24,10 +25,16 @@ class LeftContainer extends Component {
     const leftList = this._renderFunc();
     return (
       <div className="LeftContainer">
-        <MenuBar  />
-        <TitleBar  />
-        {leftList}
-        {/* <FriendList /> */}
+        <div className="titleBar">
+          <TitleBar/>
+        </div>
+        <div className="list">
+          {leftList}
+        </div>
+        <Divider/>
+        <div className="menuBar">
+          <MenuBar/>
+        </div>
       </div>
     );
   }

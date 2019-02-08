@@ -1,98 +1,7 @@
-import { observable, action, computed } from 'mobx'
-
-export default class Chatroom {
-  constructor(root) {
-    this.root = root
-  }
-
-
-  /**
-   * Array of json object
-   * 
-   * name: the name of chatroom
-   * latestMsg: the latest message of chatroom
-   * logo: the logo of chatroom which is bas64 format
-   * date: the date of the latest message
-   * readMsgIdx: the last index user read
-   * lastMsgIdx: the last index of the chatroom
-   * chats: the array of the message chatroom has
-   * joinMembers: the array of join members
-   * 
-   * 
-   *
-   */
-  @observable chatroomList = dummy
-
-  /**
-   * 
-   * Chat Object
-   * chatroomid: [chats]
-   * 
-   * sender: the sender of this message
-   * img: TODO: base64 or the index of the array of images locally stored
-   * msg: the message
-   * time: the time of the chat
-   */
-  @observable chatroomList
-
-  /**
-   * set chatroom list chatroom list 
-   * 
-   * Using axious
-   */
-  @action
-  initChatroomList = (data) => {
-    // TODO: set chatroom list
-    this.chatroomList = data;
-  }
-
-  @observable chats = {
-    1: dummyChats
-  }
-
-  /**
-   * Update the whole chatroom list 
-   * 
-   * Using long polling
-   */
-  @action updateWholeChatroomList = () => {
-    // TODO: long polling  
-  }
-
-
-  /**
-   * Delete the chatroom 
-   * 
-   * Both the local and the server or just on local or server
-   */
-  @action deleteChatroom = () => {
-    // TODO: Delete the chatroom
-  }
-
-  /**
-   * Update a chatroom
-   * 
-   */
-  @action updateChatroom = () => {
-    // TODO: update the chatroom 
-  }
-
-  /**
-   * Connect the chatroom with Websocket
-   */
-  @action openChatroom = () => {
-    // TODO: Open the web socket for the chatroom
-  }
-
-  /**
-   * Send a chat
-   * TODO: chatroom idx or id
-   */
-  @action sendChat = (whichChatroom) => {
-    // TODO: send a chat through websocket
-    // if success => add to the chatList in the chatroomList
-  }
-}
+import { observable, action, reaction, computed} from 'mobx'
+import SockJS from 'sockjs-client'
+import Stomp from 'webstomp-client'
+import ChatroomNameFormatter from '../utils/ChatroomNameFormatter'
 
 const dummy = [
   {
@@ -139,13 +48,271 @@ const dummy = [
 
 const dummyChats = [
   {
-    user_idx: 2,
+    sender: 2,
     msg: "첫번째 메시지 입니다",
-    type: "plain",
+    msg_type: "m",
+    timestamp: "1234",
+    msg_idx: "1"
   },
   {
-    user_idx: 3,
+    sender: 3,
     msg: "두번쨰 메시지 입니다",
-    type: "plain",
+    msg_type: "m",
+    msg_idx: "2",
+    timestamp: "1235"
   }
 ] 
+
+const dummyChats2 = [
+  {
+    sender: 2,
+    msg: "세번째 메시지 입니다",
+    msg_type: "m",
+    timestamp: "1234",
+    msg_idx: "1"
+  },
+  {
+    sender: 3,
+    msg: "네번째 메시지 입니다",
+    msg_type: "m",
+    msg_idx: "2",
+    timestamp: "1235"
+  } 
+]
+
+
+export default class Chatroom {
+  constructor(root) {
+    this.root = root
+  }
+
+
+  /**
+   * Array of json object
+   * 
+   * name: the name of chatroom
+   * latestMsg: the latest message of chatroom
+   * logo: the logo of chatroom which is bas64 format
+   * date: the date of the latest message
+   * readMsgIdx: the last index user read
+   * lastMsgIdx: the last index of the chatroom
+   * chats: the array of the message chatroom has
+   * joinMembers: the array of join members
+   * 
+   * 
+   *
+   */
+  @observable chatroomList = dummy
+  @observable pollingAxios = null
+  @observable chatroomAxios = null
+
+  /**
+   * 
+   * Chat Object
+   * chatroomid: [chats]
+   * 
+   * sender: the sender of this message
+   * img: TODO: base64 or the index of the array of images locally stored
+   * msg: the message
+   * time: the time of the chat
+   */
+  @observable chats = {
+  }
+
+  @observable stompClient = null
+  stompSubscription = null
+
+  /**
+   * Boolean 
+   * if the socket is connected to the server
+   * then true
+   * else false
+   * 
+   */
+  @observable isConnected = false
+
+  /**
+   * set chatroom list chatroom list 
+   * 
+   * Using axious
+   */
+  @action
+  initChatroomList = (data) => {
+    // TODO: set chatroom list
+    this.chatroomList = data;
+  }
+
+  /**
+   * Update the whole chatroom list 
+   * 
+   * Using long polling
+   */
+  @action updateWholeChatroomList = () => {
+    this.pollingAxios.post("http://localhost:8082/message/longpolling", { 
+        user_idx: 1,
+        rooms: [1]
+      }).then(res => {
+        if(res.data.resultCode === 0) {
+          // alert(res.data.chatroom_idx + ' : ' + res.data.last_msg_idx + ' : ' + res.data.last_msg);
+          this.updatePollingdata(res.data);
+        }
+        return this.root.chatroom.updateWholeChatroomList();
+      }).catch(err => {
+        console.log(err);
+        setTimeout(() => this.updateWholeChatroomList(), 10000)
+        // return this.root.chatroom.updateWholeChatroomList();
+      })
+  }
+
+/**
+   * update polling data
+   * 
+   */
+  @action updatePollingdata = (data) => {
+    // debugger;
+    for(var i=0; i<this.chatroomList.length; i++) {
+      if(this.chatroomList[i].chatroom_idx === data.chatroom_idx) {
+        this.chatroomList[i].last_msg_idx = data.last_msg_idx;
+        this.chatroomList[i].last_msg = data.last_msg;
+        this.chatroomList[i].timestamp = data.timestamp;
+      }
+    }
+  }
+
+  /**
+   * get chatroom name
+   * 
+   */
+  @action getChatroomName = (chatroom_idx) => {
+    // debugger;
+    for(var i=0; i<this.chatroomList.length; i++) {
+      if(this.chatroomList[i].chatroom_idx === chatroom_idx) {
+        return ChatroomNameFormatter.getChatroomName(this.chatroomList[i].user_list, this.chatroomList[i].chatroom_name)
+      }
+    }
+  }
+
+  /**
+   * get chatroom message
+   * 
+   * Both the local and the server or just on local or server
+   */
+  @action getChatroomMessage = (chatroom_idx) => {
+
+    let object_id = null;
+    if(this.chats[chatroom_idx]) {
+      object_id = this.chats[chatroom_idx].object_id;
+    } 
+
+    const reqData = {
+      chatroom_idx : chatroom_idx,
+      object_id : object_id
+    }
+
+    this.chatroomAxios.post("http://localhost:8081/api/chatroom/message", reqData).then(res => {
+      if(res.data.resultCode === 0) {
+        if(!this.chats[chatroom_idx]) {
+          this.chats[chatroom_idx] = res.data.param;
+        } else {
+          this.chats[chatroom_idx].data.unshift(res.data.param.data);
+          this.chats[chatroom_idx].object_id = res.data.param.object_id;
+        }
+      }
+    }).catch(err => {
+        console.log(err);
+    })
+  }
+
+  /**
+   * Delete the chatroom 
+   * 
+   * Both the local and the server or just on local or server
+   */
+  @action deleteChatroom = () => {
+    // TODO: Delete the chatroom
+  }
+
+  /**
+   * Update a chatroom
+   * 
+   */
+  @action updateChatroom = () => {
+    // TODO: update the chatroom 
+  }
+
+  /**
+   * Establish connection to Chatting server
+   */
+  @action openSocket = () => {
+    return new Promise((resolve, reject) => {
+      if(this.stompClient !== null && this.isConnected === true) {
+        resolve()
+        return
+      }
+      this.stompClient = Stomp.over(new SockJS("/gs-guide-websocket"))         
+
+      this.stompClient.connect({}, frame => {
+        console.log("Successfully Connected")
+        console.log(frame)
+        this.isConnected = true
+        resolve()
+      }, err => {
+        console.error(err)
+        this.isConnected = false
+        this.stompClient = null
+        this.stompSubscription = null
+        reject()
+      })
+    })
+  }
+
+  /**
+   * Disconnect from the Chatting server
+   */
+  @action closeSocket = () => {
+    if(this.stompClient === null || this.isConnected === false) return
+    console.log("Disconnecting from the chatroom server")
+    this.stompClient.disconnect(() => {
+      console.log("Successfully disconnected")
+      this.stompClient = null
+      this.isConnected = false
+      this.stompSubscription = null
+    })
+  }
+
+  /**
+   * Change from Chatroom A to B
+   * ie. Subscription changes
+   */
+  @action moveToAnother = (chatroomId) => {
+    console.log("Move to another chatroom")
+    if(this.stompClient === null || this.isConnected === false) {
+      console.error("No STOMP client or connection")
+      this.closeSocket()
+      return
+    }
+
+    if(this.stompSubscription !== null) 
+      this.stompSubscription.unsubscribe()
+
+    this.stompSubscription = this.stompClient.subscribe("/topic/chatroom/" + chatroomId, msg => {
+      this.chats[chatroomId].data.push(JSON.parse(msg.body))
+      console.log(msg)
+    })
+
+  }
+  /**
+   * Send a chat
+   */
+  @action sendChat = (chatroomId, content) => {
+    if(this.stompClient === null || this.isConnected === false) {
+      console.error("No valid connection between server and client")
+      this.stompClient = null
+      this.isConnected = false
+      return 
+    }
+
+    this.stompClient.send("/chatroom/" + chatroomId, JSON.stringify(content))
+  }
+  
+}

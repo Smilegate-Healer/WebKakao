@@ -1,23 +1,55 @@
-import React from 'react';
-import { Component } from 'react';
-import { observer } from 'mobx-react';
-import Btn from './Btn'
-import './MenuBar.scss';
-class MenuBar extends Component {
+import React from "react";
+import { Component } from "react";
+import Btn from "./Btn";
+import "./MenuBar.scss";
+import {
+  Paper, 
+  Tabs,
+  Tab,
+} from '@material-ui/core'
+import {
+  PersonOutline,
+  MessageOutlined,
+  MoreHorizOutlined
+} from '@material-ui/icons'
+import { inject, observer } from "mobx-react";
 
-    render() {
-        return (
-            <div className={`${this.props.className} menuContainer border`}>
-                <Btn className="menuBarLogo" btnName='friendList'></Btn>
-                <Btn className="menuBarLogo" btnName='chatroomList'></Btn>
-                <Btn className="menuBarLogo" btnName='option'></Btn>
-                {/* Btn<NewChatBtn className="price">{item.price}원</NewChatBtn>
-                <SettingBtn className="price">{item.price}원</SettingBtn>
-                <div className="count">{item.count}</div>
-                <div className="return" onClick={() => onTake(item.name)}>갖다놓기 </div> */}
-            </div>
-        );
+@inject("stores")
+@observer
+class MenuBar extends Component {
+  _onClickButton = (value) => {
+    switch (value) {
+        case 0:
+            this.props.stores.view.showFriendsList(value);
+            break;
+        case 1:
+            this.props.stores.view.showChatroomList(value);
+            break;
+        case 2:
+            this.props.stores.view.showOption(value);
+            break;
+        default:
+        alert('Error in MenuBar');
     }
+  }
+
+
+  render() {
+    return(
+      <div className="menuContainer">
+        <Tabs
+          value={this.props.stores.view.menuBarIdx}
+          onChange={(e, v) => this._onClickButton(v)}
+          variant="fullWidth"
+          indicatorColor="primary"
+          textColor="primary">
+          <Tab className="tab" icon={<PersonOutline/>}></Tab>
+          <Tab className="tab" icon={<MessageOutlined/>}></Tab>
+          <Tab className="tab" icon={<MoreHorizOutlined/>}></Tab>
+        </Tabs>
+      </div>
+    )
+  }
 
 }
 

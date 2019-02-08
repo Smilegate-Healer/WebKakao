@@ -1,13 +1,3 @@
-// 변수 사용하기
-$red: #fa5252;
-$orange: #fd7e14;
-$yellow: #fcc419;
-$green: #40c057;
-$blue: #339af0;
-$indigo: #5c7cfa;
-$violet: #7950f2;
-// mixin 만들기 (재사용되는 스타일 블록을 함수처럼 사용 할 수 있음)
-
 .List {
   display: flex;
   flex-direction: column;
@@ -22,34 +12,57 @@ $violet: #7950f2;
   width: 100%;
   height: 70px;
   align-items: stretch;
+
+
+  &:hover {
+    background-color: rgb(96.1%, 96.1%, 96.1%);
+  }
   
   .logoContainer {
-    flex: 1;
-    // cursor: pointer;
-    transition: all 0.3s ease-in;
-    &:hover {
-      // .box 에 마우스 올렸을 때
-      background: black;
-    }
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: 70px;
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .nameMsgContainer {
-    flex: 10;
+    flex: 1;
     display: flex;
+
     flex-direction: column;
+    overflow: hidden; // 최근 메시지의 길이가 길더라도 고정된 폭을 제공
 
     .name {
-      min-height: 20px;
+      flex-grow: 0;
+      flex-shrink: 0;
+      flex-basis: 26px;
 
+      display: flex;
+      align-items: center;
+      
+      .text {
+        font-size: 22px;
+      }
     }
 
     .msg {
-      min-height: 30px;
+      flex: 1;
     }
   }
 
   .dateContainer {
-    flex: 1;
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: 80px;
+    display: flex;
+    justify-content: center;
+
+    .date {
+      margin-top: 12px;
+      color: rgb(200, 200, 200);
+    }
   }
 }
