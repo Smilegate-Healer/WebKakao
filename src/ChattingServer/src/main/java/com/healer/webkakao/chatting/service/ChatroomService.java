@@ -94,7 +94,7 @@ public class ChatroomService {
 	public long getLastMsgIdx(long chatroomId) {
 		log.debug("Get the last message index by chatroomId=" + chatroomId);
 		Optional<ChatroomInfoModel> chatroom = redisRepository.findById(chatroomId);
-		return chatroom.isPresent() ? chatroom.get().getLast_msg_idx() : 0;
+		return chatroom.isPresent() ? chatroom.get().getLast_msg_idx() : -1;
 	}
 	
 	public String getLastMsg(long chatroomId) {

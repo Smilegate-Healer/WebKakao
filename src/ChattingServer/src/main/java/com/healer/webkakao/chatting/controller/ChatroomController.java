@@ -41,7 +41,7 @@ public class ChatroomController {
     log.debug("Receive from a client chatroomId=" + chatroomId);
 
     long lastMsgIdx = chatroomService.getLastMsgIdx(chatroomId);
-    if(lastMsgIdx == 0) {
+    if(lastMsgIdx == -1) {
       log.warn("There is no chatroomInfo by chatroomId=" + chatroomId);
       return;
     }
