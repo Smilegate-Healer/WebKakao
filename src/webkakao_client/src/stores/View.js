@@ -14,8 +14,9 @@ export default class View {
     
   }
 
-  @observable leftView = "ChatroomList"
-  @observable rightView = "ChatList"
+  @observable leftView = this.views.friendList
+  @observable menuBarIdx = 0
+  @observable rightView = this.views.chatList
   /**
    * TODO: Define which views want to show
    */
@@ -33,22 +34,25 @@ export default class View {
   /**
    *  Show friend list  
    */
-  @action showFriendsList = () => {
+  @action showFriendsList = (idx) => {
     this.leftView = this.views.friendList
+    this.menuBarIdx = idx
   }
 
   /**
    *  Show chatroom list 
    */
-  @action showChatroomList = () => {
+  @action showChatroomList = (idx) => {
     this.leftView = this.views.chatroomList
+    this.menuBarIdx = idx
   }
 
   /**
    *  Show option
    */
-  @action showOption = () => {
+  @action showOption = (idx) => {
     this.leftView = this.views.option
+    this.menuBarIdx = idx
   }
 
   /**
