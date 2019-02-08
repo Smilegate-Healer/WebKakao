@@ -16,13 +16,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class DatabaseConfig {
 	
-	private DataSource datasource;
-
     @Bean
     public SqlSessionFactory sqlSessionFatory(DataSource datasource) throws Exception{
      SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
      sqlSessionFactory.setDataSource(datasource);
-     this.datasource = datasource;
      sqlSessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mappers/*.xml"));
      return (SqlSessionFactory) sqlSessionFactory.getObject();
     }    
