@@ -41,7 +41,7 @@ public class RedisService {
 			return false;
 
 		ChatroomInfoModel chatroomInfoModel = ChatroomInfoModel.builder().chatroom_id(chatroomId).object_id(objectId)
-				.last_msg_idx(1).timestamp(new Date().getTime()).last_msg("") // start from 1
+				.last_msg_idx(0).timestamp(new Date().getTime()).last_msg("")
 				.build();
 
 		chatroomInfoRepository.save(chatroomInfoModel);
