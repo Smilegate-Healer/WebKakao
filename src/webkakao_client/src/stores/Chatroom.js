@@ -140,6 +140,7 @@ export default class Chatroom {
   initChatroomList = (data) => {
     // TODO: set chatroom list
     this.chatroomList = data;
+    this.chatroomList = this.root.chatroom.chatroomListSort();
   }
 
   /**
@@ -148,9 +149,10 @@ export default class Chatroom {
    * Using long polling
    */
   @action updateWholeChatroomList = () => {
+    const chatroomIdxList = this.root.chatroom.getChatroomIdxList();
     this.pollingAxios.post("http://localhost:8082/message/longpolling", { 
         user_idx: 1,
-        rooms: [1]
+        rooms: chatroomIdxList
       }).then(res => {
         if(res.data.resultCode === 0) {
           // alert(res.data.chatroom_idx + ' : ' + res.data.last_msg_idx + ' : ' + res.data.last_msg);
@@ -177,6 +179,7 @@ export default class Chatroom {
         this.chatroomList[i].timestamp = data.timestamp;
       }
     }
+    this.chatroomList = this.root.chatroom.chatroomListSort();
   }
 
   /**
@@ -190,6 +193,44 @@ export default class Chatroom {
         return ChatroomNameFormatter.getChatroomName(this.chatroomList[i].user_list, this.chatroomList[i].chatroom_name)
       }
     }
+  }
+
+  /**
+   * open chatroom
+   * 
+   */
+  @action oepnChatroom = (to_user_idx) => {
+
+    for(var i=0; i<this.chatroomList.length; i++) {
+      if(this.chatroomList[i].user_list.length === 1 && this.chatroomList[i].user_list[0].user_idx === to_user_idx) {
+        this.root.view.showChatroom(this.chatroomList[i].chatroom_idx);
+        return;
+      }
+    }
+
+    this.root.chatroom.requestChatroom(this.root.user.getUserIdx(), to_user_idx);
+
+  }
+
+  @action requestChatroom = (from_user_idx, to_user_idx) => {
+    
+    const reqData = {
+      from_user_idx: from_user_idx,
+      to_user_idx: to_user_idx
+    };
+
+    this.chatroomAxios.post("http://localhost:8081/api/chatroom/request", reqData).then(res => {
+      if(res.data.resultCode === 0) { 
+        res.data.param["user_list"] = [];
+        const user_info = this.createUserInfo(this.root.user.getFriendByUserIdx(to_user_idx, res.data.param.chatroom_idx));
+        res.data.param.user_list.push(user_info);
+        this.chatroomList.push(res.data.param);
+        this.root.view.showChatroom(res.data.param.chatroom_idx);
+      }
+    }).catch(err => {
+        console.log(err);
+    })
+
   }
 
   /**
@@ -214,7 +255,9 @@ export default class Chatroom {
         if(!this.chats[chatroom_idx]) {
           this.chats[chatroom_idx] = res.data.param;
         } else {
-          this.chats[chatroom_idx].data.unshift(res.data.param.data);
+          if(res.data.param.data.length > 0) {
+            this.chats[chatroom_idx].data.unshift(res.data.param.data);
+          }
           this.chats[chatroom_idx].object_id = res.data.param.object_id;
         }
       }
@@ -313,6 +356,33 @@ export default class Chatroom {
     }
 
     this.stompClient.send("/chatroom/" + chatroomId, JSON.stringify(content))
+  }
+
+  @action chatroomListSort = () => {
+    return this.chatroomList.slice().sort(function(a, b) {
+      return a.timestamp > b.timestamp ? -1 : 1;
+    });
+  }
+
+  createUserInfo(user, chatroom_idx) {
+
+    return {
+      chatroom_idx: chatroom_idx,
+      last_read_msg_idx: 0,
+      name: user.name,
+      profile_img: user.profile_img,
+      start_msg_idx: 0,
+      user_idx: user.user_idx
+    };
+
+  }
+
+  getChatroomIdxList() {
+    let list = [];
+    for(var i=0; i<this.chatroomList.length; i++) {
+      list.push(this.chatroomList[i].chatroom_idx);
+    }
+    return list;
   }
   
 }

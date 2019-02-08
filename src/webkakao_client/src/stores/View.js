@@ -63,6 +63,7 @@ export default class View {
    */
   @action showChatroom = (chatroomIdx) => {
     console.debug("Set chatroom to " + chatroomIdx)
+    debugger
     this.rightView = this.views.chatList
     this.selectedChatroom = chatroomIdx
   }
@@ -82,6 +83,5 @@ export default class View {
     this.rightView = this.views.settings
     this.selectedChatroom = null
   }
-
   
 }

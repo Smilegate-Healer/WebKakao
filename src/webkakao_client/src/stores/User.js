@@ -202,5 +202,23 @@ export default class User {
       }
     }).catch(err => console.error(err))
   }
+
+  @action
+  getFriendByIdx = (idx) => {
+    return this.friendList[idx].user_idx;
+  }
+
+  @action
+  getFriendByUserIdx = (user_idx) => {
+    for(var i=0; i<this.friendList.length; i++) {
+      if(this.friendList[i].user_idx === user_idx)
+        return this.friendList[i];
+    }
+  }
+
+  @action
+  getUserIdx = () => {
+    return 1;
+  }
   
 }
