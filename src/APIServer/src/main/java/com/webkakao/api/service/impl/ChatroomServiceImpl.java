@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.webkakao.api.database.ChatroomMapper;
 import com.webkakao.api.model.ChatModel;
@@ -47,7 +49,8 @@ public class ChatroomServiceImpl implements ChatroomService {
 		return response;
 
 	}
-
+	
+	@Transactional
 	@Override
 	public APIResponseWrapper requestChatroom(RequestChatroom param) {
 
@@ -60,7 +63,9 @@ public class ChatroomServiceImpl implements ChatroomService {
 			ChatsModel nextChats = ChatsModel.builder()
 	                .pre_id("null")
 	                .build();
+			
 			String object_id = mongoRepository.insert(nextChats).get_id();
+			
 			param.setMsg_object_id(object_id);
 			chatroomMapper.insertChatroom(param);
 
@@ -79,8 +84,9 @@ public class ChatroomServiceImpl implements ChatroomService {
 			
 			//insert redis chatroomInfo
 			redisService.addNewChatroom(param.getChatroom_idx(), object_id);
-
+			
 		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			wrapper.setResultCode(111);
 			wrapper.setMessage("Insert Error");
 			return wrapper;
@@ -125,6 +131,7 @@ public class ChatroomServiceImpl implements ChatroomService {
 
 	}
 
+	@Transactional
 	@Override
 	public APIResponseWrapper getChatroomList(GetChatroomList param) {
 
