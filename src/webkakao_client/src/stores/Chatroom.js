@@ -179,6 +179,10 @@ export default class Chatroom {
       }
     }
     this.chatroomList = this.root.chatroom.chatroomListSort();
+    if(this.root.view.selectedChatroom !== data.chatroom_idx) {
+      // this.root.view.showPollingMessage(data);
+      this.root.view.showPollingMessage(data);
+    }
   }
 
   /**
@@ -383,6 +387,19 @@ export default class Chatroom {
       list.push(this.chatroomList[i].chatroom_idx);
     }
     return list;
+  }
+
+  
+  @action getNameByChatroomUserList = (data) => {
+    for(var i=0; i<this.chatroomList.length; i++) {
+      if(this.chatroomList[i].chatroom_idx === data.chatroom_idx) {
+        for(var j=0; j<this.chatroomList[i].user_list.length; j++) {
+          if(this.chatroomList[i].user_list[j].user_idx === data.sender) {
+            return this.chatroomList[i].user_list[j].name;
+          }
+        }
+      }
+    }
   }
   
 }

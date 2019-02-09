@@ -17,6 +17,8 @@ class ChatBar extends React.Component {
   // TODO: complete logic with mobx
   _onArrowbackBtnClick = e => {
     alert('back button click')
+    const { view } = this.props.stores
+    view.hideChatroom();
   }
 
   _onSearchBtnClick = e => {
