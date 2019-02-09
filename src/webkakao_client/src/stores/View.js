@@ -2,8 +2,6 @@ import {
   observable, action, computed
 } from 'mobx'
 
-import { NotificationManager} from 'react-notifications';
-
 export default class View {
   // TODO: Define more views
   views = {
