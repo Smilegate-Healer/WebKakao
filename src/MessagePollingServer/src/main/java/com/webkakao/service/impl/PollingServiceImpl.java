@@ -90,6 +90,7 @@ public class PollingServiceImpl implements PollingService {
 		ChatModel message = objectMapper.readValue(msg, ChatModel.class);
 		response.setLast_msg_idx(message.getMsg_idx());
 		response.setLast_msg(message.getMsg());
+		response.setSender(message.getSender());
 		response.setTimestamp(new Date().getTime());
 
 		List<DeferredResult<PollingResponse>> list = response_map.get(chatroom_idx);

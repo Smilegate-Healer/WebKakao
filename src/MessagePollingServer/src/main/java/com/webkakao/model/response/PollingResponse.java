@@ -7,8 +7,15 @@ public class PollingResponse {
 	private long last_msg_idx;
 	private String last_msg;
 	private long timestamp;
-	
-	
+	private long sender;
+
+	public long getSender() {
+		return sender;
+	}
+
+	public void setSender(long sender) {
+		this.sender = sender;
+	}
 
 	public long getTimestamp() {
 		return timestamp;
