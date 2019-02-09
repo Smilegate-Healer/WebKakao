@@ -16,7 +16,7 @@ export default class View {
 
   @observable leftView = this.views.friendList
   @observable menuBarIdx = 0
-  @observable rightView = this.views.chatList
+  @observable rightView = null
   /**
    * TODO: Define which views want to show
    */
@@ -63,7 +63,6 @@ export default class View {
    */
   @action showChatroom = (chatroomIdx) => {
     console.debug("Set chatroom to " + chatroomIdx)
-    debugger
     this.rightView = this.views.chatList
     this.selectedChatroom = chatroomIdx
   }
