@@ -10,8 +10,8 @@
 		<result property="status_msg" column="status_msg" />
 	</resultMap>
 
-	<insert id="insertUser" parameterType="com.webkakao.api.model.request.RequestFriend">
-    	insert into USER (
+	<insert id="insertFriend" parameterType="com.webkakao.api.model.request.RequestFriend">
+    	insert into Friend (
     		from_user_idx,
     		to_user_idx
     	) 
