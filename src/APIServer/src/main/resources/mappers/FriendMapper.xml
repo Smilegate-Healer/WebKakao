@@ -11,7 +11,7 @@
 	</resultMap>
 
 	<insert id="insertFriend" parameterType="com.webkakao.api.model.request.RequestFriend">
-    	insert into Friend (
+    	insert into friend (
     		from_user_idx,
     		to_user_idx
     	) 
