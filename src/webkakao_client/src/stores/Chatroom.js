@@ -299,8 +299,6 @@ export default class Chatroom {
    * Establish connection to Chatting server
    */
   @action openSocket = () => {
-    if(this.isConnecting) return
-
     return new Promise((resolve, reject) => {
       if(this.stompClient !== null && this.isConnected === true) {
         resolve()
@@ -333,7 +331,7 @@ export default class Chatroom {
    * Disconnect from the Chatting server
    */
   @action closeSocket = () => {
-    if(this.stompClient === null || this.isConnected === false) return
+    if(this.stompClient === null) return
     console.log("Disconnecting from the chatroom server")
     this.stompClient.disconnect(() => {
       console.log("Successfully disconnected")

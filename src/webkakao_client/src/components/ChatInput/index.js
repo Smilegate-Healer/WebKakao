@@ -14,6 +14,8 @@ class ChatInput extends React.Component {
   }
 
   _onClickSendBtn = e => {
+    if(this.state.inputText === '') return
+
     const { chatroom, user, view } = this.props.stores
     chatroom.sendChat(view.selectedChatroom, {
       sender: user.userInfo.user_idx,
@@ -29,7 +31,6 @@ class ChatInput extends React.Component {
 
   _onEnter = e => {
     if(e.key === 'Enter') {
-      if(this.state.inputText === '') return 
       this._onClickSendBtn()
     }
   }  

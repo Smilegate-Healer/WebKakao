@@ -17,14 +17,13 @@ class SendBtn extends React.Component {
       <IconButton
         aria-label="Send the message"
         onClick={this.props.onClick}
-        className="SendBtn"
+        classes={{root: "SendBtn"}}
         style={{
           backgroundColor: "#F9DC09"
         }}>
         <ArrowUpward 
-          className="icon"
-          fontSize="small"
-          />
+          classes={{root: "icon"}}
+          fontSize="inherit"/>
       </IconButton>
     )
   }

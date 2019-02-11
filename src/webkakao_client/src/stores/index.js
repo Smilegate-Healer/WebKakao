@@ -15,18 +15,14 @@ class RootStore {
      * Reaction to changing selected Chatroom id
      */
     reaction(() => this.view.selectedChatroom, selectedChatroom => {
-      if(selectedChatroom !== null) this.chatroom.getChatroomMessage(selectedChatroom)
-
-      this.chatroom.openSocket()
-        .then(() => {
-          if(selectedChatroom !== null) 
-            this.chatroom.moveToAnother(selectedChatroom)
-          else 
-            this.chatroom.stompSubscription.unsubcribe()
-        })
-        .catch(() => {
-          console.error("ERROR while opening socket")
-        })
+      if(selectedChatroom !== null) {
+        this.chatroom.moveToAnother(selectedChatroom)
+        this.chatroom.getChatroomMessage(selectedChatroom)
+      } else {
+        if(this.chatroom.stompSubscription !== null) {
+          this.chatroom.stompSubscription.unsubcribe()
+        }
+      }
     })
 
     /**
@@ -35,9 +31,10 @@ class RootStore {
      * It will be occured when the status turns from true to false
      */
     reaction(() => this.chatroom.isConnected, isConnected => {
-      console.debug("Chatting server connection broken")
-      if(isConnected === false) 
+      if(isConnected === false)  {
+        console.debug("Chatting server connection broken")
         this.connecToChattingServer()
+      }
     })
   }
 

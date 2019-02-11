@@ -51,6 +51,7 @@
     "react-app-polyfill": "^0.2.0",
     "react-dev-utils": "^7.0.1",
     "react-dom": "^16.7.0",
+    "react-hot-loader": "^4.6.5",
     "react-notifications-component": "^1.0.1",
     "react-stomp": "^4.1.0",
     "resolve": "1.8.1",
@@ -137,6 +138,9 @@
         {
           "loose": true
         }
+      ],
+      [
+        "react-hot-loader/babel"
       ]
     ]
   },

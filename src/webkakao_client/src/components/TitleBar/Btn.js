@@ -42,18 +42,9 @@ class Btn extends Component {
     }
   };
 
-  // render() {
-  //   const logo = this._renderLogo();
-  //   return (
-  //     <div className="inline title_bar_btn" onClick={this.onClickButton}>
-  //       <img className="title_bar_logo" src={logo} />
-  //     </div>
-  //   );
-  // }
-
   render() {
     return (
-      <IconButton color="primary">
+      <IconButton classes={{ colorInherit: "button" }} color="inherit">
         {this._renderLogo()}
       </IconButton>
     )

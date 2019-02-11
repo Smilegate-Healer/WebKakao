@@ -14,7 +14,7 @@ import lombok.Setter;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NON_PRIVATE)
 public class ChatModel {
   @JsonProperty("sender")
-  private String sender;
+  private long sender;
 
   @JsonProperty("msg")
   private String msg;

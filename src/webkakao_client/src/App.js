@@ -6,6 +6,7 @@ import { observer, inject } from 'mobx-react';
 import { CssBaseline, CircularProgress } from '@material-ui/core';
 import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
+import { hot } from 'react-hot-loader/root'
 
 @inject("stores")
 @observer
@@ -59,4 +60,5 @@ class App extends Component {
   }
 }
 
-export default App;
+
+export default hot(App);
