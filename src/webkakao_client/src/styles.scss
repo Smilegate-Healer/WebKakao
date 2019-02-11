@@ -1,4 +1,4 @@
-
+@import "./colors.scss";
 
 .root {
   display: flex;
@@ -30,6 +30,21 @@
 
     // TODO: 한 대화가 너무 길 경우 범위를 벗어남
     overflow: hidden;
+  }
+
+  .loading {
+    position: absolute; 
+    width: 100%;
+    height: 100%;
+    background-color: rgba($color: $kakaoYellow, $alpha: 0.8);
+    z-index: 12;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .progress {
+      color: white;
+    }
   }
 }
 

@@ -113,7 +113,9 @@ public class ChatroomService {
         List<ChatModel> chatModelList = new ArrayList<>();
 
         // Convert String to Chatmodel
+        log.debug("Get the messages from the Redis");
         List<String> strs = redisTemplate.opsForList().range(chatroomId, 0, size - 1);
+        log.debug("Convert to objects");
         for (int i = 0; i < strs.size(); i++) {
           ChatModel chatModel = objectMapper.readValue(strs.get(i), ChatModel.class);
           chatModelList.add(chatModel);
@@ -121,10 +123,12 @@ public class ChatroomService {
 
         // Insert new chats into Mongo
         ChatsModel nextChats = ChatsModel.builder().pre_id(chatroomInfo.getObject_id()).build();
+        log.debug("Get the next objet id from Mongo");
         String surId = mongoRepository.insert(nextChats).get_id();
 
         // Get the existing chats from Mongo
         // It was inserted when the pre chats had been inserted
+        log.debug("Gee the current document by object id where to save from Mongo");
         ChatsModel storingChats = mongoRepository.findById(chatroomInfo.getObject_id()).get();
 
         // Set
@@ -134,14 +138,17 @@ public class ChatroomService {
         storingChats.setSur_id(surId);
 
         // Insert chats into Mongo
+        log.debug("Inser chats into Mongo");
         mongoRepository.save(storingChats);
 
         // Update the chatroomInfo
         chatroomInfo.setObject_id(surId);
         chatroomInfo.setLast_msg_idx(storingChats.getLast_message_idx()); // TODO: 동기화 문제 ???
+        log.debug("Update the chatroomInfo at Redis");
         redisRepository.save(chatroomInfo);
 
         // Remove the stored messages in Redis list
+        log.debug("Trim the list in the Redis");
         redisTemplate.opsForList().trim(chatroomId, size, redisTemplate.opsForList().size(chatroomId)); // TODO: 동기화 문제 ???
         return true;
       } catch (IOException e) {

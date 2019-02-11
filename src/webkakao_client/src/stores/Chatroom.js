@@ -131,6 +131,15 @@ export default class Chatroom {
   @observable isConnected = false
 
   /**
+   * Booelan 
+   * if the socket is connecting to the Server
+   * then true
+   * else false
+   */
+  @observable isConnecting = false
+
+
+  /**
    * set chatroom list chatroom list 
    * 
    * Using axious
@@ -290,25 +299,32 @@ export default class Chatroom {
    * Establish connection to Chatting server
    */
   @action openSocket = () => {
+    if(this.isConnecting) return
+
     return new Promise((resolve, reject) => {
       if(this.stompClient !== null && this.isConnected === true) {
         resolve()
         return
       }
-      this.stompClient = Stomp.over(new SockJS("/gs-guide-websocket"))         
+
+      this.isConnecting = true
+
+      const sock = new SockJS("/gs-guide-websocket")
+      this.stompClient = Stomp.over(sock)         
 
       this.stompClient.connect({}, frame => {
         console.log("Successfully Connected")
         console.log(frame)
         this.isConnected = true
+        this.isConnecting = false
         resolve()
       }, err => {
         console.error(err)
         this.isConnected = false
+        this.isConnecting = false
         this.stompClient = null
         this.stompSubscription = null
         reject()
-        // TODO: Retry???
       })
     })
   }
@@ -323,6 +339,7 @@ export default class Chatroom {
       console.log("Successfully disconnected")
       this.stompClient = null
       this.isConnected = false
+      this.isConnecting = false
       this.stompSubscription = null
     })
   }

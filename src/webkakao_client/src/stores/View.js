@@ -25,7 +25,7 @@ export default class View {
    */
   @observable modalView = ""
   /**
-   * TODO: The index or id of the chatroom
+   * The chatroom id
    */
   @observable selectedChatroom = null
 

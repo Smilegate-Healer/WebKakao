@@ -14,6 +14,7 @@ class ChatroomList extends React.Component {
   _onLogoClick = (e, idx) => {
     alert("on logo click of " + idx);
     e.stopPropagation(); // only for children click event
+
   };
 
   _renderItem = (v, idx) => {
