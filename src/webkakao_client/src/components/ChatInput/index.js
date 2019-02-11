@@ -11,6 +11,7 @@ class ChatInput extends React.Component {
 
   state = {
     inputText: '',
+    multiline: false
   }
 
   _onClickSendBtn = e => {
@@ -25,20 +26,33 @@ class ChatInput extends React.Component {
 
     // flush the input
     this.setState({
-      inputText: ''
+      inputText: '',
+      multiline: false
     })
   }
 
-  _onEnter = e => {
-    if(e.key === 'Enter') {
+  _onKeyPress = e => {
+    if(e.key === "Enter" && e.shiftKey) {
+      
+      this.setState({
+        inputText: (this.state.multiline) ? this.state.inputText : this.state.inputText + '\n',
+        multiline: true,
+      })
+    } else if(e.key === 'Enter') {
       this._onClickSendBtn()
     }
-  }  
+  }
 
   _onInputChange = e => {
     this.setState({
       inputText: e.target.value
     })
+  }
+
+  _renderEndAdorment = () => {
+    if(this.state.inputText !== '' ) {
+      return <SendBtn onClick={this._onClickSendBtn}/>
+    }
   }
 
 
@@ -50,9 +64,11 @@ class ChatInput extends React.Component {
           className="input"
           margin="dense"
           onChange={this._onInputChange}
-          onKeyPress={this._onEnter}
+          onKeyPress={this._onKeyPress}
           value={this.state.inputText}
-          endAdornment={<SendBtn onClick={this._onClickSendBtn}/>}
+          endAdornment={this._renderEndAdorment()}
+          multiline={this.state.multiline}
+          autoFocus={true}
         />
       </div>
     )

@@ -1,9 +1,8 @@
 import {
-  observable, action, computed
+  observable, action,
 } from 'mobx'
 
 export default class View {
-  // TODO: Define more views
   views = {
     friendList: "FriendList",
     chatroomList: "ChatroomList",
@@ -11,7 +10,6 @@ export default class View {
     chatList: "ChatList",
     emptyChatList: "EmptyChatList",
     settings: "Settings"
-    
   }
 
   @observable leftView = this.views.friendList
@@ -20,10 +18,12 @@ export default class View {
   @observable notificationDOMRef = null;
   @observable notificationId = null;
   @observable notificationChatroomIdx = null;
+
   /**
    * TODO: Define which views want to show
    */
   @observable modalView = ""
+
   /**
    * The chatroom id
    */

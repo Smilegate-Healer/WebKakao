@@ -1,7 +1,7 @@
 import UserStore from './User';
 import Chatroom from './Chatroom';
 import View from './View';
-import { autorun, reaction } from 'mobx';
+import { reaction } from 'mobx';
 
 class RootStore {
   constructor() {
@@ -38,15 +38,18 @@ class RootStore {
     })
   }
 
-
+  /**
+   * Connect to the Chatting server 
+   * until the connection is established
+   */
   connecToChattingServer = () => {
     console.debug("Connect to the Chatting server")
     this.chatroom.openSocket()
       .then(() => {
         if(this.view.selectedChatroom !== null) {
           this.chatroom.moveToAnother(this.view.selectedChatroom)
-        } else if(this.chatroom.stompSubscription !== null) {
-          this.chatroom.stompSubscription.unsubcribe()
+        } else {
+          this.chatroom.unsubscribeChatroom()
         } 
       })
       .catch(() => {

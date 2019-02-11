@@ -3,8 +3,8 @@
 
 .ChatInputContainer {
   width: 100%;
-  height: 50px;
-
+  height: 100%;
+  
   display: flex;
   flex-direction: row;
 
@@ -12,14 +12,15 @@
   align-items: center;
 
   background-color: white;
-
+  
   padding: 2px;
 
   .input {
+
     $inputHeight: 42px;
 
     width: 100%;
-    height: $inputHeight;
+    height: 100%;
     font-size: $inputSize;
     
     border: 1px;
@@ -43,7 +44,7 @@
 }
 
 .SendBtn {
-  $size: 36px;
+  $size: 32px;
 
   width: $size;
   height: $size;

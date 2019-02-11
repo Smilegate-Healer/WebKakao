@@ -1,12 +1,13 @@
 @import "../../colors.scss";
+@import "../../sizes.scss";
 
-$profileSize: 48px;
+$profileSize: 42px;
 $nameSize: 20px;
-$msgSize: 24px;
 
 .List {
   width: 100%;
   height: 100%;
+
   overflow: scroll;  
 }
 
@@ -15,9 +16,13 @@ $msgSize: 24px;
   margin-right: 8px;
   margin-top: 4px;
   margin-bottom: 4px;
+
   display: flex;
   flex-direction: row;
   flex-shrink: 0;
+  flex-basis: auto;
+
+  overflow: hidden;
 
   // background-color: transparent;
   
@@ -27,21 +32,30 @@ $msgSize: 24px;
     flex-grow: 0;
 
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 
+    margin-left: 8px;
+
+    .profileImg {
+      width: $profileSize;
+      height: $profileSize;
+
+      border-radius: 100%;
+    }
   }
 
   .senderMsgContainer {
-    margin-left: 4px;
-    margin-top: 2px;
 
     flex: 0;
 
     display: flex;
     flex-direction: column;
     flex-basis: auto;
-    
+
+    margin-left: 8px;
+    margin-top: 2px;
+         
     .sender {
       flex-basis: $nameSize;
       flex-shrink: 0;
@@ -51,13 +65,20 @@ $msgSize: 24px;
     }
 
     .msg {
+      flex-basis: auto;
       flex: 1;
       flex-shrink: 0;
+      flex-grow: 1;
 
       border-radius: 2px;
 
       padding: 6px;
       background-color: white;
+  
+      .text {
+        white-space: pre-line;
+        word-break: break-all;
+      }
     }
 
   }
@@ -74,7 +95,7 @@ $msgSize: 24px;
     align-items: flex-end;
 
     padding-left: 4px;
-    
+
   }
 
 

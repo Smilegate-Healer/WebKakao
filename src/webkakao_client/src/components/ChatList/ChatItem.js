@@ -1,9 +1,9 @@
 import React from "react";
 import "./styles.scss";
 import PropTypes from "prop-types";
-import { Person } from "@material-ui/icons";
 import { Typography } from "@material-ui/core";
 import DateFormatter from '../../utils/DateFormatter'
+import DefaultProfileImg from "../../resources/img_person_no1.png"
 
 
 class ChatItem extends React.Component {
@@ -23,7 +23,7 @@ class ChatItem extends React.Component {
         
         <div className="senderMsgContainer senderMsgContainerMine">
           <div className="msg msgMine">
-            <Typography variant="body1" color="textPrimary">
+            <Typography className="text" variant="body1" color="textPrimary">
               {chat.msg}
             </Typography>
           </div>
@@ -32,13 +32,23 @@ class ChatItem extends React.Component {
     ) 
   }
 
+  _renderProfile = (profile) => {
+    return (
+      <img
+        className="profileImg"
+        src={profile ? profile : DefaultProfileImg}
+        alt="profile"
+      />
+    )
+  }
+
   _renderNotMine() {
     const { chat } = this.props;
     var fullTime = DateFormatter.getKoreanDate(chat.timestamp)
     return (
       <div className="ChatItem">
         <div className="profileContainer">
-          {chat.profile ? chat.profile : <Person />}
+          {this._renderProfile(chat.profile)}
         </div>
 
         <div className="senderMsgContainer">
@@ -48,7 +58,7 @@ class ChatItem extends React.Component {
             </Typography>
           </div>
           <div className="msg">
-            <Typography variant="body1" color="textPrimary">
+            <Typography className="text" variant="body1" color="textPrimary" noWrap>
               {chat.msg}
             </Typography>
           </div>
@@ -72,7 +82,7 @@ class ChatItem extends React.Component {
 ChatItem.propTypes = {
   chat: PropTypes.shape({
     profile: PropTypes.string,
-    sender: PropTypes.string,
+    sender: PropTypes.number,
     timestamp: PropTypes.string,
     msg: PropTypes.string
   }),

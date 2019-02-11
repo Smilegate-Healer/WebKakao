@@ -1,91 +1,14 @@
-import { observable, action, reaction, computed} from 'mobx'
+import { observable, action } from 'mobx'
 import SockJS from 'sockjs-client'
 import Stomp from 'webstomp-client'
 import ChatroomNameFormatter from '../utils/ChatroomNameFormatter'
 
-const dummy = [
-  {
-    "chatroom_idx": 1,
-    "start_msg_idx": 1,
-    "last_msg_idx": 15,
-    "last_read_msg_idx": 15,
-    "user_list": [
-      {
-        "chatroom_idx": 1,
-        "user_idx": 2,
-        "name": "조영호",
-        "profile_img": "base64",
-        "start_msg_idx": 10,
-        "last_read_msg_idx": 10
-      },
-      {
-        "chatroom_idx": 1,
-        "user_idx": 3,
-        "name": "정명지",
-        "profile_img": "base64",
-        "start_msg_idx": 5,
-        "last_read_msg_idx": 1
-      }
-    ]
-  },
-  {
-    "chatroom_idx": 4,
-    "start_msg_idx": 0,
-    "last_msg_idx": 0,
-    "last_read_msg_idx": 0,
-    "user_list": [
-      {
-        "chatroom_idx": 4,
-        "user_idx": 2,
-        "name": "조영호",
-        "profile_img": "base64",
-        "start_msg_idx": 0,
-        "last_read_msg_idx": 0
-      },
-    ]
-  }
-]
-
-const dummyChats = [
-  {
-    sender: 2,
-    msg: "첫번째 메시지 입니다",
-    msg_type: "m",
-    timestamp: "1234",
-    msg_idx: "1"
-  },
-  {
-    sender: 3,
-    msg: "두번쨰 메시지 입니다",
-    msg_type: "m",
-    msg_idx: "2",
-    timestamp: "1235"
-  }
-] 
-
-const dummyChats2 = [
-  {
-    sender: 2,
-    msg: "세번째 메시지 입니다",
-    msg_type: "m",
-    timestamp: "1234",
-    msg_idx: "1"
-  },
-  {
-    sender: 3,
-    msg: "네번째 메시지 입니다",
-    msg_type: "m",
-    msg_idx: "2",
-    timestamp: "1235"
-  } 
-]
 
 
 export default class Chatroom {
   constructor(root) {
     this.root = root
   }
-
 
   /**
    * Array of json object
@@ -102,7 +25,7 @@ export default class Chatroom {
    * 
    *
    */
-  @observable chatroomList = dummy
+  @observable chatroomList = []
   @observable pollingAxios = null
   @observable chatroomAxios = null
 
@@ -116,7 +39,7 @@ export default class Chatroom {
    * msg: the message
    * time: the time of the chat
    */
-  @observable chats = { }
+  @observable chats = {}
 
   @observable stompClient = null
   stompSubscription = null
@@ -211,7 +134,7 @@ export default class Chatroom {
    * open chatroom
    * 
    */
-  @action oepnChatroom = (to_user_idx) => {
+  @action openChatroom = (to_user_idx) => {
 
     for(var i=0; i<this.chatroomList.length; i++) {
       if(this.chatroomList[i].user_list.length === 1 && this.chatroomList[i].user_list[0].user_idx === to_user_idx) {
@@ -354,15 +277,15 @@ export default class Chatroom {
       return
     }
 
-    if(this.stompSubscription !== null) 
-      this.stompSubscription.unsubscribe()
+    this.unsubscribeChatroom()
 
     this.stompSubscription = this.stompClient.subscribe("/topic/chatroom/" + chatroomId, msg => {
       this.chats[chatroomId].data.push(JSON.parse(msg.body))
       console.log(msg)
     })
-
   }
+
+
   /**
    * Send a chat
    */
@@ -375,6 +298,16 @@ export default class Chatroom {
     }
 
     this.stompClient.send("/chatroom/" + chatroomId, JSON.stringify(content))
+  }
+
+  /**
+   * Unsubscribe if subscription is not null
+   */
+  @action unsubscribeChatroom = () => {
+    if(this.stompSubscription !== null) {
+      this.stompSubscription.unsubscribe()
+      this.stompSubscription = null
+    }
   }
 
   @action chatroomListSort = () => {

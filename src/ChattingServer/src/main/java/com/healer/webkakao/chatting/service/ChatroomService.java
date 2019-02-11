@@ -138,7 +138,7 @@ public class ChatroomService {
         storingChats.setSur_id(surId);
 
         // Insert chats into Mongo
-        log.debug("Inser chats into Mongo");
+        log.debug("Insert chats into Mongo");
         mongoRepository.save(storingChats);
 
         // Update the chatroomInfo

@@ -14,9 +14,7 @@ class ChatBar extends React.Component {
     chatroomName: "카카오페이"
   }
 
-  // TODO: complete logic with mobx
   _onArrowbackBtnClick = e => {
-    alert('back button click')
     const { view } = this.props.stores
     view.hideChatroom();
   }

@@ -2,7 +2,6 @@ import React from 'react'
 import ChatItem from './ChatItem'
 import './styles.scss'
 import { inject, observer } from "mobx-react"
-import { reaction } from 'mobx'
 
 @inject("stores")
 @observer

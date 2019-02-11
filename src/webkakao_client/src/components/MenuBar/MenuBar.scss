@@ -1,6 +1,10 @@
 .menuContainer {
   width: 100%;
-  height: 50px;
+  height: 48px;
+
+  .tabs {
+    height: 48px;
+  }
 
   .border {
     border: 1px solid black;

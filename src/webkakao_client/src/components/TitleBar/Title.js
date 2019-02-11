@@ -28,7 +28,7 @@ class Title extends Component {
   }
 }
 
-Title.PropTypes = {
+Title.propTypes = {
   title: PropTypes.string.isRequired
 }
 
