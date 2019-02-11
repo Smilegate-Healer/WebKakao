@@ -1,9 +1,7 @@
 import React from "react";
 import { Component } from "react";
-import Btn from "./Btn";
 import "./MenuBar.scss";
 import {
-  Paper, 
   Tabs,
   Tab,
 } from '@material-ui/core'
@@ -41,11 +39,10 @@ class MenuBar extends Component {
           value={this.props.stores.view.menuBarIdx}
           onChange={(e, v) => this._onClickButton(v)}
           variant="fullWidth"
-          indicatorColor="primary"
-          textColor="primary">
-          <Tab className="tab" icon={<PersonOutline/>}></Tab>
-          <Tab className="tab" icon={<MessageOutlined/>}></Tab>
-          <Tab className="tab" icon={<MoreHorizOutlined/>}></Tab>
+          classes={{root: "tabs"}}>
+          <Tab className="tab" icon={<PersonOutline/>}/>
+          <Tab className="tab" icon={<MessageOutlined/>}/>
+          <Tab className="tab" icon={<MoreHorizOutlined/>}/>
         </Tabs>
       </div>
     )

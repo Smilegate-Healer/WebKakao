@@ -2,9 +2,20 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './styles.scss'
 import { Typography } from '@material-ui/core'
-import {Person} from '@material-ui/icons'
+import DefaultProfileImg from '../../resources/img_person_no1.png'
+
 
 class FriendItem extends React.Component {
+
+  _renderProfile = (profile_img) => {
+    return (
+      <img
+        className="profile"
+        alt="profile"
+        src= {profile_img && profile_img !== 'default' ? profile_img : DefaultProfileImg} // TODO: delete "defualt"
+      />
+    )
+  }
 
   render() {
 
@@ -13,14 +24,12 @@ class FriendItem extends React.Component {
     return (
       <div className="Item" onClick={this.props.onClick}>
         <div className="profileContainer" onClick={this.props.onProfileClick}>
-          {
-            user.profile_img && user.profile_img !== 'default' ? user.profile_img : <Person fontSize="large"/>
-          }
+          {this._renderProfile(user.profile_img)}
         </div>
 
         <div className="nameStatusMsgContainer">
           <div className="name">
-            <Typography variant="body1" color="textPrimary">
+            <Typography className="text" variant="body1" color="textPrimary">
               {user.name}
             </Typography>
           </div>

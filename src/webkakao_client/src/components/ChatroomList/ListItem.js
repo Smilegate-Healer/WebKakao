@@ -1,11 +1,11 @@
 import React from 'react'
-import PropTypes, { string, number } from 'prop-types'
+import PropTypes from 'prop-types'
 import './styles.scss'
-import { Person, } from '@material-ui/icons'
 import { Typography } from '@material-ui/core'
 import DateFormatter from '../../utils/DateFormatter'
 import ChatroomNameFormatter from '../../utils/ChatroomNameFormatter'
 import { observer } from 'mobx-react';
+import DefaultProfileImg from '../../resources/img_person_no1.png'
 
 @observer
 class ListItem extends React.Component {
@@ -19,6 +19,16 @@ class ListItem extends React.Component {
     }
   }
 
+  _renderLogo = (logo) => {
+    return (
+      <img
+        src={logo ? logo : DefaultProfileImg}
+        alt="chatroomLogo"
+        className="logo"
+      />
+    )
+  }
+
   render() {
     const { item } = this.props
 
@@ -27,9 +37,7 @@ class ListItem extends React.Component {
     return (
       <li className="ListItem" onClick={this.props.onClick}>
         <div className="logoContainer" onClick={this.props.onLogoClick}>
-          {
-            item.logo && item.logo !== 'default' ? item.logo : <Person fontSize="large"/>
-          }
+          {this._renderLogo(item.logo)}
         </div>
 
         <div className="nameMsgContainer">

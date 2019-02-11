@@ -3,10 +3,11 @@ import './styles.scss'
 import LeftContainer from './container/LeftContainer';
 import RightContainer from './container/RightContainer';
 import { observer, inject } from 'mobx-react';
-import { CssBaseline } from '@material-ui/core';
+import { CssBaseline, CircularProgress } from '@material-ui/core';
 import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import UserInfoModal from './components/Modal/UserInfoModal';
+import { hot } from 'react-hot-loader/root'
 import UserSearchModal from './components/Modal/UserSearchModal';
 
 @inject("stores")
@@ -29,9 +30,24 @@ class App extends Component {
     this.props.stores.view.showChatroom(this.props.stores.view.getNotificationChatroomIdx());
   }
 
+  _renderLoadingPage = () => {
+
+    if(this.props.stores.chatroom.isConnected === false) {
+
+      return (
+        <div className="loading" onClick={e => {
+          e.stopPropagation() // disable click through this div
+        }}>
+          <CircularProgress className="progress" size={60}/>
+        </div>
+      ) 
+    }
+  }
+
   render() {
     return (
       <div className="root">
+        {this._renderLoadingPage()}
         <ReactNotification ref={this.props.stores.view.notificationDOMRef} onClick={this.onClickNotification} />
         <UserSearchModal/>
         <UserInfoModal/>
@@ -47,4 +63,5 @@ class App extends Component {
   }
 }
 
-export default App;
+
+export default hot(App);

@@ -7,8 +7,6 @@ import { inject, observer } from 'mobx-react';
 class FriendList extends React.Component {
 
   _onItemClick = (e, idx) => {
-    alert('you click this person ' + idx)
-    // TODO: 1:1 채팅방 확인 -> 있으면 해당 채팅방 / 없으면 1:1 채팅방 생성
     const { chatroom, user } = this.props.stores;
     chatroom.openChatroom(user.getFriendByIdx(idx));
   }

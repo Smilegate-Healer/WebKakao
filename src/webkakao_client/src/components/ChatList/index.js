@@ -2,7 +2,6 @@ import React from 'react'
 import ChatItem from './ChatItem'
 import './styles.scss'
 import { inject, observer } from "mobx-react"
-import { reaction } from 'mobx'
 
 @inject("stores")
 @observer
@@ -16,18 +15,17 @@ class ChatList extends React.Component {
   }
 
   _renderItems = () => {
-    const { view, chatroom } = this.props.stores
+    const { view, chatroom, user } = this.props.stores
 
     if(!view.selectedChatroom || !chatroom.chats[view.selectedChatroom]) return 
     
     return chatroom.chats[view.selectedChatroom].data.map((v, idx) => {
-      var isMine = idx%2 === 0 ? true : false // TODO: testing code
 
       return (
         <ChatItem
           chat={v}
           key={idx}
-          isMine={isMine}
+          isMine={v.sender === user.userInfo.user_idx}
         />
       )
     })

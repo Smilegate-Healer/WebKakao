@@ -3,6 +3,7 @@
   width: 100%;
   display: flex;
   flex-direction: row;
+  margin-top: 4px;
 
   .titleContainer {
     flex: 1;
@@ -11,7 +12,7 @@
     align-items: center;
     justify-content: flex-start;
     
-    margin-left: 2px;
+    margin-left: 16px;
   }
   
   .buttonContainer {
@@ -20,37 +21,4 @@
     display: flex;
     justify-content: space-around;
   }
-}
-
-.inline {
-  display: inline-block;
-}
-
-.title_bar_title {
-  /* width: 60%; */
-  height: 80%;
-}
-
-.title_bar_btn {
-  width: 13%;
-  height: 100%;
-  text-align: center;
-  margin: 3% 0% 0%;
-}
-
-.title_bar_input {
-  width: 95%;
-  margin: 2.5%;
-  height: 30px;
-  line-height: 100%;
-  box-sizing : border-box;
-}
-
-.title_bar_logo {
-  width: 20px;
-  height: 20px;
-}
-
-.border {
-  border: 1px solid black;
 }
