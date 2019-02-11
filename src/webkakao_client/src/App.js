@@ -6,6 +6,8 @@ import { observer, inject } from 'mobx-react';
 import { CssBaseline } from '@material-ui/core';
 import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
+import UserInfoModal from './components/Modal/UserInfoModal';
+import UserSearchModal from './components/Modal/UserSearchModal';
 
 @inject("stores")
 @observer
@@ -24,7 +26,6 @@ class App extends Component {
   }
 
   onClickNotification(e){
-    debugger;
     this.props.stores.view.showChatroom(this.props.stores.view.getNotificationChatroomIdx());
   }
 
@@ -32,6 +33,8 @@ class App extends Component {
     return (
       <div className="root">
         <ReactNotification ref={this.props.stores.view.notificationDOMRef} onClick={this.onClickNotification} />
+        <UserSearchModal/>
+        <UserInfoModal/>
         <CssBaseline/>
         <div className="leftContainer">
           <LeftContainer/>

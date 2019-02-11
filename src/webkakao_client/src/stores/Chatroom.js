@@ -202,7 +202,7 @@ export default class Chatroom {
    * open chatroom
    * 
    */
-  @action oepnChatroom = (to_user_idx) => {
+  @action openChatroom = (to_user_idx) => {
 
     for(var i=0; i<this.chatroomList.length; i++) {
       if(this.chatroomList[i].user_list.length === 1 && this.chatroomList[i].user_list[0].user_idx === to_user_idx) {

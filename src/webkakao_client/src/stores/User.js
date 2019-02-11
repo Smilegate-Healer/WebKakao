@@ -22,6 +22,9 @@ export default class User {
   @observable userInfo = dummyUser
   @observable friendList = []
 
+  @observable searchUser = null;
+  @observable userDetail = null;
+
   interval = null
 
   constructor(root) {
@@ -107,7 +110,7 @@ export default class User {
 
   @action getFriendList = () => {
     this.friendAxios.post("http://localhost:8081/api/friend/list", { // TODO: REST???
-      user_idx: 1
+      user_idx: this.userInfo.user_idx
     }).then(res => {
       console.log(res)
       if (res.data.resultCode === 0) {
@@ -118,7 +121,7 @@ export default class User {
 
   @action getChatroomList = () => {
     this.root.chatroom.chatroomAxios.post('http://localhost:8081/api/chatroom/list', {
-      user_idx: 1
+      user_idx: this.userInfo.user_idx
     }).then(res => {
       console.log(res)
       if (res.data.resultCode === 0) {
@@ -142,7 +145,10 @@ export default class User {
     this.friendAxios.post("http://localhost:8081/api/friend/request", data).then(res => {
       console.log(res)
       if (res.data.resultCode === 0) {
-        this.initFriendList(res.data.param.list)
+        this.addUserList(res.data.param);
+        this.root.view.hideUserSearchModal();
+        this.root.view.hideUserInfoModal();
+        this.root.user.removeUserInfo();
       }
     }).catch(err => console.error(err))
   }
@@ -180,9 +186,16 @@ export default class User {
     this.friendAxios.post("http://localhost:8081/api/friend/search", data).then(res => {
       console.log(res)
       if (res.data.resultCode === 0) {
-        this.initFriendList(res.data.param.list)
+        this.searchUser = res.data.param;
+      } else if (res.data.resultCode === 102) {
+        this.searchUser = 'Invalid User';
       }
     }).catch(err => console.error(err))
+  }
+
+  @action
+  removeSearchUser = () => {
+    this.searchUser = null;
   }
 
   /**
@@ -198,9 +211,15 @@ export default class User {
     this.friendAxios.post("http://localhost:8081/api/user/info", data).then(res => {
       console.log(res)
       if (res.data.resultCode === 0) {
-        this.initFriendList(res.data.param.list)
+        this.userDetail = res.data.param;
+        this.root.view.showUserInfoModal();
       }
     }).catch(err => console.error(err))
+  }
+
+  @action
+  removeUserInfo = () => {
+    this.userDetail = null;
   }
 
   @action
@@ -210,15 +229,30 @@ export default class User {
 
   @action
   getFriendByUserIdx = (user_idx) => {
-    for(var i=0; i<this.friendList.length; i++) {
-      if(this.friendList[i].user_idx === user_idx)
+    for (var i = 0; i < this.friendList.length; i++) {
+      if (this.friendList[i].user_idx === user_idx)
         return this.friendList[i];
     }
   }
 
   @action
   getUserIdx = () => {
-    return 1;
+    return this.userInfo.user_idx;
   }
-  
+
+  @action
+  isFriend = () => {
+    if (this.userDetail) {
+      for (var i = 0; i < this.friendList.length; i++) {
+        if (this.friendList[i].user_idx === this.userDetail.user_idx)
+          return true;
+      }
+      return false;
+    }
+  }
+
+  addUserList = (data) => {
+    this.friendList.push(data);
+  }
+
 }

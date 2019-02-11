@@ -20,6 +20,9 @@ export default class View {
   @observable notificationDOMRef = null;
   @observable notificationId = null;
   @observable notificationChatroomIdx = null;
+  @observable userInfoModal = false;
+  @observable userSearchModal = false;
+  
   /**
    * TODO: Define which views want to show
    */
@@ -135,5 +138,21 @@ export default class View {
 
   @action getNotificationChatroomIdx() {
     return this.root.view.notificationChatroomIdx;
+  }
+
+  @action showUserInfoModal = () => {
+    this.root.view.userInfoModal = true;
+  }
+
+  @action hideUserInfoModal = () => { 
+    this.root.view.userInfoModal = false;
+  }
+
+  @action showUserSearchModal = () => { 
+    this.root.view.userSearchModal = true;
+  }
+
+  @action hideUserSearchModal = () => { 
+    this.root.view.userSearchModal = false;
   }
 }

@@ -4,6 +4,7 @@ import Title from "./Title";
 import Btn from "./Btn";
 import "./TitleBar.scss";
 import { observer, inject } from "mobx-react";
+import { allSettled } from "q";
 
 
 @inject("stores")

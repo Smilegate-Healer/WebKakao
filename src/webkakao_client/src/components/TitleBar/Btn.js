@@ -1,24 +1,28 @@
 import React from "react";
 import { Component } from "react";
 import { IconButton } from '@material-ui/core'
-import { 
+import {
   SearchOutlined,
   AddOutlined,
   SettingsOutlined
 } from '@material-ui/icons'
+import { observer, inject } from "mobx-react";
 
+
+@inject("stores")
+@observer
 class Btn extends Component {
   _renderLogo = () => {
     let logo;
     switch (this.props.btnName) {
       case "search":
-        logo = <SearchOutlined/>;
+        logo = <SearchOutlined />;
         break;
       case "new_talk":
-        logo = <AddOutlined/>;
+        logo = <AddOutlined />;
         break;
       case "setting":
-        logo = <SettingsOutlined/>;
+        logo = <SettingsOutlined />;
         break;
       default:
         logo = null;
@@ -27,18 +31,58 @@ class Btn extends Component {
   };
 
   onClickButton = () => {
-    switch (this.props.btnName) {
-      case "search":
-        alert("search");
+    const { view } = this.props.stores
+
+    switch (view.leftView) {
+      case view.views.chatroomList:
+        switch (this.props.btnName) {
+          case "search":
+            alert("chatroom list search");
+            break;
+          case "new_talk":
+            alert("chatroom list new_talk");
+            break;
+          case "setting":
+            alert("chatroom list setting");
+            break;
+          default:
+            alert("chatroom list default");
+        }
         break;
-      case "new_talk":
-        alert("new_talk");
+      case view.views.friendList:
+        switch (this.props.btnName) {
+          case "search":
+            alert("friend list search");
+            break;
+          case "new_talk":
+            view.showUserSearchModal();
+            // alert("friend list new_talk");
+            break;
+          case "setting":
+            alert("friend list setting");
+            break;
+          default:
+            alert("friend list default");
+        }
         break;
-      case "setting":
-        alert("setting");
+      case view.views.option:
+        switch (this.props.btnName) {
+          case "search":
+            alert("option search");
+            break;
+          case "new_talk":
+            alert("option new_talk");
+            break;
+          case "setting":
+            alert("option setting");
+            break;
+          default:
+            alert("option default");
+            break;
+        }
         break;
       default:
-        alert("default");
+        break;
     }
   };
 
@@ -53,7 +97,7 @@ class Btn extends Component {
 
   render() {
     return (
-      <IconButton color="primary">
+      <IconButton color="primary" onClick={this.onClickButton}>
         {this._renderLogo()}
       </IconButton>
     )
