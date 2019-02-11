@@ -82,7 +82,7 @@ export default class Chatroom {
   @action updateWholeChatroomList = () => {
     const chatroomIdxList = this.root.chatroom.getChatroomIdxList();
     this.pollingAxios.post("http://localhost:8082/message/longpolling", { 
-        user_idx: 1,
+        user_idx: this.root.user.userInfo.user_idx,
         rooms: chatroomIdxList
       }).then(res => {
         if(res.data.resultCode === 0) {
@@ -230,7 +230,7 @@ export default class Chatroom {
 
       this.isConnecting = true
 
-      const sock = new SockJS("/gs-guide-websocket")
+      const sock = new SockJS("http://localhost:8080/gs-guide-websocket")
       this.stompClient = Stomp.over(sock)         
 
       this.stompClient.connect({}, frame => {
