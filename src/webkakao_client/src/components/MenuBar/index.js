@@ -16,15 +16,21 @@ import { inject, observer } from "mobx-react";
 @observer
 class MenuBar extends Component {
   _onClickButton = (value) => {
+    const { view, chatroom, user } = this.props.stores;
+    view.resetSearchTargerStr();
     switch (value) {
         case 0:
-            this.props.stores.view.showFriendsList(value);
+            view.showFriendsList(value);
+            chatroom.showAllChatroomList();
             break;
         case 1:
-            this.props.stores.view.showChatroomList(value);
+            view.showChatroomList(value);
+            user.showAllFriendList();
             break;
         case 2:
-            this.props.stores.view.showOption(value);
+            view.showOption(value);
+            user.showAllFriendList();
+            chatroom.showAllChatroomList();
             break;
         default:
         alert('Error in MenuBar');

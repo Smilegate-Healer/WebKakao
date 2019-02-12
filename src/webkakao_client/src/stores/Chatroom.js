@@ -349,5 +349,12 @@ export default class Chatroom {
       }
     }
   }
+
+  @action
+  showAllChatroomList = () => {
+    for (var i = 0; i < this.chatroomList.length; i++) {
+      this.chatroomList[i].hide = false;
+    }
+  }
   
 }

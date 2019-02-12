@@ -12,7 +12,6 @@ class FriendList extends React.Component {
   }
 
   onClick = (idx) => {
-    debugger;
     const { user } = this.props.stores;
     const req = {
       user_idx: idx

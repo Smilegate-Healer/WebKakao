@@ -20,6 +20,8 @@ export default class View {
   @observable notificationChatroomIdx = null;
   @observable userInfoModal = false;
   @observable userSearchModal = false;
+  @observable isSearchBar = false;
+  @observable searchTargerStr = '';
   
   /**
    * TODO: Define which views want to show
@@ -153,5 +155,23 @@ export default class View {
 
   @action hideUserSearchModal = () => { 
     this.root.view.userSearchModal = false;
+  }
+
+  @action showSearchBar = () => { 
+    this.root.view.isSearchBar = true;
+  }
+
+  @action hideSearchBar = () => { 
+    this.root.view.isSearchBar = false;
+  }
+
+  @action
+  setSearchTargerStr = (value) => {
+    this.searchTargerStr = value;
+  }
+
+  @action
+  resetSearchTargerStr = () => {
+    this.searchTargerStr = '';
   }
 }

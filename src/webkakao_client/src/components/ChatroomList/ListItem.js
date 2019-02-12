@@ -34,38 +34,42 @@ class ListItem extends React.Component {
 
     const date = DateFormatter.getKoreanDate(item.timestamp)
     const chatroomName = ChatroomNameFormatter.getChatroomName(item.user_list, item.chatroom_name)
-    return (
-      <li className="ListItem" onClick={this.props.onClick}>
-        <div className="logoContainer" onClick={this.props.onLogoClick}>
-          {this._renderLogo(item.logo)}
-        </div>
+    if (!item.hide) {
+      return (
+        <li className="ListItem" onClick={this.props.onClick}>
+          <div className="logoContainer" onClick={this.props.onLogoClick}>
+            {this._renderLogo(item.logo)}
+          </div>
 
-        <div className="nameMsgContainer">
-          <div className="name">
-            <Typography 
-              variant="body1" 
-              color="textPrimary"
-              noWrap={true}>
-              {chatroomName} 
+          <div className="nameMsgContainer">
+            <div className="name">
+              <Typography
+                variant="body1"
+                color="textPrimary"
+                noWrap={true}>
+                {chatroomName}
+              </Typography>
+            </div>
+            <div className="msg">
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                noWrap={true}>
+                {item.last_msg}
+              </Typography>
+            </div>
+          </div>
+
+          <div className="dateContainer">
+            <Typography variant="body2" className="date">
+              {date}
             </Typography>
           </div>
-          <div className="msg">
-            <Typography 
-              variant="body2" 
-              color="textSecondary" 
-              noWrap={true}>
-              {item.last_msg}
-            </Typography>
-          </div>
-        </div>
-
-        <div className="dateContainer">
-          <Typography variant="body2" className="date">
-            {date}
-          </Typography>
-        </div>
-      </li>
-    )
+        </li>
+      )
+    } else {
+      return (<div></div>)
+    }
   }
 }
 
@@ -77,7 +81,5 @@ ListItem.propTypes = {
     date: PropTypes.string
   })
 }
-
-
 
 export default ListItem

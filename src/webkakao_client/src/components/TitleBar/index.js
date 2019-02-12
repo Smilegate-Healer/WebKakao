@@ -5,6 +5,7 @@ import Btn from "./Btn";
 import "./TitleBar.scss";
 import { observer, inject } from "mobx-react";
 import { allSettled } from "q";
+import SearchBar from "./SearchBar";
 
 
 @inject("stores")
@@ -40,6 +41,7 @@ class TitleBar extends Component {
 
   render() {
     return (
+      <div>
       <div className="titleBarContainer">
         <div className="titleContainer">
           <Title title={this._renderTitle()}/>
@@ -49,6 +51,8 @@ class TitleBar extends Component {
           <Btn btnName={this.state.secondBtn} />
           <Btn btnName={this.state.thirdBtn} />
         </div>
+      </div>
+        <SearchBar/>
       </div>
     )
   }

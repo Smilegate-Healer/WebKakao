@@ -37,7 +37,7 @@ class Btn extends Component {
       case view.views.chatroomList:
         switch (this.props.btnName) {
           case "search":
-            alert("chatroom list search");
+            view.showSearchBar();
             break;
           case "new_talk":
             alert("chatroom list new_talk");
@@ -52,11 +52,10 @@ class Btn extends Component {
       case view.views.friendList:
         switch (this.props.btnName) {
           case "search":
-            alert("friend list search");
+            view.showSearchBar();
             break;
           case "new_talk":
             view.showUserSearchModal();
-            // alert("friend list new_talk");
             break;
           case "setting":
             alert("friend list setting");

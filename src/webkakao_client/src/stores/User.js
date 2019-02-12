@@ -255,4 +255,11 @@ export default class User {
     this.friendList.push(data);
   }
 
+  @action
+  showAllFriendList = () => {
+    for (var i = 0; i < this.friendList.length; i++) {
+      this.friendList[i].hide = false;
+    }
+  }
+
 }

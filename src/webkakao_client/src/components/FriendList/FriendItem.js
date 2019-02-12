@@ -10,31 +10,30 @@ import { inject, observer } from 'mobx-react';
 class FriendItem extends React.Component {
 
   onClick = () => {
-    debugger;
     const { user } = this.props.stores;
     const req = {
       user_idx: this.props.user.user_idx
     }
     user.getUserInfo(req);
   }
+  
 
   _renderProfile = (profile_img) => {
     return (
       <img
         className="profile"
         alt="profile"
-        src= {profile_img && profile_img !== 'default' ? profile_img : DefaultProfileImg} // TODO: delete "defualt"
+        src={profile_img && profile_img !== 'default' ? profile_img : DefaultProfileImg} // TODO: delete "defualt"
       />
     )
   }
 
-  render() {
-
+  _randerFunc = () => {
     const { user } = this.props
-
-    return (
-      <div className="Item" onClick={this.onClick}>
-        <div className="profileContainer" onClick={this.props.onProfileClick}>
+    if (!user.hide) {
+      return (<div className="Item" onClick={this.onClick}>
+        {/* <div className="profileContainer" onClick={this.props.onProfileClick}> */}
+        <div className="profileContainer">
           {this._renderProfile(user.profile_img)}
         </div>
 
@@ -50,8 +49,21 @@ class FriendItem extends React.Component {
             </Typography>
           </div>
         </div>
+      </div>)
+    } else {
+      return (<div></div>)
+    }
+  }
+
+  render() {
+    const component = this._randerFunc();
+
+    return (
+      <div>
+        { component }
       </div>
     )
+
   }
 }
 
