@@ -3,9 +3,20 @@ import PropTypes from 'prop-types'
 import './styles.scss'
 import { Typography } from '@material-ui/core'
 import DefaultProfileImg from '../../resources/img_person_no1.png'
+import { inject, observer } from 'mobx-react';
 
-
+@inject('stores')
+@observer
 class FriendItem extends React.Component {
+
+  onClick = () => {
+    debugger;
+    const { user } = this.props.stores;
+    const req = {
+      user_idx: this.props.user.user_idx
+    }
+    user.getUserInfo(req);
+  }
 
   _renderProfile = (profile_img) => {
     return (
@@ -22,7 +33,7 @@ class FriendItem extends React.Component {
     const { user } = this.props
 
     return (
-      <div className="Item" onClick={this.props.onClick}>
+      <div className="Item" onClick={this.onClick}>
         <div className="profileContainer" onClick={this.props.onProfileClick}>
           {this._renderProfile(user.profile_img)}
         </div>

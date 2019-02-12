@@ -29,7 +29,13 @@ class ChatBar extends React.Component {
 
   getChatroomName() {
     const { view, chatroom } = this.props.stores
-    return chatroom.getChatroomName(view.selectedChatroom);
+    const chatroomName = chatroom.getChatroomName(view.selectedChatroom);
+    if(chatroomName) {
+      return chatroomName;
+    } else {
+      return '';
+    }
+    
   }
 
   render() {

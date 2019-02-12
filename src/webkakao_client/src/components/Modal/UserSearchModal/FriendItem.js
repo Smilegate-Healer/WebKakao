@@ -10,7 +10,6 @@ import { inject, observer } from 'mobx-react';
 class FriendItem extends React.Component {
 
   onClick = () => {
-    alert("click");
     const { user } = this.props.stores;
     const req = {
       user_idx: user.searchUser.user_idx

@@ -6,14 +6,18 @@ import { inject, observer } from 'mobx-react';
 @observer
 class FriendList extends React.Component {
 
-  _onItemClick = (e, idx) => {
-    const { chatroom, user } = this.props.stores;
-    chatroom.openChatroom(user.getFriendByIdx(idx));
-  }
-
   _onProfileClick = (e, idx) => {
     alert('you click this profile image of the person ' + idx)
     e.stopPropagation()
+  }
+
+  onClick = (idx) => {
+    debugger;
+    const { user } = this.props.stores;
+    const req = {
+      user_idx: idx
+    }
+    user.getUserInfo(req);
   }
 
   render() {
@@ -27,7 +31,7 @@ class FriendList extends React.Component {
               <FriendItem
                 user={v}
                 key={v.name}
-                onClick={e => this._onItemClick(e, idx)}
+                onClick={e => this.onClick(e, idx)}
                 onProfileClick={e => this._onProfileClick(e, idx)}
               />
             )
