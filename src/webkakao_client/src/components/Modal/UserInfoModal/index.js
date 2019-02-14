@@ -1,5 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
+import Background from './Background'
+import Profile from './Profile'
 import { inject, observer } from 'mobx-react';
 import {
   Close,
@@ -15,7 +17,9 @@ const customStyles = {
     right                 : 'auto',
     bottom                : 'auto',
     marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
+    transform             : 'translate(-50%, -50%)',
+    width: 400,
+    height: 600
   }
 };
 
@@ -48,24 +52,27 @@ class UserInfoModal extends React.Component {
     }
 
     onAddFriendButtonClick = () => {
-      const { user } = this.props.stores
+      const { user, view } = this.props.stores
       const req = {
         from_user_idx: user.userInfo.user_idx,
         to_user_idx: user.userDetail.user_idx
       }
       user.requestFriend(req);
+      view.resetTargerEmail();
+      user.removeSearchUser();
     }
 
     _RanderFunc() {
       const { user } = this.props.stores
       const isFriend = user.isFriend();
+      
       if (isFriend) {
         return (<div><ChatBubble onClick={this.onChatButtonClick}/></div>);
       } else {
         return (<div><PersonAdd onClick={this.onAddFriendButtonClick}/><Block/></div>);
       }
     }
-  
+
     render() {
       const isOpen = this.props.stores.view.userInfoModal; 
       const component = this._RanderFunc();
@@ -82,9 +89,9 @@ class UserInfoModal extends React.Component {
               <Close onClick={this.closeModal}
                 className="icon"
               />
-              Background Image
+              <Background/>
             </div>
-            <div>Profile Image</div>
+              <Profile/>
             <div>
               {component}
             </div>

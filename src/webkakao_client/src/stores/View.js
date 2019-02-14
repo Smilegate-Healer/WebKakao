@@ -22,6 +22,7 @@ export default class View {
   @observable userSearchModal = false;
   @observable isSearchBar = false;
   @observable searchTargerStr = '';
+  @observable targerEmail = '';
   
   /**
    * TODO: Define which views want to show
@@ -173,5 +174,15 @@ export default class View {
   @action
   resetSearchTargerStr = () => {
     this.searchTargerStr = '';
+  }
+
+  @action
+  setTargerEmail = (value) => {
+    this.targerEmail = value;
+  }
+
+  @action
+  resetTargerEmail = () => {
+    this.targerEmail = '';
   }
 }

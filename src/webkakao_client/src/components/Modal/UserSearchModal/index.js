@@ -4,10 +4,8 @@ import { inject, observer } from 'mobx-react';
 import FriendItem from './FriendItem'
 import { InputBase } from '@material-ui/core'
 import SearchBtn from './SearchBtn';
+import CloseBtn from './CloseBtn';
 import InvalidUser from './InvalidUser';
-import {
-  Close
-} from '@material-ui/icons'
 
 const customStyles = {
   content: {
@@ -23,10 +21,6 @@ const customStyles = {
 @inject('stores')
 @observer
 class UserSearchModal extends React.Component {
-
-  state = {
-    email: '',
-  }
 
   constructor() {
     super();
@@ -50,6 +44,7 @@ class UserSearchModal extends React.Component {
     const { view, user } = this.props.stores
     view.hideUserSearchModal();
     user.removeSearchUser();
+    view.resetTargerEmail();
   }
 
   _userRanderFunc() {
@@ -63,22 +58,22 @@ class UserSearchModal extends React.Component {
   }
 
   _onEnter = (e) => {
+    const { targerEmail } = this.props.stores.view;
     if(e.key === 'Enter') {
-      if(this.state.email === '') return 
+      if(targerEmail === '') return 
       this._onClickSearchBtn();
     }
   }  
 
   _onInputChange = (e) => {
-    this.setState({
-      email: e.target.value
-    })
+    const { view } = this.props.stores;
+    view.setTargerEmail(e.target.value);
   }
 
   _onClickSearchBtn = (e) => {
-    const { user } = this.props.stores
+    const { user, view } = this.props.stores
     const req = {
-      user_email: this.state.email
+      user_email: view.targerEmail
     }
     user.searchFriend(req);
   }
@@ -95,19 +90,37 @@ class UserSearchModal extends React.Component {
           style={customStyles}
           contentLabel="Example Modal"
         >
-          <Close onClick={this.closeModal}
-          className="icon"
+        <div>
+          <InputBase
+            value="이메일로 친구 추가"
+            style={{
+              color: "#000000",
+              fontSize: 22,
+              backgroundColor: "#FFFFFFF",
+              width: 300,
+              textAlign: "center"
+            }}
+            readOnly
           />
-
+        </div>
+        <div>
           <InputBase
             className="input"
             margin="dense"
             onChange={this._onInputChange}
             onKeyPress={this._onEnter}
-            value={this.state.email}
+            value={this.props.stores.view.targetEmail}
+            autoFocus="true"
+            style={{
+              backgroundColor: "#f4f4f9",
+              width: 300
+            }}
+            startAdornment={<CloseBtn onClick={this.closeModal}/>}
             endAdornment={<SearchBtn onClick={this._onClickSearchBtn} />}
+            placeholder="상대방 E-Mail"
           />
           {user}
+          </div>
         </Modal>
       </div>
     );

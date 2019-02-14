@@ -1,5 +1,5 @@
 import React from 'react'
-import userNotFound from '../../../resources/user_not_found.png';
+import img_person_no1 from '../../../resources/img_person_no1.png';
 
 import {
     Close
@@ -7,15 +7,13 @@ import {
 import PropTypes from 'prop-types'
 // import './styles.scss'
 
-class InvalidUser extends React.Component {
+class Profile extends React.Component {
 
   render() {
     return (
       <div>
-        <img src={userNotFound} 
+        <img src={img_person_no1}
         style={{
-          width: 300,
-          marginTop: 30,
         }}
         />
       </div>
@@ -23,8 +21,8 @@ class InvalidUser extends React.Component {
   }
 }
 
-InvalidUser.propTypes = {
+Profile.propTypes = {
   onClick: PropTypes.func
 }
 
-export default InvalidUser
+export default Profile

@@ -25,8 +25,8 @@ class SearchBar extends Component {
     }
 
     _onInputChange = (e) => {
-        const { view } = this.props.stores;
 
+        const { view } = this.props.stores;
         view.setSearchTargerStr(e.target.value);
 
         if(this.state.timer) {
@@ -87,34 +87,6 @@ class SearchBar extends Component {
         }
     }
 
-    
-
-    _onSearchBtnClick = () => {
-
-        const { view } = this.props.stores;
-        const searchTargerStr = view.searchTargerStr;
-        // const value = hangul.disassemble(this.state.targetStr);
-        switch (view.leftView) {
-            case view.views.friendList:
-                const friendList = this.props.stores.user.friendList;
-                for(var i=0; i<friendList.length; i++) {
-                    if(hangul.search(friendList[i].name, searchTargerStr) < 0) {
-                        friendList[i].hide = true;
-                    } else {
-                        friendList[i].hide = false;
-                    }
-                }
-            break;
-            case view.views.chatroomList:
-            break;
-            case view.views.option:
-            break;
-            default:
-            break;
-        }
-
-    }
-
     _onCloseBtnClick = () => {
 
         const { view, chatroom, user } = this.props.stores;
@@ -135,29 +107,6 @@ class SearchBar extends Component {
         }
     }
 
-    onClose = () => {
-        
-        const { view } = this.props.stores;
-
-        if (this.state.targetStr === '') {
-            switch (view.leftView) {
-                case view.views.friendList:
-                    const friendList = this.props.stores.user.friendList;
-                    for(var i=0; i<friendList.length; i++) {
-                        friendList[i].hide = false;
-                    }
-                break;
-                case view.views.chatroomList:
-                break;
-                case view.views.option:
-                break;
-                default:
-                break;
-            }
-            return
-        }
-    }
-
     _randerFunc = () => {
         const { view } = this.props.stores;
         if (view.isSearchBar === false) {
@@ -175,7 +124,8 @@ class SearchBar extends Component {
                         backgroundColor: "#f0f0f5",
                         width: 300
                     }}
-                    endAdornment={<SearchBtn />}
+                    autoFocus="true"
+                    startAdornment={<SearchBtn />}
                 />
                 <CloseBtn className="icon" onClick={this._onCloseBtnClick}/>
                 </div>
