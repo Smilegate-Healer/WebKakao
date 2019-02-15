@@ -182,6 +182,7 @@ export default class Chatroom {
 
     const reqData = {
       chatroom_idx : chatroom_idx,
+      user_idx : this.root.user.userInfo.user_idx,
       object_id : object_id
     }
 
@@ -355,6 +356,31 @@ export default class Chatroom {
     for (var i = 0; i < this.chatroomList.length; i++) {
       this.chatroomList[i].hide = false;
     }
+  }
+
+  @action
+  showAllChatroomList = () => {
+    for (var i = 0; i < this.chatroomList.length; i++) {
+      this.chatroomList[i].hide = false;
+    }
+  }
+
+  @action
+  getNotReadUserCount = (msg_idx) => {
+    let data;
+    for (var i = 0; i < this.chatroomList.length; i++) {
+      if(this.chatroomList[i].chatroom_idx === this.root.view.selectedChatroom) { 
+        data = this.chatroomList[i];
+        break;
+      }
+    }
+    let notReadUserCount = data.user_list.length;
+    for(var i=0; i<data.user_list.length; i++) {
+      if (data.user_list[i].last_read_msg_idx >= msg_idx) {
+        notReadUserCount--;
+      }
+    }
+    return notReadUserCount;
   }
   
 }
