@@ -37,4 +37,6 @@ public interface ChatroomMapper {
 
 	public RequestChatroomParam getChatroomInfo(long chatroom_idx);
 
+	public void updateLastReadMsgIdx(Map<String, Object> map);
+
 }

@@ -127,4 +127,13 @@
 		where
 			chatroom_idx = #{chatroom_idx}
 	</update>
+	
+	<update id="updateLastReadMsgIdx" parameterType="Map">
+		update
+			chatroom_member
+		set
+			last_read_msg_idx = #{last_read_msg_idx}
+		where
+			chatroom_idx = #{chatroom_idx} and user_idx = #{user_idx}
+	</update>
 </mapper>

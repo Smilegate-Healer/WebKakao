@@ -198,6 +198,15 @@ public class ChatroomServiceImpl implements ChatroomService {
 			
 		}
 		
+		if(resultParam.getData() != null && resultParam.getData().size() > 0) {
+			long last_read_msg_idx = resultParam.getData().get(resultParam.getData().size() - 1).getMsg_idx();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("chatroom_idx", param.getChatroom_idx());
+			map.put("user_idx", param.getUser_idx());
+			map.put("last_read_msg_idx", last_read_msg_idx);
+			chatroomMapper.updateLastReadMsgIdx(map);
+		}
+		
 		wrapper.setParam(resultParam);
 
 		return wrapper;
