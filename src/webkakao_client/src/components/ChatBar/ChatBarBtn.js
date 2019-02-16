@@ -8,14 +8,20 @@ import "./styles.scss"
 
 class ChatBarBtn extends React.Component {
 
+  static defaultProps = {
+    size: "default"
+  }
+
   _renderIcon() {
+    const { size } = this.props
+
     switch(this.props.type) {
       case "search":
-      return <SearchIcon fontSize={this.props.size}/>
+      return <SearchIcon fontSize={size}/>
       case "arrowback":
-      return <ArrowBackIOS fontSize={this.props.size}/>
+      return <ArrowBackIOS fontSize={size}/>
       case "menu":
-      return <MenuIcon fontSize={this.props.size}/>
+      return <MenuIcon fontSize={size}/>
       default:
     }
     return null
@@ -34,8 +40,8 @@ class ChatBarBtn extends React.Component {
 }
 
 ChatBarBtn.propTypes = {
-  type: PropTypes.oneOf("serach", "arrowback", "menu"),
-  size: PropTypes.oneOf("small", "large"),
+  type: PropTypes.oneOf(["search", "arrowback", "menu"]),
+  size: PropTypes.oneOf(["small", "large", "inehrit", "default"]),
   onClick: PropTypes.func,
 }
 

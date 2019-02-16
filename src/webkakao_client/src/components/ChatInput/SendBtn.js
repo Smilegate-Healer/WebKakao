@@ -1,6 +1,6 @@
 import React from 'react'
 import { 
-  IconButton
+  IconButton,
 } from '@material-ui/core'
 import {
   ArrowUpward
@@ -12,11 +12,16 @@ class SendBtn extends React.Component {
 
   render() {
     return (
-      <IconButton 
+      <IconButton
         aria-label="Send the message"
         onClick={this.props.onClick}
-        className="SendBtn">
-        <ArrowUpward/>
+        classes={{root: "SendBtn"}}
+        style={{
+          backgroundColor: "#F9DC09"
+        }}>
+        <ArrowUpward 
+          classes={{root: "icon"}}
+          fontSize="inherit"/>
       </IconButton>
     )
   }

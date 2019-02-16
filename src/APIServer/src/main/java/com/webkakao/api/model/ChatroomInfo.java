@@ -8,13 +8,38 @@ public class ChatroomInfo {
 	private long start_msg_idx;
 	private long last_msg_idx;
 	private long last_read_msg_idx;
-	private String chatroom__name;
+	private String chatroom_name;
 	private String logo;
-	
+	private String last_msg;
+	private long timestamp;
 	private List<ChatroomUserList> user_list;
-	
+
+	public long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public String getChatroom_name() {
+		return chatroom_name;
+	}
+
+	public void setChatroom_name(String chatroom_name) {
+		this.chatroom_name = chatroom_name;
+	}
+
+	public String getLast_msg() {
+		return last_msg;
+	}
+
+	public void setLast_msg(String last_msg) {
+		this.last_msg = last_msg;
+	}
+
 	public ChatroomInfo() {
-		this.logo = "default";
+		this.logo = "";
 	}
 
 	public String getLogo() {

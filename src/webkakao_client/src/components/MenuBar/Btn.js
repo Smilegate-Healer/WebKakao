@@ -31,13 +31,11 @@ class Btn extends Component {
     onClickButton = () => {
         switch (this.props.btnName) {
             case 'friendList':
-            // alert('friendList');
-                debugger;
+            alert('friendList');
                 this.props.stores.view.showFriendsList();
                 break;
             case 'chatroomList':
-            // alert('chatroomList');
-            debugger;
+            alert('chatroomList');
                 this.props.stores.view.showChatroomList();
                 break;
             case 'option':

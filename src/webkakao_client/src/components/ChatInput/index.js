@@ -1,57 +1,47 @@
 import React from 'react'
 import "./styles.scss"
-import SockJS from 'sockjs-client'
-import Stomp from 'webstomp-client'
 import SendBtn from './SendBtn';
-import { TextField } from '@material-ui/core'
-import { inject } from 'mobx-react'
+import { InputBase } from '@material-ui/core'
+import { inject, observer } from 'mobx-react'
 
 // TODO: action으로 분리할 것
 @inject("stores")
+@observer
 class ChatInput extends React.Component {
-
-  componentWillMount() {
-    var sock = new SockJS("/gs-guide-websocket")
-    var stompClient = Stomp.over(sock)
-    this.stompClient = stompClient
-    
-    this.stompClient.connect({}, frame => {
-      console.log('conneted to the socket')
-      stompClient.subscribe("/topic/chatroom/1", (msg) => {
-        this.props.stores.chatroom.chats[1].push(JSON.parse(msg.body))
-        console.log(msg)
-      })
-    })
-  }
 
   state = {
     inputText: '',
-    sender:  1
+    multiline: false
   }
 
   _onClickSendBtn = e => {
-    this.stompClient.send("/chatroom/1", JSON.stringify({
-      sender: this.state.sender === 1 ? 2 : 1,
+    if(this.state.inputText === '') return
+
+    const { chatroom, user, view } = this.props.stores
+    chatroom.sendChat(view.selectedChatroom, {
+      sender: user.userInfo.user_idx,
       msg: this.state.inputText,
       msg_type: "m"
-    })) 
-
-    this.setState({
-      sender: this.state.sender === 1 ? 2 : 1
-    })
+    }) 
 
     // flush the input
     this.setState({
-      inputText: ''
+      inputText: '',
+      multiline: false
     })
   }
 
-  _onEnter = e => {
-    if(e.key === 'Enter') {
-      if(this.state.inputText === '') return 
+  _onKeyPress = e => {
+    if(e.key === "Enter" && e.shiftKey) {
+      
+      this.setState({
+        inputText: (this.state.multiline) ? this.state.inputText : this.state.inputText + '\n',
+        multiline: true,
+      })
+    } else if(e.key === 'Enter') {
       this._onClickSendBtn()
     }
-  }  
+  }
 
   _onInputChange = e => {
     this.setState({
@@ -59,8 +49,10 @@ class ChatInput extends React.Component {
     })
   }
 
-  componentDidMount() {
-
+  _renderEndAdorment = () => {
+    if(this.state.inputText !== '' ) {
+      return <SendBtn onClick={this._onClickSendBtn}/>
+    }
   }
 
 
@@ -68,20 +60,16 @@ class ChatInput extends React.Component {
 
     return (
       <div className="ChatInputContainer">
-        <TextField 
+        <InputBase
           className="input"
-          variant="outlined"
           margin="dense"
           onChange={this._onInputChange}
-          onKeyPress={this._onEnter}
+          onKeyPress={this._onKeyPress}
           value={this.state.inputText}
+          endAdornment={this._renderEndAdorment()}
+          multiline={this.state.multiline}
+          autoFocus={true}
         />
-
-        <div className="sendBtn">
-          <SendBtn
-            onClick={this._onClickSendBtn}
-          />
-        </div>
       </div>
     )
   }

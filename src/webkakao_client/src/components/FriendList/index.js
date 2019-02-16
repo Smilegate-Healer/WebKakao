@@ -6,13 +6,17 @@ import { inject, observer } from 'mobx-react';
 @observer
 class FriendList extends React.Component {
 
-  _onItemClick = (e, idx) => {
-    alert('you click this person ' + idx)
-  }
-
   _onProfileClick = (e, idx) => {
     alert('you click this profile image of the person ' + idx)
     e.stopPropagation()
+  }
+
+  onClick = (idx) => {
+    const { user } = this.props.stores;
+    const req = {
+      user_idx: idx
+    }
+    user.getUserInfo(req);
   }
 
   render() {
@@ -26,7 +30,7 @@ class FriendList extends React.Component {
               <FriendItem
                 user={v}
                 key={v.name}
-                onClick={e => this._onItemClick(e, idx)}
+                onClick={e => this.onClick(e, idx)}
                 onProfileClick={e => this._onProfileClick(e, idx)}
               />
             )
@@ -39,34 +43,5 @@ class FriendList extends React.Component {
   }
 }
 
-FriendList.defaultProps = {
-  friends: [
-    {
-      name: "홍길동",
-      profileImg: "base64",
-      statusMsg: "나의 상태"
-    },
-    {
-      name: "홍길동",
-      profileImg: "base64",
-      statusMsg: "나의 상태"
-    },
-    {
-      name: "홍길동",
-      profileImg: "base64",
-      statusMsg: "나의 상태"
-    },
-    {
-      name: "홍길동",
-      profileImg: "base64",
-      statusMsg: "나의 상태"
-    },
-    {
-      name: "홍길동",
-      profileImg: "base64",
-      statusMsg: "나의 상태"
-    },
-  ]
-}
 
 export default FriendList

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.rog//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.healer.webkakao.chatting.database.ChatroomMapper">
+
+  <update
+    id="updateObjectIdAndLastMsgIdx"
+    parameterType="com.healer.webkakao.chatting.model.mysql.Chatroom">
+    UPDATE
+      chat_room
+    SET
+      recent_time = NOW(),
+      msg_object_id = #{msg_object_id},
+      last_msg_idx = #{last_msg_idx}
+    WHERE
+      chatroom_idx = #{chatroom_idx}
+  </update>
+
+</mapper>
+

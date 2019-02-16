@@ -32,6 +32,7 @@
     "file-loader": "2.0.0",
     "fork-ts-checker-webpack-plugin-alt": "0.4.14",
     "fs-extra": "7.0.0",
+    "hangul-js": "^0.2.5",
     "html-webpack-plugin": "4.0.0-alpha.2",
     "identity-obj-proxy": "3.0.0",
     "jest": "23.6.0",
@@ -51,6 +52,9 @@
     "react-app-polyfill": "^0.2.0",
     "react-dev-utils": "^7.0.1",
     "react-dom": "^16.7.0",
+    "react-hot-loader": "^4.6.5",
+    "react-modal": "^3.8.1",
+    "react-notifications-component": "^1.0.1",
     "react-stomp": "^4.1.0",
     "resolve": "1.8.1",
     "sass-loader": "7.1.0",
@@ -136,6 +140,9 @@
         {
           "loose": true
         }
+      ],
+      [
+        "react-hot-loader/babel"
       ]
     ]
   },

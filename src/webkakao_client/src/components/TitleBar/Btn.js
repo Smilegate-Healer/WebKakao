@@ -1,55 +1,97 @@
-import React from 'react';
-import { Component } from 'react';
-import './TitleBar.css';
-import talkLogo from '../../resources/LeftContainer/TitleBar/talk.png';
-import settingLogo from '../../resources/LeftContainer/TitleBar/setting.png';
-import searchLogo from '../../resources/LeftContainer/TitleBar/search.png';
+import React from "react";
+import { Component } from "react";
+import { IconButton } from '@material-ui/core'
+import {
+  SearchOutlined,
+  AddOutlined,
+  SettingsOutlined
+} from '@material-ui/icons'
+import { observer, inject } from "mobx-react";
 
+
+@inject("stores")
+@observer
 class Btn extends Component {
-
-    _renderLogo = () => {
-        let logo;
-        switch (this.props.btnName) {
-            case 'search':
-                logo = searchLogo;
-                break;
-            case 'new_talk':
-                logo = talkLogo;
-                break;
-            case 'setting':
-                logo = settingLogo;
-                break;
-            default:
-                logo = null;
-        }
-        return logo;
+  _renderLogo = () => {
+    let logo;
+    switch (this.props.btnName) {
+      case "search":
+        logo = <SearchOutlined />;
+        break;
+      case "new_talk":
+        logo = <AddOutlined />;
+        break;
+      case "setting":
+        logo = <SettingsOutlined />;
+        break;
+      default:
+        logo = null;
     }
+    return logo;
+  };
 
-    onClickButton = () => {
+  onClickButton = () => {
+    const { view } = this.props.stores
+
+    switch (view.leftView) {
+      case view.views.chatroomList:
         switch (this.props.btnName) {
-            case 'search':
-                alert('search');
-                break;
-            case 'new_talk':
-            alert('new_talk');
-                break;
-            case 'setting':
-            alert('setting');
-                break;
-            default:
-            alert('default');
+          case "search":
+            view.showSearchBar();
+            break;
+          case "new_talk":
+            alert("chatroom list new_talk");
+            break;
+          case "setting":
+            alert("chatroom list setting");
+            break;
+          default:
+            alert("chatroom list default");
         }
-      }
-
-    render() {
-        const logo = this._renderLogo();
-        return (
-            <div className="inline title_bar_btn" onClick={this.onClickButton}>
-                <img className="title_bar_logo" src={logo} />
-            </div>
-        );
+        break;
+      case view.views.friendList:
+        switch (this.props.btnName) {
+          case "search":
+            view.showSearchBar();
+            break;
+          case "new_talk":
+            view.showUserSearchModal();
+            break;
+          case "setting":
+            alert("friend list setting");
+            break;
+          default:
+            alert("friend list default");
+        }
+        break;
+      case view.views.option:
+        switch (this.props.btnName) {
+          case "search":
+            alert("option search");
+            break;
+          case "new_talk":
+            alert("option new_talk");
+            break;
+          case "setting":
+            alert("option setting");
+            break;
+          default:
+            alert("option default");
+            break;
+        }
+        break;
+      default:
+        break;
     }
+  };
 
+  render() {
+    return (
+      <IconButton classes={{ colorInherit: "button" }} color="inherit" onClick={this.onClickButton}>
+        {this._renderLogo()}
+      </IconButton>
+    )
+  }
 }
 
 export default Btn;

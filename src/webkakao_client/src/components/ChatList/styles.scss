@@ -1,27 +1,138 @@
+@import "../../colors.scss";
+@import "../../sizes.scss";
+
+$profileSize: 42px;
+$nameSize: 20px;
+
 .List {
   width: 100%;
   height: 100%;
+
   overflow: scroll;  
 }
 
+.notReadUserCount{
+  color: yellow;
+}
 
 .ChatItem {
+  margin-right: 8px;
+  margin-top: 4px;
+  margin-bottom: 4px;
 
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-shrink: 0;
+  flex-basis: auto;
+
+  overflow: hidden;
+
+  // background-color: transparent;
   
   .profileContainer {
-    flex: 1
+    flex-shrink: 0;
+    flex-basis: $profileSize;    
+    flex-grow: 0;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    margin-left: 8px;
+
+    .profileImg {
+      width: $profileSize;
+      height: $profileSize;
+
+      border-radius: 100%;
+    }
   }
 
   .senderMsgContainer {
+
+    flex: 0;
+
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    flex-basis: auto;
+
+    margin-left: 8px;
+    margin-top: 2px;
+         
+    .sender {
+      flex-basis: $nameSize;
+      flex-shrink: 0;
+      flex-grow: 0;
+
+      background-color: transparent;
+    }
+
+    .msg {
+      flex-basis: auto;
+      flex: 1;
+      flex-shrink: 0;
+      flex-grow: 1;
+
+      border-radius: 2px;
+
+      padding: 6px;
+      background-color: white;
+  
+      .text {
+        white-space: pre-line;
+        word-break: break-all;
+      }
+    }
+
+  }
+
+
+
+
+  .mineTimeContainer {
+    flex-basis: 100px;
+    flex-shrink: 0; 
+    flex-direction: column;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+
+    padding-left: 4px;
   }
 
   .timeContainer {
-    flex: 2
+    flex-basis: 100px;
+    flex-shrink: 0; 
+    flex-direction: column;
+    align-self: flex-end;
+    display: flex;
+    justify-content: flex-start;
 
+    padding-left: 4px;
+  }
+
+}
+
+.ChatItemMine {
+  justify-content: flex-end;
+  flex-basis: auto;
+
+  .timeMine {
+    justify-content: flex-end;
+    padding-right: 4px;
+    flex-basis: auto;
+    flex-direction: column;
+  }
+
+  .senderMsgContainerMine {
+    flex: 0; 
+
+    flex-basis: auto;
+
+    .msgMine {
+      flex: 0;
+      background-color: $kakaoYellow;
+    }
   }
 }
