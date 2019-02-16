@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.healer.webkakao.chatting.database.ChatroomMapper;
+import com.healer.webkakao.chatting.model.mysql.Chatroom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ChatroomService {
   public static final String REDIS_KEY = "chatroomInfo";
+  private final long MAX_SIZE = 20;
 
   @Autowired
   private ChatroomInfoRedisRepository redisRepository;
@@ -35,6 +38,9 @@ public class ChatroomService {
 
   @Autowired
   private ObjectMapper objectMapper;
+
+  @Autowired
+  private ChatroomMapper chatroomMapper;
 
   /**
    * Update the chatroom information by chatroomId chatroomId is made by MySQL
@@ -73,22 +79,6 @@ public class ChatroomService {
     redisRepository.save(chatroomInfoModel);
     return true;
   }
-  //
-  // public boolean addNewChatroom(long chatroomId, long objectId) {
-  // log.debug("Add a new chatroom infomation by chatroomId");
-  // if(redisRepository.existsById(chatroomId)) return false;
-  //
-  // log.debug("The new chatroomId not existed");
-  // ChatroomInfoModel chatroomInfoModel = ChatroomInfoModel.builder()
-  // .chatroom_id(chatroomId)
-  // .object_id(objectId)
-  // .last_msg_idx(1) // start from 1
-  // .build();
-  //
-  // log.debug("Save the new chatroom infomation into the Redis");
-  // redisRepository.save(chatroomInfoModel);
-  // return true;
-  // }
 
   public long getLastMsgIdx(long chatroomId) {
     log.debug("Get the last message index by chatroomId=" + chatroomId);
@@ -115,6 +105,7 @@ public class ChatroomService {
         // Convert String to Chatmodel
         log.debug("Get the messages from the Redis");
         List<String> strs = redisTemplate.opsForList().range(chatroomId, 0, size - 1);
+
         log.debug("Convert to objects");
         for (int i = 0; i < strs.size(); i++) {
           ChatModel chatModel = objectMapper.readValue(strs.get(i), ChatModel.class);
@@ -123,6 +114,7 @@ public class ChatroomService {
 
         // Insert new chats into Mongo
         ChatsModel nextChats = ChatsModel.builder().pre_id(chatroomInfo.getObject_id()).build();
+
         log.debug("Get the next objet id from Mongo");
         String surId = mongoRepository.insert(nextChats).get_id();
 
@@ -141,23 +133,60 @@ public class ChatroomService {
         log.debug("Insert chats into Mongo");
         mongoRepository.save(storingChats);
 
+        // Update the chatroomInfo in MySQL
+        log.debug("Update the chatroomInfo at MySQL");
+        chatroomMapper.updateObjectIdAndLastMsgIdx(
+                Chatroom.builder()
+                        .chatroom_idx(chatroomInfo.getChatroom_id())
+                        .last_msg_idx(storingChats.getLast_message_idx())
+                        .msg_object_id(chatroomInfo.getObject_id())
+                        .build()
+        );
+
         // Update the chatroomInfo
+        log.debug("Update the chatroomInfo at Redis");
         chatroomInfo.setObject_id(surId);
         chatroomInfo.setLast_msg_idx(storingChats.getLast_message_idx()); // TODO: 동기화 문제 ???
-        log.debug("Update the chatroomInfo at Redis");
         redisRepository.save(chatroomInfo);
+
 
         // Remove the stored messages in Redis list
         log.debug("Trim the list in the Redis");
-        redisTemplate.opsForList().trim(chatroomId, size, redisTemplate.opsForList().size(chatroomId)); // TODO: 동기화 문제 ???
+        redisTemplate.opsForList().trim(chatroomId, size, redisTemplate.opsForList().size(chatroomId)); // TODO: 동기화 문제  ???
         return true;
       } catch (IOException e) {
         log.error(e.getMessage());
         return false;
       }
     }
-
     return false;
+  }
+
+  public void chat(ChatModel message, long chatroomId) throws Exception {
+    log.debug("Receive from a client chatroomId=" + chatroomId);
+
+    long lastMsgIdx = this.getLastMsgIdx(chatroomId);
+    if(lastMsgIdx == -1) {
+      log.warn("There is no chatroomInfo by chatroomId=" + chatroomId);
+      return;
+    }
+
+    message.setMsg_idx(lastMsgIdx + 1);
+    // TODO: Which time do I set???
+    message.setTimestamp(System.currentTimeMillis());
+    this.updateLastMsg(chatroomId, lastMsgIdx + 1, message.getMsg());
+
+    String msgStr = objectMapper.writeValueAsString(message);
+
+    // Add the message into the List of Redis
+//    log.debug("Add the message into the list of Redis");
+    String chatroomIdStr = String.valueOf(chatroomId);
+    redisTemplate.opsForList().rightPush(chatroomIdStr, msgStr);
+
+    this.moveToMongo(chatroomIdStr, MAX_SIZE);
+
+//    log.debug("Publish the message to Redis");
+    redisTemplate.convertAndSend("chatroom/" + chatroomId, objectMapper.writeValueAsString(message)); // Send the content of the message using Pub/Sub
   }
 
 }

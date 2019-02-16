@@ -332,13 +332,17 @@
 | Key Name       | Value Type | Description             | Required |
 |----------------|------------|-------------------------|----------|
 | from_user_idx  | long       |  요청자의 유저 인덱스   | y        |
+| from_user_name | String       |  요청자의 유저 이름   | y        |
 | to_user_idx    | long       |  상대방의 유저 인덱스   | y        |
+| to_user_name   | String       |  요청자의 유저 이름   | y        |
 
 #### 6.1.2 Request Example
 ```
 {  
    "from_user_idx":1,
-   "to_user_idx":2
+   "from_user_name":"홍성문",
+   "to_user_idx":2,
+   "to_user_name":"조영호"
 }
 ```
 
@@ -400,6 +404,7 @@
 ```
 
 <br/>
+
 ### 7.2 ResponseBody  
   
 #### 7.2.1 Param Specification
@@ -447,6 +452,7 @@
 ```
 
 <br/>
+
 ### 8.2 ResponseBody  
   
 #### 8.2.1 Param Specification
@@ -466,11 +472,11 @@
   <br/>
   
   
-## 9. GET CHATROOM LIST
-  - 채팅방 목록을 요청하는 API 입니다.
+## 9. GET CHATROOM MESSAGE
+  - 채팅방 메세지 목록을 요청하는 API 입니다.
   
   
-| URL | /api/chatroom/list |
+| URL | /api/chatroom/message |
 |-----|------------------------|
 
 <br/>
@@ -480,10 +486,89 @@
 #### 9.1.1 Specification
 | Key Name       | Value Type | Description             | Required |
 |----------------|------------|-------------------------|----------|
-| user_idx       | long       |  요청자의 유저 인덱스   | y        |
+| chatroom_idx   | long       |  요청 채팅방 인덱스          | y        |
+| object_id      | String     |  요청 메세지 object_id     | n        |
   
 
 #### 9.1.2 Request Example
+```
+{  
+   "chatroom_idx":1,
+   "object_id: '5c46bd387d152a16a7d5dfb7'
+}
+```
+
+<br/>
+
+### 9.2 ResponseBody  
+
+#### 9.2.1 Param Specification
+| Param Key Name | Value Type | Description                         | Required |
+|----------------|----------------------|---------------------------|----------|
+| data           | List<ChatModel>       | 채팅방 대화 리스트          |   y      |
+| pre_object_id           | String       | 이전 대화 object id          |   y      |
+
+##### 9.2.2 ChatroomInfo Specification
+  
+| UserInfo Key Name | Value Type | Description                  | Required |
+|-------------------|------------|------------------------------|----------|
+| sender            | long       | 채팅방의 인덱스                  | y        |
+| msg               | string     | 채팅방 참여 시점의 메세지 인덱스     | y        |
+| msg_type          | string     | 메세지 인덱스                   | y        |
+| msg_idx           | long       | 마지막으로 읽은 메세지 인덱스       | y        |
+| timestamp         | long       | 마지막으로 읽은 메세지 인덱스       | y        |
+
+
+
+  
+  
+#### 9.2.3 Response Example
+```
+{  
+   "resultCode":0,
+   "message":"success",
+   "param":{  
+      "data":[  
+         {  
+            "msg_idx":1,
+            "timestamp":1549437575423,
+            "sender":"2",
+            "msg":"첫번째 메세지",
+            "msg_type":"m"
+         },
+         {  
+            "msg_idx":2,
+            "timestamp":1549437575423,
+            "sender":"2",
+            "msg":"두번째 메세지",
+            "msg_type":"m"
+         }
+      ],
+      "pre_object_id": "5c46bd387d152a16a7d5dfb7"
+   }
+}
+
+```
+
+
+## 10. GET CHATROOM LIST
+  - 채팅방 목록을 요청하는 API 입니다.
+  
+  
+| URL | /api/chatroom/list |
+|-----|------------------------|
+
+<br/>
+
+### 10.1 RequestBody  
+  
+#### 10.1.1 Specification
+| Key Name       | Value Type | Description             | Required |
+|----------------|------------|-------------------------|----------|
+| user_idx       | long       |  요청자의 유저 인덱스   | y        |
+  
+
+#### 10.1.2 Request Example
 ```
 {  
    "user_idx":1
@@ -491,14 +576,15 @@
 ```
 
 <br/>
-### 9.2 ResponseBody  
 
-#### 9.2.1 Param Specification
+### 10.2 ResponseBody  
+
+#### 10.2.1 Param Specification
 | Param Key Name | Value Type | Description                         | Required |
 |----------------|----------------------|---------------------------|----------|
 | list           | List<ChatroomInfo>       | 채팅방 목록 리스트          |   y      |
 
-##### 9.2.2 ChatroomInfo Specification
+##### 10.2.2 ChatroomInfo Specification
   
 | UserInfo Key Name | Value Type | Description                  | Required |
 |-------------------|------------|------------------------------|----------|
@@ -511,7 +597,7 @@
 
   
   
-#### 9.2.3 Response Example
+#### 10.2.3 Response Example
 ```
 {  
    "resultCode":0,
