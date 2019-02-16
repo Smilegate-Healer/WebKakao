@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.rog//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.healer.webkakao.fileserver.database.ProfileMapper">
+
+  <resultMap id="ProfileModel" type="com.healer.webkakao.fileserver.model.ProfileModel">
+    <result column="id" property="id" javaType="long"/>
+    <result column="user_idx" property="user_idx" javaType="long"/>
+    <result column="url" property="url" javaType="String"/>
+    <result column="timestamp" property="timestamp" javaType="long"/>
+    <result column="state" property="state" javaType="boolean"/>
+  </resultMap>
+
+  <insert id="addNew"
+          parameterType="com.healer.webkakao.fileserver.model.ProfileModel"
+          useGeneratedKeys="true"
+          keyProperty="id">
+    INSERT INTO profile (
+      user_idx,
+      url
+    )
+    VALUES (
+      #{user_idx},
+      #{url}
+    )
+  </insert>
+
+  <select id="getProfileList"
+          parameterType="long"
+          resultType="com.healer.webkakao.fileserver.model.ProfileModel">
+    SELECT
+      url,
+      UNIX_TIMESTAMP(timestamp)
+    FROM
+      profile
+    WHERE
+      user_idx = #{userId} AND
+      state != 1
+  </select>
+
+  <select id="getInfo"
+          parameterType="long"
+          resultType="com.healer.webkakao.fileserver.model.ProfileModel">
+    SELECT
+      id,
+      user_idx,
+      url,
+      UNIX_TIMESTAMP(timestamp),
+      state
+    FROM
+      profile
+    WHERE
+      id = #{profileId}
+  </select>
+
+
+</mapper>
+

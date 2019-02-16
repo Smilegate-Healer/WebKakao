@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.rog//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.healer.webkakao.fileserver.database.FileMapper">
+
+  <insert id="addNew"
+          parameterType="com.healer.webkakao.fileserver.model.request.FileUploadReqModel"
+          useGeneratedKeys="true"
+          keyProperty="file_idx">
+    INSERT INTO file (
+      sender_idx,
+      chatroom_idx,
+      data_url,
+      origin_name
+    )
+    VALUES (
+      #{sender_idx},
+      #{chatroom_idx},
+      #{data_url},
+      #{origin_name}
+    )
+  </insert>
+
+  <update id="updateUploadComplete"
+          parameterType="long">
+    UPDATE
+      file
+    SET
+      uploaded = 1
+    WHERE
+      file_idx = #{fileId}
+  </update>
+
+  <select id="getInfo"
+          parameterType="long"
+          resultType="com.healer.webkakao.fileserver.model.FileModel">
+    SELECT
+      *
+    FROM
+      file
+    WHERE
+      file_idx = #{fileId}
+  </select>
+
+</mapper>
+

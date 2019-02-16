@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.rog//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.healer.webkakao.fileserver.database.UserMapper">
+  <select id="getInfo"
+          parameterType="long"
+          resultType="com.healer.webkakao.fileserver.model.UserModel">
+    SELECT
+      user_idx,
+      profile_img,
+      back_img
+    FROM
+      user
+    WHERE
+      user_idx = #{userId}
+  </select>
+
+  <update id="updateProfile"
+          parameterType="com.healer.webkakao.fileserver.model.UserModel">
+    UPDATE
+      user
+    SET
+      profile_img = #{profile_img}
+    WHERE
+      user_idx = #{user_idx}
+  </update>
+
+  <select id="getProfileUrl"
+          parameterType="long"
+          resultType="String">
+  SELECT
+    url
+  FROM
+    profile as p
+  JOIN
+    user as u
+  ON
+    u.profile_img = p.id
+  </select>
+
+
+
+</mapper>
+
