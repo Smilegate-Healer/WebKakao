@@ -67,3 +67,13 @@ object_id로 key값을 하는 Redis의 List
 ```
 위의 채팅 기록들은 채팅방의 정보를 기록하는 것보다 많은 메모리를 차지할 것으로 예상된다.
 
+
+## Message type
+
+| Code | Description |
+| --- | ------------ |
+| "m" | 일반 텍스트 메시지 message |
+| "p" | 사진 photo |
+| "v" | 동영상 video |
+| "f" | 사진 동영상 외의 파일 |
+
