@@ -382,5 +382,100 @@ export default class Chatroom {
     }
     return notReadUserCount;
   }
+
+  @action
+  getSelectedChatroomUserList = () => {
+    for (var i = 0; i < this.chatroomList.length; i++) {
+      if(this.chatroomList[i].chatroom_idx === this.root.view.selectedChatroom) { 
+        return this.chatroomList[i].user_list;
+      }
+    }
+  }
+
+  @action renameChatroom = (name) => {
+    const data = {
+      chatroom_idx: this.root.view.selectedChatroom,
+      chatroom_name: name
+    }
+    this.chatroomAxios.post("http://localhost:8081/api/chatroom/rename", data).then(res => {
+      if(res.data.resultCode === 0) { 
+        this.setNameChatroom(res.data.param.chatroom_idx, res.data.param.chatroom_name);
+        this.root.view.hideRenameChatroomModal();
+        this.root.view.resetRenameChatroomTargerStr();
+        this.root.view.setSelectedChatroom(name);
+      }
+    }).catch(err => {
+        console.log(err);
+    })
+  }
+
+  @action setNameChatroom = (chatroom_idx, name) => {
+    for (var i = 0; i < this.chatroomList.length; i++) {
+      if(this.chatroomList[i].chatroom_idx === chatroom_idx) { 
+        this.chatroomList[i].chatroom_name = name;
+      }
+    }
+  }
+
+  @action inviteChatroom = () => {
+    const userList = this.root.view.searchUserList;
+    const users = [];
+    const userInfos = [];
+    for(var i=0; i<userList.length; i++) {
+      if(userList[i].checked) {
+        const user = {
+          to_user_idx: userList[i].user_idx,
+          to_user_name: userList[i].name
+        }
+        users.push(user);
+        userInfos.push(userList[i]);
+      }
+    }
+
+    const reqData = {
+      from_user_idx: this.root.user.userInfo.user_idx,
+      from_user_name: this.root.user.userInfo.name,
+      to_user_list: users,
+      chatroom_idx: this.root.view.selectedChatroom
+    }
+    this.chatroomAxios.post("http://localhost:8081/api/chatroom/checkin/users", reqData).then(res => {
+      if(res.data.resultCode === 0) { 
+        const chatroomList = this.root.chatroom.chatroomList;
+        for(var i=0; i<chatroomList.length; i++) {
+          if(chatroomList[i].chatroom_idx === this.root.view.selectedChatroom) {
+            for(var j=0; j<userInfos.length; j++) {
+              userInfos[j].start_msg_idx = res.data.param.start_msg_idx;
+              userInfos[j].last_read_msg_idx = res.data.param.last_read_msg_idx;
+              chatroomList[i].user_list.push(userInfos[j]);
+            }
+          }
+        }
+      }
+    }).catch(err => {
+        console.log(err);
+    })
+  }
+
+  @action checkoutChatroom = () => {
+
+    const reqData = {
+      chatroom_idx: this.root.view.selectedChatroom,
+      user_idx: this.root.user.userInfo.user_idx
+    }
+    debugger;
+    this.chatroomAxios.post("http://localhost:8081/api/chatroom/checkout", reqData).then(res => {
+      if(res.data.resultCode === 0) { 
+        const chatroomList = this.root.chatroom.chatroomList;
+        for(var i=0; i<chatroomList.length; i++) {
+          if(chatroomList[i].chatroom_idx === this.root.view.selectedChatroom) {
+            chatroomList.splice(i, 1);
+          }
+        }
+        this.root.view.hideChatroom();
+      }
+    }).catch(err => {
+        console.log(err);
+    })
+  }
   
 }

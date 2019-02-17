@@ -1,16 +1,14 @@
 import React from 'react'
 import { 
-  Button,
   IconButton,
-  ButtonBase,
 } from '@material-ui/core'
 import {
-  SearchOutlined
+  Close
 } from '@material-ui/icons'
 import PropTypes from 'prop-types'
 // import './styles.scss'
 
-class SearchBtn extends React.Component {
+class CloseBtn extends React.Component {
 
   render() {
     return (
@@ -18,11 +16,10 @@ class SearchBtn extends React.Component {
         aria-label="Send the message"
         onClick={this.props.onClick}
         className="SendBtn"
-        // style={{
-        //   backgroundColor: "#F9DC09"
-        // }}
-        >
-        <SearchOutlined 
+        style={{
+          backgroundColor: "#ffffff"
+        }}>
+        <Close 
           className="icon"
           fontSize="small"
           />
@@ -31,8 +28,8 @@ class SearchBtn extends React.Component {
   }
 }
 
-SearchBtn.propTypes = {
+CloseBtn.propTypes = {
   onClick: PropTypes.func
 }
 
-export default SearchBtn
+export default CloseBtn

@@ -2,6 +2,7 @@ import React from 'react'
 import ChatItem from './ChatItem'
 import './styles.scss'
 import { inject, observer } from "mobx-react"
+import SideMenu from './SideMenu';
 
 @inject("stores")
 @observer
@@ -35,6 +36,7 @@ class ChatList extends React.Component {
     return (
       <div className="List" ref={ref => this.div = ref}>
         { this._renderItems()}
+        <SideMenu/>
       </div>
     )
   }

@@ -40,7 +40,7 @@ class Btn extends Component {
             view.showSearchBar();
             break;
           case "new_talk":
-            alert("chatroom list new_talk");
+            view.showUserListModal('new');
             break;
           case "setting":
             alert("chatroom list setting");
