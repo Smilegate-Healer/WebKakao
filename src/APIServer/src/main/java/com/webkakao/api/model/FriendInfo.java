@@ -4,7 +4,7 @@ public class FriendInfo {
 
 	private long user_idx;
 	private String name;
-	private String profile_img;
+	private long profile_img;
 	private String status_msg;
 
 	public long getUser_idx() {
@@ -23,11 +23,11 @@ public class FriendInfo {
 		this.name = name;
 	}
 
-	public String getProfile_img() {
+	public long getProfile_img() {
 		return profile_img;
 	}
 
-	public void setProfile_img(String profile_img) {
+	public void setProfile_img(long profile_img) {
 		this.profile_img = profile_img;
 	}
 

@@ -5,7 +5,7 @@ import { Typography } from '@material-ui/core'
 import DefaultProfileImg from '../../resources/img_person_no1.png'
 import { inject, observer } from 'mobx-react';
 
-@inject('stores')
+
 @observer
 class FriendItem extends React.Component {
 
@@ -23,7 +23,7 @@ class FriendItem extends React.Component {
       <img
         className="profile"
         alt="profile"
-        src={profile_img && profile_img !== 'default' ? profile_img : DefaultProfileImg} // TODO: delete "defualt"
+        src={profile_img ? `http://localhost:8083/profile/${profile_img}` : DefaultProfileImg} 
       />
     )
   }
