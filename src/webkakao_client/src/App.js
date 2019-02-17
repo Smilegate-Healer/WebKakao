@@ -9,6 +9,8 @@ import "react-notifications-component/dist/theme.css";
 import UserInfoModal from './components/Modal/UserInfoModal';
 import { hot } from 'react-hot-loader/root'
 import UserSearchModal from './components/Modal/UserSearchModal';
+import UserListModal from './components/Modal/UserListModal';
+import RenameChatroomModal from './components/Modal/RenameChatroomModal';
 
 @inject("stores")
 @observer
@@ -50,7 +52,9 @@ class App extends Component {
         {this._renderLoadingPage()}
         <ReactNotification ref={this.props.stores.view.notificationDOMRef} onClick={this.onClickNotification} />
         <UserSearchModal/>
+        <UserListModal/>
         <UserInfoModal/>
+        <RenameChatroomModal/>
         <CssBaseline/>
         <div className="leftContainer">
           <LeftContainer/>

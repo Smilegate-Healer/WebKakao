@@ -4,8 +4,11 @@ import PropTypes from "prop-types";
 import { Typography } from "@material-ui/core";
 import DateFormatter from '../../utils/DateFormatter'
 import DefaultProfileImg from "../../resources/img_person_no1.png"
+import { inject, observer } from "mobx-react"
+import { yellow } from "@material-ui/core/colors";
 
-
+@inject("stores")
+@observer
 class ChatItem extends React.Component {
   static defaultProps = {
     isMine: false
@@ -13,11 +16,13 @@ class ChatItem extends React.Component {
 
   _renderMine() {
     const { chat } = this.props
+    const { chatroom } = this.props.stores;
     var fullTime = DateFormatter.getKoreanDate(chat.timestamp)
-
+    const notReadUserCount = this._renderNotReadUserCount();
     return (
       <div className="ChatItem ChatItemMine">
-        <div className="timeContainer timeMine">
+        <div className="mineTimeContainer timeMine">
+          {notReadUserCount}
           <Typography variant="caption">{fullTime}</Typography>
         </div>
         
@@ -42,9 +47,20 @@ class ChatItem extends React.Component {
     )
   }
 
+  _renderNotReadUserCount = () => {
+    const { chat } = this.props;
+    const { user, chatroom } = this.props.stores;
+    const notReadUserCount = chatroom.getNotReadUserCount(chat.msg_idx);
+    if(notReadUserCount > 0)
+      return (<Typography variant="caption" className="notReadUserCount">{notReadUserCount}</Typography>);
+  }
+
   _renderNotMine() {
     const { chat } = this.props;
+    const { user } = this.props.stores;
     var fullTime = DateFormatter.getKoreanDate(chat.timestamp)
+    const senderName = user.getFriendNameByUserIdx(chat.sender)
+    const notReadUserCount = this._renderNotReadUserCount();
     return (
       <div className="ChatItem">
         <div className="profileContainer">
@@ -54,7 +70,7 @@ class ChatItem extends React.Component {
         <div className="senderMsgContainer">
           <div className="sender">
             <Typography variant="body2" color="textSecondary">
-              {chat.sender}
+              {senderName}
             </Typography>
           </div>
           <div className="msg">
@@ -65,6 +81,7 @@ class ChatItem extends React.Component {
         </div>
 
         <div className="timeContainer">
+          {notReadUserCount}
           <Typography variant="caption">{fullTime}</Typography>
         </div>
       </div>

@@ -7,7 +7,6 @@ import { inject, observer } from 'mobx-react'
 
 @inject("stores")
 @observer
-
 class ChatBar extends React.Component {
 
   static defaultProps = {
@@ -24,18 +23,24 @@ class ChatBar extends React.Component {
   }
 
   _onMenuBtnClick = e => {
-    alert("menu button click")
+    const { view } = this.props.stores;
+    view.showChatroomSideMenu();
+    // alert("menu button click")
   }
 
   getChatroomName() {
     const { view, chatroom } = this.props.stores
-    const chatroomName = chatroom.getChatroomName(view.selectedChatroom);
-    if(chatroomName) {
-      return chatroomName;
+    let chatroomName = view.selectedChatroomName;
+    if(!chatroomName) {
+      chatroomName = chatroom.getChatroomName(view.selectedChatroom);
+      if(chatroomName) {
+        return chatroomName;
+      } else {
+        return '';
+      }
     } else {
-      return '';
+      return chatroomName;
     }
-    
   }
 
   render() {

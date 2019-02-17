@@ -16,14 +16,19 @@ import com.webkakao.api.model.ChatroomInfo;
 import com.webkakao.api.model.ChatroomUserList;
 import com.webkakao.api.model.ChatsModel;
 import com.webkakao.api.model.request.CheckInChatroom;
+import com.webkakao.api.model.request.CheckInChatroomByUserList;
 import com.webkakao.api.model.request.CheckOutChatroom;
 import com.webkakao.api.model.request.GetChatroomList;
 import com.webkakao.api.model.request.GetChatroomMessage;
+import com.webkakao.api.model.request.RenameChatroom;
 import com.webkakao.api.model.request.RequestChatroom;
 import com.webkakao.api.model.request.UpdateChatroomName;
+import com.webkakao.api.model.response.CheckInChatroomByUserListParam;
 import com.webkakao.api.model.response.GetChatroomListParam;
 import com.webkakao.api.model.response.GetChatroomMessageParam;
+import com.webkakao.api.model.response.RenameChatroomParam;
 import com.webkakao.api.model.response.RequestChatroomParam;
+import com.webkakao.api.repository.ChatroomInfoRedisRepository;
 import com.webkakao.api.repository.ChatsMongoRepository;
 import com.webkakao.api.response.wrapper.APIResponseWrapper;
 import com.webkakao.api.service.ChatroomService;
@@ -41,6 +46,7 @@ public class ChatroomServiceImpl implements ChatroomService {
 	@Autowired
 	private ChatsMongoRepository mongoRepository;
 
+	
 	public APIResponseWrapper createWrapper() {
 
 		APIResponseWrapper response = new APIResponseWrapper();
@@ -198,6 +204,15 @@ public class ChatroomServiceImpl implements ChatroomService {
 			
 		}
 		
+		if(resultParam.getData() != null && resultParam.getData().size() > 0) {
+			long last_read_msg_idx = resultParam.getData().get(resultParam.getData().size() - 1).getMsg_idx();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("chatroom_idx", param.getChatroom_idx());
+			map.put("user_idx", param.getUser_idx());
+			map.put("last_read_msg_idx", last_read_msg_idx);
+			chatroomMapper.updateLastReadMsgIdx(map);
+		}
+		
 		wrapper.setParam(resultParam);
 
 		return wrapper;
@@ -212,6 +227,51 @@ public class ChatroomServiceImpl implements ChatroomService {
 
 		return wrapper;
 
+	}
+
+	@Override
+	public APIResponseWrapper checkInChatroomByUserList(CheckInChatroomByUserList param) {
+		
+		APIResponseWrapper wrapper = createWrapper();
+		
+		long last_msg_idx = redisService.getLastMsgIdx(param.getChatroom_idx());
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("last_read_msg_idx", last_msg_idx);
+		map.put("chatroom_idx", param.getChatroom_idx());
+		map.put("start_msg_idx", last_msg_idx);
+		try {
+			for(int i=0; i<param.getTo_user_list().size(); i++) {
+				map.put("user_idx", param.getTo_user_list().get(i).getTo_user_idx());
+				chatroomMapper.checkInChatroom(map);
+			}
+		} catch (Exception e) {
+			wrapper.setResultCode(111);
+			wrapper.setMessage("Insert Error");
+			return wrapper;
+		}
+		CheckInChatroomByUserListParam resultParam = new CheckInChatroomByUserListParam();
+		resultParam.setLast_read_msg_idx(last_msg_idx);
+		resultParam.setStart_msg_idx(last_msg_idx);
+		wrapper.setParam(resultParam);
+
+		return wrapper;
+	}
+
+	@Override
+	public APIResponseWrapper renameChatroom(RenameChatroom param) {
+		
+		APIResponseWrapper wrapper = createWrapper();
+
+		chatroomMapper.renameChatroom(param);
+		
+		RenameChatroomParam resultParam = new RenameChatroomParam();
+		resultParam.setChatroom_idx(param.getChatroom_idx());
+		resultParam.setChatroom_name(param.getChatroom_name());
+		
+		wrapper.setParam(resultParam);
+
+		return wrapper;
 	}
 
 }

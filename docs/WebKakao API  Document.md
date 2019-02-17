@@ -332,17 +332,13 @@
 | Key Name       | Value Type | Description             | Required |
 |----------------|------------|-------------------------|----------|
 | from_user_idx  | long       |  요청자의 유저 인덱스   | y        |
-| from_user_name | String       |  요청자의 유저 이름   | y        |
 | to_user_idx    | long       |  상대방의 유저 인덱스   | y        |
-| to_user_name   | String       |  요청자의 유저 이름   | y        |
 
 #### 6.1.2 Request Example
 ```
 {  
    "from_user_idx":1,
-   "from_user_name":"홍성문",
-   "to_user_idx":2,
-   "to_user_name":"조영호"
+   "to_user_idx":2
 }
 ```
 
@@ -657,4 +653,53 @@
 }
 
 ```
+
+
+## 11. UPDATE CHATROOM NAME
+  - 채팅방 이름을 수정하는 api 입니다.
+  
+  
+| URL | /api/chatroom/name |
+|-----|------------------------|
+
+<br/>
+
+### 11.1 RequestBody  
+  
+#### 11.1.1 Specification
+| Key Name       | Value Type | Description             | Required |
+|----------------|------------|-------------------------|----------|
+| chatroom_idx   | long       |  요청 채팅방 인덱스          | y        |
+| chatroom_name  | String     |  요청 채팅방 이름           | y        |
+  
+
+#### 11.1.2 Request Example
+```
+{  
+   "chatroom_idx":1,
+   "chatroom_name: "Healer"
+}
+```
+
+<br/>
+
+### 11.2 ResponseBody  
+  
+#### 11.2.1 Param Specification
+| Param Key Name | Value Type | Description                         | Required |
+|----------------|------------|-------------------------------------|----------|
+|  -   |         -   |              -                       |    -      |
+  
+#### 11.2.2 Response Example
+```
+{  
+   "resultCode":0,
+   "message":"success"
+}
+```
+  
+  <br/>
+  <br/>
+  
+
 

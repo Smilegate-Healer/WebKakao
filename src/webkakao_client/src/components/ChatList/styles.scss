@@ -11,6 +11,9 @@ $nameSize: 20px;
   overflow: scroll;  
 }
 
+.notReadUserCount{
+  color: yellow;
+}
 
 .ChatItem {
   margin-right: 8px;
@@ -86,18 +89,28 @@ $nameSize: 20px;
 
 
 
-  .timeContainer {
+  .mineTimeContainer {
     flex-basis: 100px;
     flex-shrink: 0; 
-    
+    flex-direction: column;
+
     display: flex;
     justify-content: flex-start;
     align-items: flex-end;
 
     padding-left: 4px;
-
   }
 
+  .timeContainer {
+    flex-basis: 100px;
+    flex-shrink: 0; 
+    flex-direction: column;
+    align-self: flex-end;
+    display: flex;
+    justify-content: flex-start;
+
+    padding-left: 4px;
+  }
 
 }
 
@@ -109,6 +122,7 @@ $nameSize: 20px;
     justify-content: flex-end;
     padding-right: 4px;
     flex-basis: auto;
+    flex-direction: column;
   }
 
   .senderMsgContainerMine {

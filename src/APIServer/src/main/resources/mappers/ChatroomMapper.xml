@@ -127,4 +127,22 @@
 		where
 			chatroom_idx = #{chatroom_idx}
 	</update>
+	
+	<update id="updateLastReadMsgIdx" parameterType="Map">
+		update
+			chatroom_member
+		set
+			last_read_msg_idx = #{last_read_msg_idx}
+		where
+			chatroom_idx = #{chatroom_idx} and user_idx = #{user_idx}
+	</update>
+	
+	<update id="renameChatroom" parameterType="com.webkakao.api.model.request.RenameChatroom">
+		update
+			chat_room
+		set
+			chatroom_name = #{chatroom_name}
+		where
+			chatroom_idx = #{chatroom_idx}
+	</update>
 </mapper>
