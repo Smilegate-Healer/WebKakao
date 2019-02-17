@@ -136,4 +136,13 @@
 		where
 			chatroom_idx = #{chatroom_idx} and user_idx = #{user_idx}
 	</update>
+	
+	<update id="renameChatroom" parameterType="com.webkakao.api.model.request.RenameChatroom">
+		update
+			chat_room
+		set
+			chatroom_name = #{chatroom_name}
+		where
+			chatroom_idx = #{chatroom_idx}
+	</update>
 </mapper>

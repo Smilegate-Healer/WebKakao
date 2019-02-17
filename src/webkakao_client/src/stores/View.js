@@ -1,6 +1,7 @@
 import {
   observable, action,
 } from 'mobx'
+import cloneDeep from 'lodash/cloneDeep';
 
 export default class View {
   views = {
@@ -20,10 +21,19 @@ export default class View {
   @observable notificationChatroomIdx = null;
   @observable userInfoModal = false;
   @observable userSearchModal = false;
+  @observable userListModal = false;
+  @observable userListType = '';
+
   @observable isSearchBar = false;
+  @observable renameChatroomModal = false;
   @observable searchTargerStr = '';
   @observable targerEmail = '';
-  
+  @observable renameChatroomTargetStr = '';
+
+  @observable chatroomSideMenu = false;
+
+  @observable searchUserList = null;
+  @observable checkedUser = false;
   /**
    * TODO: Define which views want to show
    */
@@ -33,6 +43,7 @@ export default class View {
    * The chatroom id
    */
   @observable selectedChatroom = null
+  @observable selectedChatroomName = null
 
   constructor(root) {
     this.root = root
@@ -72,6 +83,7 @@ export default class View {
     console.debug("Set chatroom to " + chatroomIdx)
     this.rightView = this.views.chatList
     this.selectedChatroom = chatroomIdx
+    this.selectedChatroomName = this.root.chatroom.getChatroomName(this.selectedChatroom);
   }
 
   /**
@@ -138,6 +150,10 @@ export default class View {
     });
   }
 
+  @action setSelectedChatroom = (name) => {
+    this.selectedChatroomName = name;
+  }
+
   @action getNotificationChatroomIdx() {
     return this.root.view.notificationChatroomIdx;
   }
@@ -150,12 +166,48 @@ export default class View {
     this.root.view.userInfoModal = false;
   }
 
+  @action showUserListModal = (type) => {
+    this.root.view.userListModal = true;
+    this.root.view.userListType = type;
+    this.searchUserList = cloneDeep(this.root.user.friendList);
+    if(type === 'invite'){
+      let entrants;
+      for(var i=0; i<this.root.chatroom.chatroomList.length; i++) {
+        if(this.root.chatroom.chatroomList[i].chatroom_idx === this.root.view.selectedChatroom) {
+          entrants = this.root.chatroom.chatroomList[i].user_list;
+        }
+      }
+      debugger;
+      for(var i=0; i<this.searchUserList.length; i++) {
+        for(var j=0; j<entrants.length; j++) {
+          if(this.searchUserList[i].user_idx === entrants[j].user_idx) {
+            this.searchUserList.splice(i, 1);
+          }
+        }
+      }
+    }
+  }
+
+  @action hideUserListModal = () => { 
+    this.root.view.userListModal = false;
+    this.root.view.userListType = '';
+    this.searchUserList = null;
+  }
+
   @action showUserSearchModal = () => { 
     this.root.view.userSearchModal = true;
   }
 
   @action hideUserSearchModal = () => { 
     this.root.view.userSearchModal = false;
+  }
+
+  @action showRenameChatroomModal = () => { 
+    this.root.view.renameChatroomModal = true;
+  }
+
+  @action hideRenameChatroomModal = () => { 
+    this.root.view.renameChatroomModal = false;
   }
 
   @action showSearchBar = () => { 
@@ -166,14 +218,32 @@ export default class View {
     this.root.view.isSearchBar = false;
   }
 
+  @action showChatroomSideMenu = () => { 
+    this.root.view.chatroomSideMenu = true;
+  }
+
+  @action hideChatroomSideMenu = () => { 
+    this.root.view.chatroomSideMenu = false;
+  }
+
   @action
   setSearchTargerStr = (value) => {
     this.searchTargerStr = value;
   }
 
   @action
+  setRenameChatroomTargerStr = (value) => {
+    this.renameChatroomTargetStr = value;
+  }
+
+  @action
   resetSearchTargerStr = () => {
     this.searchTargerStr = '';
+  }
+
+  @action
+  resetRenameChatroomTargerStr = () => {
+    this.renameChatroomTargetStr = '';
   }
 
   @action
@@ -184,5 +254,44 @@ export default class View {
   @action
   resetTargerEmail = () => {
     this.targerEmail = '';
+  }
+
+  @action checkUserList = (user_idx) => {
+
+    let count = 0;
+
+    for(var i=0; i<this.searchUserList.length; i++) {
+      if(this.searchUserList[i].user_idx === user_idx) {
+        if(this.searchUserList[i].checked) {
+          this.searchUserList[i].checked = false;
+        } else {
+          this.searchUserList[i].checked = true;
+        }
+      }
+      if(this.searchUserList[i].checked) {
+        count++;
+      }
+    }
+    if(count > 0) {
+      this.checkedUser = true;
+    } else {
+      this.checkedUser = false;
+    }
+  }
+
+  @action getSelectedUserCount  = () => {
+    let count = 0;
+    for(var i=0; i<this.searchUserList.length; i++) {
+      if(this.searchUserList[i].checked === true) {
+        count++;
+      } 
+    }
+    return count;
+  }
+
+  @action showAllSelectedUser = () => {
+    for(var i=0; i<this.searchUserList.length; i++) {
+      this.searchUserList[i].hide = false;
+    }
   }
 }

@@ -5,7 +5,7 @@ import {
   ButtonBase,
 } from '@material-ui/core'
 import {
-  SearchOutlined
+  VerticalAlignBottom
 } from '@material-ui/icons'
 import PropTypes from 'prop-types'
 // import './styles.scss'
@@ -18,11 +18,10 @@ class SearchBtn extends React.Component {
         aria-label="Send the message"
         onClick={this.props.onClick}
         className="SendBtn"
-        // style={{
-        //   backgroundColor: "#F9DC09"
-        // }}
-        >
-        <SearchOutlined 
+        style={{
+          backgroundColor: "#F9DC09"
+        }}>
+        <VerticalAlignBottom 
           className="icon"
           fontSize="small"
           />

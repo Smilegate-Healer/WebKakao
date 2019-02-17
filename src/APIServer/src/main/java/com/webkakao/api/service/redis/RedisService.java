@@ -41,25 +41,24 @@ public class RedisService {
 			return false;
 
 		ChatroomInfoModel chatroomInfoModel = ChatroomInfoModel.builder().chatroom_id(chatroomId).object_id(objectId)
-				.last_msg_idx(0).timestamp(new Date().getTime()).last_msg("")
-				.build();
+				.last_msg_idx(0).timestamp(new Date().getTime()).last_msg("").build();
 
 		chatroomInfoRepository.save(chatroomInfoModel);
 
 		return true;
 
 	}
-	
+
 	public List<ChatModel> getChatroomMessage(long chatroom_idx) {
 
 		List<String> data = redisTemplate.opsForList().range(chatroom_idx, 0, -1);
 		List<ChatModel> result = new ArrayList<>();
 		try {
-			for(int i = 0; i < data.size(); i++) {
+			for (int i = 0; i < data.size(); i++) {
 				ChatModel chatModel = objectMapper.readValue(data.get(i), ChatModel.class);
 				result.add(chatModel);
 			}
-		} catch(IOException e) {
+		} catch (IOException e) {
 			result.clear();
 		}
 		return result;
@@ -85,6 +84,17 @@ public class RedisService {
 
 	}
 
-	
+	public long getLastMsgIdx(long chatroom_idx) {
+
+		Optional<ChatroomInfoModel> object = chatroomInfoRepository.findById(chatroom_idx);
+		
+		if (object.isPresent()) {
+			ChatroomInfoModel model = object.get();
+			return model.getLast_msg_idx();
+		}
+		
+		return -1;
+		
+	}
 
 }
