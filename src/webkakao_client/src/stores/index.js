@@ -19,9 +19,7 @@ class RootStore {
         this.chatroom.moveToAnother(selectedChatroom)
         this.chatroom.getChatroomMessage(selectedChatroom)
       } else {
-        if(this.chatroom.stompSubscription !== null) {
-          this.chatroom.stompSubscription.unsubcribe()
-        }
+        this.chatroom.unsubscribeChatroom()
       }
     })
 

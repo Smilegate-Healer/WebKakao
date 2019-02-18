@@ -1,8 +1,8 @@
 
-.Item {
+.MeItem {
   display: flex;
   flex-direction: row;
-  height: 70px;
+  height: 80px;
   width: 100%;
   align-items: stretch;
 
@@ -11,7 +11,7 @@
   }
 
   .profileContainer {
-    $profileSize: 50px;
+    $profileSize: 60px;
 
     flex-shrink: 0;
     flex-grow: 0;

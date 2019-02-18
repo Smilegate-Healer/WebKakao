@@ -52,6 +52,7 @@
     "react-app-polyfill": "^0.2.0",
     "react-dev-utils": "^7.0.1",
     "react-dom": "^16.7.0",
+    "react-dropzone": "^8.1.0",
     "react-hot-loader": "^4.6.5",
     "react-modal": "^3.8.1",
     "react-notifications-component": "^1.0.1",

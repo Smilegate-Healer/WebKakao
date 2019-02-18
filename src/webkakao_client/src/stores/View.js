@@ -7,10 +7,11 @@ export default class View {
   views = {
     friendList: "FriendList",
     chatroomList: "ChatroomList",
-    option: "Option",
+    more: "More",
     chatList: "ChatList",
     emptyChatList: "EmptyChatList",
-    settings: "Settings"
+    settings: "Settings",
+    editProfilePage: "EditProfilePage"
   }
 
   @observable leftView = this.views.friendList
@@ -68,9 +69,17 @@ export default class View {
   /**
    *  Show option
    */
-  @action showOption = (idx) => {
-    this.leftView = this.views.option
+  @action showMore = (idx) => {
+    this.leftView = this.views.more
     this.menuBarIdx = idx
+  }
+
+  /**
+   * Show profile editting page
+   * 
+   */
+  @action showEditProfile = () => {
+    this.rightView = this.views.editProfilePage
   }
 
   /**

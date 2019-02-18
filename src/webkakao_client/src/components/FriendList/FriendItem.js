@@ -1,10 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import './styles.scss'
 import { Typography } from '@material-ui/core'
 import DefaultProfileImg from '../../resources/img_person_no1.png'
-import { inject, observer } from 'mobx-react';
-
+import { observer } from 'mobx-react';
+import "./styles.scss"
 
 @observer
 class FriendItem extends React.Component {
@@ -65,16 +64,23 @@ class FriendItem extends React.Component {
     )
 
   }
+
+  static defaultProps = {
+    user: {
+      hide: false
+    }
+  }
 }
 
 FriendItem.propTypes = {
-  info: PropTypes.shape({
+  user: PropTypes.shape({
     profile_img: PropTypes.string,
     name: PropTypes.string.isRequired,
-    status_msg: PropTypes.string
+    status_msg: PropTypes.string,
+    hide: PropTypes.bool
   }),
   onClick: PropTypes.func,
-  onProfileClick: PropTypes.func
+  onProfileClick: PropTypes.func,
 }
 
 export default FriendItem

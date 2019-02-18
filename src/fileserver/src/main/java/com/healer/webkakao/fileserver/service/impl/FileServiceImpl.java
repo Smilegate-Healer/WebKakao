@@ -146,8 +146,8 @@ public class FileServiceImpl implements FileService {
               .build();
     }
 
-    log.debug("Update file msg idx");
-    fileMapper.updateMsgIdx(fileId, req.getMsg_idx());
+//    log.debug("Update file msg idx");
+//    fileMapper.updateMsgIdx(fileId, req.getMsg_idx());
     return APIResponseWrapper.builder()
             .resultCode(0)
             .param(null)
