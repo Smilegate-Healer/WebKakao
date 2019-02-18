@@ -134,9 +134,13 @@ export default class User {
   }
 
   @action getFriendList = () => {
+    debugger;
     this.friendAxios.post("http://localhost:8081/api/friend/list", { // TODO: REST???
       user_idx: this.userInfo.user_idx
-    }).then(res => {
+    },{
+      headers: {
+        access_token: this.root.user.userInfo.access_token
+    }}).then(res => {
       console.log(res)
       if (res.data.resultCode === 0) {
         this.initFriendList(res.data.param.list)
@@ -147,7 +151,10 @@ export default class User {
   @action getChatroomList = () => {
     this.root.chatroom.chatroomAxios.post('http://localhost:8081/api/chatroom/list', {
       user_idx: this.userInfo.user_idx
-    }).then(res => {
+    },{
+      headers: {
+        access_token: this.root.user.userInfo.access_token
+    }}).then(res => {
       console.log(res)
       if (res.data.resultCode === 0) {
         this.root.chatroom.initChatroomList(res.data.param.list)
