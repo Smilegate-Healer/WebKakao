@@ -71,6 +71,7 @@ public class RedisService {
 			Optional<ChatroomInfoModel> object = chatroomInfoRepository.findById(list.get(i).getChatroom_idx());
 			if (object.isPresent()) {
 				ChatroomInfoModel model = object.get();
+				list.get(i).setLast_msg_idx(model.getLast_msg_idx());
 				list.get(i).setLast_msg(model.getLast_msg());
 				// TODO: Timestamp Setting
 				list.get(i).setTimestamp(model.getTimestamp());
