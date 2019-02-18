@@ -93,12 +93,9 @@ export default class User {
         // "Authorization": `Bearer` + this.userInfo.token
       }
     })
-    debugger;
     this.authorizedAxios.post("http://localhost:8084/auth/login", data).then(res => {
       console.log(res)
       if (res.data.resultCode === 0) {
-        debugger;
-        this.isLogin = true;
         this.userInfo = res.data.param;
         this.getFriendList()
         this.getChatroomList()
@@ -138,6 +135,7 @@ export default class User {
       if (res.data.resultCode === 0) {
         this.root.chatroom.initChatroomList(res.data.param.list)
         this.root.chatroom.updateWholeChatroomList();
+        this.isLogin = true;
       }
     }).catch(err => console.error(err))
   }

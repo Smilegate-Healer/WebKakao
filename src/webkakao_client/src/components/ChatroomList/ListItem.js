@@ -1,16 +1,16 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import './styles.scss'
-import { Typography } from '@material-ui/core'
-import DateFormatter from '../../utils/DateFormatter'
-import ChatroomNameFormatter from '../../utils/ChatroomNameFormatter'
-import { observer } from 'mobx-react';
-import DefaultProfileImg from '../../resources/img_person_no1.png'
-import Badge from '@material-ui/core/Badge';
+import React from "react";
+import PropTypes from "prop-types";
+import "./styles.scss";
+import { Typography } from "@material-ui/core";
+import DateFormatter from "../../utils/DateFormatter";
+import ChatroomNameFormatter from "../../utils/ChatroomNameFormatter";
+import { observer } from "mobx-react";
+import DefaultProfileImg from "../../resources/img_person_no1.png";
+import Badge from "@material-ui/core/Badge";
+import { reaction } from "mobx";
 
 @observer
 class ListItem extends React.Component {
-
   static defaultProps = {
     item: {
       chatroomName: "기본이름",
@@ -18,24 +18,27 @@ class ListItem extends React.Component {
       last_msg: "마지막 메시지 입니다.",
       timestamp: 1234123412342312
     }
-  }
+  };
 
-  _renderLogo = (logo) => {
+  _renderLogo = logo => {
     return (
       <img
         src={logo ? logo : DefaultProfileImg}
         alt="chatroomLogo"
         className="logo"
       />
-    )
-  }
+    );
+  };
 
   render() {
-    const { item } = this.props
+    const { item } = this.props;
     const count = item.last_msg_idx - item.last_read_msg_idx;
 
-    const date = DateFormatter.getKoreanDate(item.timestamp)
-    const chatroomName = ChatroomNameFormatter.getChatroomName(item.user_list, item.chatroom_name)
+    const date = DateFormatter.getKoreanDate(item.timestamp);
+    const chatroomName = ChatroomNameFormatter.getChatroomName(
+      item.user_list,
+      item.chatroom_name
+    );
     if (!item.hide) {
       return (
         <li className="ListItem" onClick={this.props.onClick}>
@@ -45,38 +48,39 @@ class ListItem extends React.Component {
 
           <div className="nameMsgContainer">
             <div className="name">
-              <Typography
-                variant="body1"
-                color="textPrimary"
-                noWrap={true}>
+              <Typography variant="body1" color="textPrimary" noWrap={true}>
                 {chatroomName}
               </Typography>
             </div>
             <div className="msg">
-            
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                noWrap={true}>
+              <Typography variant="body2" color="textSecondary" noWrap={true}>
                 {item.last_msg}
               </Typography>
             </div>
           </div>
 
-          <div className="dateContainer">
-          <Typography variant="body2" className="date">
-              {date}
-            </Typography>
-            {/* <Typography variant="body2" className="date">
-              {date}
-            </Typography> */}
-            <Badge badgeContent={count} color="primary">
-            </Badge>
+          <div className="dateBadgeContainer">
+            <div className="date">
+              <Typography variant="body2" className="text">
+                {date}
+              </Typography>
+            </div>
+            <div className="badge">
+              <Badge 
+                classes={{
+                  root: "badgeRoot",
+                  colorPrimary: "color"
+                }}
+                badgeContent={count}
+                color="primary"
+                max={999}
+              />
+            </div>
           </div>
         </li>
-      )
+      );
     } else {
-      return (<div></div>)
+      return <div />;
     }
   }
 }
@@ -88,6 +92,6 @@ ListItem.propTypes = {
     lastMsg: PropTypes.string,
     date: PropTypes.string
   })
-}
+};
 
-export default ListItem
+export default ListItem;
