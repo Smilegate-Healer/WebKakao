@@ -477,5 +477,36 @@ export default class Chatroom {
         console.log(err);
     })
   }
+
+  @action newChatroomWithUserList = () => {
+    const users = [];
+    const searchUserList = this.root.view.searchUserList;
+    for(var i=0; i<searchUserList.length; i++) {
+      if(searchUserList[i].checked) {
+        users.push(searchUserList[i].user_idx);
+      }
+    }
+    const reqData = {
+      from_user_idx: this.root.user.userInfo.user_idx,
+      to_user_idx: users
+    };
+
+    this.chatroomAxios.post("http://localhost:8081/api/chatroom/request/users", reqData).then(res => {
+      debugger;
+      if(res.data.resultCode === 0) { 
+        res.data.param["user_list"] = [];
+        for(var i=0; i<searchUserList.length; i++) {
+          if(searchUserList[i].checked) {
+            const user_info = this.createUserInfo(this.root.user.getFriendByUserIdx(searchUserList[i].user_idx, res.data.param.chatroom_idx));
+            res.data.param.user_list.push(user_info);
+          }
+        }
+        this.chatroomList.push(res.data.param);
+        this.root.view.showChatroom(res.data.param.chatroom_idx);
+      }
+    }).catch(err => {
+        console.log(err);
+    })
+  }
   
 }
