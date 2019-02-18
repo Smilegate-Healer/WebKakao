@@ -15,7 +15,6 @@ public class AccessTokenServiceImpl implements AccessTokenService {
 	public LoginResponse generateToken(LoginResponse result) {
 		
 		String access_token = tokenGenerateUtil.tokenGenerate();
-		System.out.println("access_token : " + access_token);
 		result.setAccess_token(access_token);
 		
 		return result;
