@@ -92,14 +92,14 @@ export default class User {
       }
     })
     debugger;
-    this.authorizedAxios.post("http://localhost:8083/auth/login", data).then(res => {
+    this.authorizedAxios.post("http://localhost:8084/auth/login", data).then(res => {
       console.log(res)
       if (res.data.resultCode === 0) {
         debugger;
         this.isLogin = true;
         this.userInfo = res.data.param;
-        this.props.stores.user.getFriendList()
-        this.props.stores.user.getChatroomList()
+        this.getFriendList()
+        this.getChatroomList()
       }
     }).catch(err => console.error(err))
 

@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService {
 				redisUserInfo.setUser_type(response.getUser_type());
 				// TODO: Redis에 데이터 추가
 				redisService.insertToken(response.getAccess_token(), redisUserInfo);
+				wrapper.setParam(response);
 			} else {
 				wrapper.setResultCode(100);
 				wrapper.setMessage("Passwords do not match");
