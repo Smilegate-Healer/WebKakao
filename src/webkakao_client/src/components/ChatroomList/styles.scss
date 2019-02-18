@@ -72,7 +72,8 @@
     flex-basis: 80px;
     display: flex;
     justify-content: center;
-
+    flex-direction: column;
+    
     .date {
       margin-top: 12px;
       color: rgb(200, 200, 200);

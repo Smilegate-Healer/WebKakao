@@ -17,7 +17,7 @@ class CloseBtn extends React.Component {
         onClick={this.props.onClick}
         className="SendBtn"
         style={{
-          backgroundColor: "#FFFFFF"
+          backgroundColor: "#f4f4f9"
         }}>
         <Close 
           className="icon"

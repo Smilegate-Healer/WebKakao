@@ -124,7 +124,7 @@ class SearchBar extends Component {
                         backgroundColor: "#f0f0f5",
                         width: 300
                     }}
-                    autoFocus="true"
+                    autoFocus={true}
                     startAdornment={<SearchBtn />}
                 />
                 <CloseBtn className="icon" onClick={this._onCloseBtnClick}/>
