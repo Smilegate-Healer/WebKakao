@@ -11,7 +11,6 @@ class PasswordReset extends Component {
     }
 
     onLogin = () => {
-        debugger;
         const { user } = this.props.stores;
         user.resetPassword(this.state);
     }
