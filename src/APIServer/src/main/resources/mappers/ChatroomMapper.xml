@@ -31,6 +31,17 @@
     	)
     </insert>
     
+    <insert id="insertChatroomWithUsers" parameterType="com.webkakao.api.model.request.RequestChatroomWithUsers" useGeneratedKeys="true" keyProperty="chatroom_idx">
+    	insert into chat_room (
+    		creator_idx,
+    		msg_object_id
+    	) 
+    	values (
+    		#{from_user_idx},
+    		#{msg_object_id}
+    	)
+    </insert>
+    
     <insert id="checkInChatroom" parameterType="Map">
 		insert into chatroom_member (
     		chatroom_idx,

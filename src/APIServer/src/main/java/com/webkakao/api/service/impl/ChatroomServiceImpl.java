@@ -22,13 +22,13 @@ import com.webkakao.api.model.request.GetChatroomList;
 import com.webkakao.api.model.request.GetChatroomMessage;
 import com.webkakao.api.model.request.RenameChatroom;
 import com.webkakao.api.model.request.RequestChatroom;
+import com.webkakao.api.model.request.RequestChatroomWithUsers;
 import com.webkakao.api.model.request.UpdateChatroomName;
 import com.webkakao.api.model.response.CheckInChatroomByUserListParam;
 import com.webkakao.api.model.response.GetChatroomListParam;
 import com.webkakao.api.model.response.GetChatroomMessageParam;
 import com.webkakao.api.model.response.RenameChatroomParam;
 import com.webkakao.api.model.response.RequestChatroomParam;
-import com.webkakao.api.repository.ChatroomInfoRedisRepository;
 import com.webkakao.api.repository.ChatsMongoRepository;
 import com.webkakao.api.response.wrapper.APIResponseWrapper;
 import com.webkakao.api.service.ChatroomService;
@@ -268,6 +268,54 @@ public class ChatroomServiceImpl implements ChatroomService {
 		RenameChatroomParam resultParam = new RenameChatroomParam();
 		resultParam.setChatroom_idx(param.getChatroom_idx());
 		resultParam.setChatroom_name(param.getChatroom_name());
+		
+		wrapper.setParam(resultParam);
+
+		return wrapper;
+	}
+
+	@Override
+	public APIResponseWrapper requestChatroomWithUsers(RequestChatroomWithUsers param) {
+		APIResponseWrapper wrapper = createWrapper();
+		RequestChatroomParam resultParam = null;
+
+		try {
+			
+			//create new chatsmodel object
+			ChatsModel nextChats = ChatsModel.builder()
+	                .pre_id("null")
+	                .build();
+			
+			String object_id = mongoRepository.insert(nextChats).get_id();
+			
+			param.setMsg_object_id(object_id);
+			chatroomMapper.insertChatroomWithUsers(param);
+
+			Map<String, Object> map = new HashMap<String, Object>();
+
+			map.put("chatroom_idx", param.getChatroom_idx());
+			map.put("user_idx", param.getFrom_user_idx());
+			map.put("last_read_msg_idx", 0);
+			map.put("start_msg_idx", 0);
+			
+			chatroomMapper.checkInChatroom(map);
+			
+			resultParam = chatroomMapper.getChatroomInfo(param.getChatroom_idx());
+			
+			for(int i=0; i<param.getTo_user_idx().size(); i++) {
+				map.put("user_idx", param.getTo_user_idx().get(i));
+				chatroomMapper.checkInChatroom(map);
+			}
+			
+			//insert redis chatroomInfo
+			redisService.addNewChatroom(param.getChatroom_idx(), object_id);
+			
+		} catch (Exception e) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			wrapper.setResultCode(111);
+			wrapper.setMessage("Insert Error");
+			return wrapper;
+		}
 		
 		wrapper.setParam(resultParam);
 
