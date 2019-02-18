@@ -18,7 +18,7 @@ export default class User {
   @observable authorizedAxios = null
   @observable friendAxios = null
 
-  @observable isLogin = true  // test
+  @observable isLogin = false;  // test
   @observable userInfo = dummyUser
   @observable friendList = []
 
@@ -30,9 +30,6 @@ export default class User {
   constructor(root) {
     // from index
     this.root = root;
-
-    // TODO: test
-    this.login()
   }
 
   @action
@@ -40,7 +37,7 @@ export default class User {
     this.friendList = data;
   }
 
-  @action login = () => {
+  @action login = (data) => {
     // TODO: Login logic
     // Set the user infomation
     // json object or something else
@@ -94,6 +91,18 @@ export default class User {
         // "Authorization": `Bearer` + this.userInfo.token
       }
     })
+    debugger;
+    this.authorizedAxios.post("http://localhost:8083/auth/login", data).then(res => {
+      console.log(res)
+      if (res.data.resultCode === 0) {
+        debugger;
+        this.isLogin = true;
+        this.userInfo = res.data.param;
+        this.props.stores.user.getFriendList()
+        this.props.stores.user.getChatroomList()
+      }
+    }).catch(err => console.error(err))
+
   }
 
   @action logout = () => {
