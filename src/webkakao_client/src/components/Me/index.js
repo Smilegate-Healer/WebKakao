@@ -35,26 +35,28 @@ class Me extends React.Component {
 
   render() {
     const { userInfo } = this.props.stores.user
-    return (
-      <div className="MeItem" onClick={this._onClick}>
-        <div className="profileContainer">
-          {this._renderProfile(userInfo.profile_img)}
-        </div>
+    if(userInfo) 
+      return (
+        <div className="MeItem" onClick={this._onClick}>
+          <div className="profileContainer">
+            {this._renderProfile(userInfo.profile_img)}
+          </div>
 
-        <div className="nameStatusMsgContainer">
-          <div className="name">
-            <Typography className="text" variant="body1" color="textPrimary">
-              {userInfo.name}
-            </Typography>
-          </div>
-          <div className="statusMsg">
-            <Typography variant="body2" color="textSecondary">
-              {this.props.isFriendList ? userInfo.status_msg : userInfo.email}
-            </Typography>
+          <div className="nameStatusMsgContainer">
+            <div className="name">
+              <Typography className="text" variant="body1" color="textPrimary">
+                {userInfo.name}
+              </Typography>
+            </div>
+            <div className="statusMsg">
+              <Typography variant="body2" color="textSecondary">
+                {this.props.isFriendList ? userInfo.status_msg : userInfo.email}
+              </Typography>
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    else return null
   }
 
   static defaultProps = {

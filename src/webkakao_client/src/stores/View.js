@@ -4,17 +4,9 @@ import {
 import cloneDeep from 'lodash/cloneDeep';
 
 export default class View {
-  views = {
-    friendList: "FriendList",
-    chatroomList: "ChatroomList",
-    more: "More",
-    chatList: "ChatList",
-    emptyChatList: "EmptyChatList",
-    settings: "Settings",
-    editProfilePage: "EditProfilePage"
-  }
+  views = { }
 
-  @observable leftView = this.views.friendList
+  @observable leftView = null
   @observable menuBarIdx = 0
   @observable rightView = null
   @observable notificationDOMRef = null;
@@ -48,6 +40,16 @@ export default class View {
 
   constructor(root) {
     this.root = root
+    this.views = {
+      friendList: "FriendList",
+      chatroomList: "ChatroomList",
+      more: "More",
+      chatList: "ChatList",
+      emptyChatList: "EmptyChatList",
+      settings: "Settings",
+      editProfilePage: "EditProfilePage"
+    }
+    this.friendList = this.views.friendList
   }
 
   /**
