@@ -11,6 +11,8 @@ import { hot } from "react-hot-loader/root";
 import UserSearchModal from "./components/Modal/UserSearchModal";
 import UserListModal from "./components/Modal/UserListModal";
 import SignIn from "./components/SignIn";
+import SignUp from "./components/SignUp";
+import PasswordReset from "./components/PasswordReset";
 import RenameChatroomModal from "./components/Modal/RenameChatroomModal";
 
 @inject("stores")
@@ -69,7 +71,17 @@ class App extends Component {
     } else {
       return (
         <div className="root">
-          <SignIn />
+          <div>
+            <SignIn />
+          </div>
+          <hr />
+          <div>
+            <SignUp />
+          </div>
+          <hr/>
+          <div>
+            <PasswordReset />
+          </div>
         </div>
       );
     }

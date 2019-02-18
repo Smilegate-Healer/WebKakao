@@ -3,17 +3,17 @@ import { observer, inject } from "mobx-react";
 
 @inject("stores")
 @observer
-
-class SignIn extends Component {
+class PasswordReset extends Component {
 
     state = {
         email: '',
-        password: ''
+        name: ''
     }
 
     onLogin = () => {
+        debugger;
         const { user } = this.props.stores;
-        user.signIn(this.state);
+        user.resetPassword(this.state);
     }
 
     emailChange = (e) => {
@@ -22,9 +22,9 @@ class SignIn extends Component {
         });
     }
 
-    passwdChange = (e) => {
+    nameChange = (e) => {
         this.setState({
-            password: e.target.value
+            name: e.target.value
         });
     }
 
@@ -32,24 +32,19 @@ class SignIn extends Component {
         return (
             <div>
                 <form>
-                    <h2> Please sign in </h2>
+                    <h2> Password Reset </h2>
                     <br></br>
                     <label> E-Mail </label>
                     <input type="email" id="inputEmail" value={this.state.email} placeholder="E-Mail" required onChange={this.emailChange} />
-                    <label htmlFor="inputPassword" > Password </label>
-                    <input type="password" id="inputPassword" value={this.state.password} placeholder="Password" required onChange={this.passwdChange} />
+                    <label> name </label>
+                    <input type="text" id="inputPassword" value={this.state.name} placeholder="Name" required onChange={this.nameChange} />
                     <br></br>
                 </form>
-                <button type="submit" onClick={this.onLogin}> Sign in
+                <button type="submit" onClick={this.onLogin}> Password Reset
                 </button>
-                <br></br>
-                <button> Sign up
-                </button>
-                <br></br>
-                <span>Forgot password?</span>
             </div>
         );
     }
 }
 
-export default SignIn;
+export default PasswordReset;

@@ -1,6 +1,6 @@
 package com.webkakao.auth.model.request;
 
-public class Login {
+public class SignIn {
 
 	private String email;
 	private String password;

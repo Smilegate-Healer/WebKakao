@@ -19,51 +19,50 @@
 			email = #{email}
 	</select>
 	
-	<!-- <select id="getUser" parameterType="String" resultType="com.authorization.model.UserInfo">
-		select 
-			*
+	<select id="duplicatieCheck" parameterType="String" resultType="String">
+		select
+			email
 		from 
 			user
 		where
-			id = #{id};
-	</select>    
-	
-	<select id="getPassword" parameterType="com.authorization.model.UserInfo" resultType="String">
-		select 
-			password
-		from 
-			user
-		where
-			id = #{id} and email = #{email} and name = #{name}
-			
+			email = #{email}
 	</select>
 	
-	<update id="resetPassword" parameterType="map">
-		update
-			user
-		set
-			password = #{password}, salt = #{salt}
-		where
-			id = #{id}
-	</update>
-	
-	<insert id="insertUser" parameterType="com.authorization.model.UserInfo">
+	<insert id="insertUser" parameterType="com.webkakao.auth.model.request.SignUp">
     	insert into USER (
-    		id,
     		password,
     		email,
     		name,
-    		salt,
-    		reg_date
+    		salt
     	) 
     	values (
-    		#{id},
     		#{password},
     		#{email},
     		#{name},
-    		#{salt},
-    		NOW()
+    		#{salt}
     	)
-    </insert> -->
+    </insert>
+    
+    <select id="userCheck" parameterType="com.webkakao.auth.model.request.PasswordReset" resultType="com.webkakao.auth.model.UserCheck">
+		select
+			email,
+			name
+		from 
+			user
+		where
+			email = #{email} and name = #{name}
+	</select>
+    
+    <update id="passwordReset" parameterType="com.webkakao.auth.model.request.PasswordReset">
+    	update
+    		user
+    	set
+    		salt = #{salt},
+    		password = #{password}
+    	where
+    		email = #{email} 
+    			and 
+    		name = #{name}
+    </update>
 
 </mapper>
