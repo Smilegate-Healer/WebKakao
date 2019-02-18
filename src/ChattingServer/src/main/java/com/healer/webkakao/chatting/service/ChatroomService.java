@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import com.healer.webkakao.chatting.database.ChatroomMapper;
 import com.healer.webkakao.chatting.model.mysql.Chatroom;
+import com.healer.webkakao.chatting.util.MessageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -170,6 +171,9 @@ public class ChatroomService {
       log.warn("There is no chatroomInfo by chatroomId=" + chatroomId);
       return;
     }
+
+    log.debug("Check the message type is valid");
+    MessageType.valueOf(message.getMsg_type());
 
     message.setMsg_idx(lastMsgIdx + 1);
     // TODO: Which time do I set???
