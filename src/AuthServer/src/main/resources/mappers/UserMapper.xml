@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webkakao.auth.database.UserMapper">
+
+	<select id="getUserByEmail" parameterType="String" resultType="com.webkakao.auth.model.response.LoginResponse">
+		select
+			user_idx,
+			email,
+			password,
+			status_msg,
+			profile_img,
+			salt,
+			user_type
+		from 
+			user
+		where
+			email = #{email}
+	</select>
+	
+	<!-- <select id="getUser" parameterType="String" resultType="com.authorization.model.UserInfo">
+		select 
+			*
+		from 
+			user
+		where
+			id = #{id};
+	</select>    
+	
+	<select id="getPassword" parameterType="com.authorization.model.UserInfo" resultType="String">
+		select 
+			password
+		from 
+			user
+		where
+			id = #{id} and email = #{email} and name = #{name}
+			
+	</select>
+	
+	<update id="resetPassword" parameterType="map">
+		update
+			user
+		set
+			password = #{password}, salt = #{salt}
+		where
+			id = #{id}
+	</update>
+	
+	<insert id="insertUser" parameterType="com.authorization.model.UserInfo">
+    	insert into USER (
+    		id,
+    		password,
+    		email,
+    		name,
+    		salt,
+    		reg_date
+    	) 
+    	values (
+    		#{id},
+    		#{password},
+    		#{email},
+    		#{name},
+    		#{salt},
+    		NOW()
+    	)
+    </insert> -->
+
+</mapper>
