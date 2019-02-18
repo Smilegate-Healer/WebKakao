@@ -23,13 +23,6 @@ class App extends Component {
     );
     this.props.stores.view.notificationDOMRef = React.createRef();
   }
-
-  componentWillMount() {
-    // this.props.stores.user.login() // TODO: Test
-    // this.props.stores.user.getFriendList()
-    // this.props.stores.user.getChatroomList()
-  }
-
   onClickNotification(e) {
     this.props.stores.view.showChatroom(
       this.props.stores.view.getNotificationChatroomIdx()
@@ -54,7 +47,7 @@ class App extends Component {
     const { user } = this.props.stores;
     if (user.isLogin) {
       return (
-        <div>
+        <div className="root">
           {this._renderLoadingPage()}
           <ReactNotification
             ref={this.props.stores.view.notificationDOMRef}

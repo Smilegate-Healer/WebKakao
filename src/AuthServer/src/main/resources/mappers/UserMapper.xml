@@ -8,6 +8,7 @@
 			user_idx,
 			email,
 			password,
+			name,
 			status_msg,
 			profile_img,
 			salt,
