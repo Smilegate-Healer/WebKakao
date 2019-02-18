@@ -2,9 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Typography } from '@material-ui/core'
 import DefaultProfileImg from '../../resources/img_person_no1.png'
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import "./styles.scss"
 
+@inject("stores")
 @observer
 class FriendItem extends React.Component {
 

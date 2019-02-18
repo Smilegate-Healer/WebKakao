@@ -101,7 +101,7 @@ class SideMenu extends React.Component {
                     </ListItem>
                 </List>
                 <Divider />
-                {userList}
+                    {userList}
                 <Divider />
                 <List>
                     <ListItem button key='채팅방 나가기' onClick={this.onButtonClick('exit')}>

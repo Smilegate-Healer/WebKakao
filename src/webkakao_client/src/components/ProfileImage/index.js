@@ -3,7 +3,7 @@ import "./styles.scss"
 import DefaultProfileImg from "../../resources/img_person_no1.png"
 
 export default class ProfileImage extends React.Component {
-  render() {
+ render() {
     const { image } = this.props
     return (
       <img

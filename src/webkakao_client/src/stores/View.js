@@ -188,7 +188,6 @@ export default class View {
           entrants = this.root.chatroom.chatroomList[i].user_list;
         }
       }
-      debugger;
       for(var i=0; i<this.searchUserList.length; i++) {
         for(var j=0; j<entrants.length; j++) {
           if(this.searchUserList[i].user_idx === entrants[j].user_idx) {

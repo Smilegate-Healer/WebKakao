@@ -102,7 +102,6 @@ export default class Chatroom {
    * 
    */
   @action updatePollingdata = (data) => {
-    // debugger;
     for(var i=0; i<this.chatroomList.length; i++) {
       if(this.chatroomList[i].chatroom_idx === data.chatroom_idx) {
         this.chatroomList[i].last_msg_idx = data.last_msg_idx;
@@ -125,7 +124,6 @@ export default class Chatroom {
    * 
    */
   @action getChatroomName = (chatroom_idx) => {
-    // debugger;
     for(var i=0; i<this.chatroomList.length; i++) {
       if(this.chatroomList[i].chatroom_idx === chatroom_idx) {
         return ChatroomNameFormatter.getChatroomName(this.chatroomList[i].user_list, this.chatroomList[i].chatroom_name)
@@ -191,7 +189,6 @@ export default class Chatroom {
 
     this.chatroomAxios.post("http://localhost:8081/api/chatroom/message", reqData).then(res => {
       if(res.data.resultCode === 0) {
-        debugger;
         if(!this.chats[chatroom_idx]) {
           this.chats[chatroom_idx] = res.data.param;
         } else {
@@ -207,10 +204,8 @@ export default class Chatroom {
           }
           this.chats[chatroom_idx].object_id = res.data.param.object_id;
         }
-        debugger;
           for(var i=0; i<this.chatroomList.length; i++) {
             if(this.chatroomList[i].chatroom_idx === chatroom_idx) {
-              debugger;
               if(this.chats[chatroom_idx].data.length > 0) {
                 this.chatroomList[i].last_msg_idx = this.chats[chatroom_idx].data[this.chats[chatroom_idx].data.length - 1].msg_idx;
               }
@@ -351,7 +346,7 @@ export default class Chatroom {
             var msgType = "f"
             const slashIdx = fileType.indexOf("/")
             if(slashIdx !== -1) {
-              var pre = fileType.substring(0, slashIdx - 1) 
+              var pre = fileType.substring(0, slashIdx) 
               switch(pre) {
                 case "image": 
                   msgType = "p"
@@ -540,7 +535,6 @@ export default class Chatroom {
       chatroom_idx: this.root.view.selectedChatroom,
       user_idx: this.root.user.userInfo.user_idx
     }
-    debugger;
     this.chatroomAxios.post("http://localhost:8081/api/chatroom/checkout", reqData).then(res => {
       if(res.data.resultCode === 0) { 
         const chatroomList = this.root.chatroom.chatroomList;
@@ -570,7 +564,6 @@ export default class Chatroom {
     };
 
     this.chatroomAxios.post("http://localhost:8081/api/chatroom/request/users", reqData).then(res => {
-      debugger;
       if(res.data.resultCode === 0) { 
         res.data.param["user_list"] = [];
         for(var i=0; i<searchUserList.length; i++) {

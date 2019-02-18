@@ -49,12 +49,11 @@
 
 
     .name {
-      flex-grow: 0;
+      flex: 1;
       flex-shrink: 0;
-      flex-basis: 26px;
 
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       
       .text {
         font-size: 22px;
@@ -63,10 +62,13 @@
 
     .msg {
       flex: 1;
+      display: 'flex';
+      align-items: flex-start;
     }
+
   }
 
-  .dateContainer {
+  .dateBadgeContainer {
     flex-shrink: 0;
     flex-grow: 0;
     flex-basis: 80px;
@@ -75,8 +77,33 @@
     flex-direction: column;
     
     .date {
-      margin-top: 12px;
-      color: rgb(200, 200, 200);
+      flex: 1;
+      
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      
+      .text {
+        color: rgb(200, 200, 200);
+      }
+    }
+
+    .badge {
+      flex: 1;
+
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+
+      .badgeRoot {
+        position: relative;
+        right: 10px;
+        top: 25%;
+      }
+
+      .color {
+        background-color: #F94B20;
+      }
     }
   }
 }
