@@ -1,6 +1,8 @@
 import React from 'react'
 import FriendItem from './FriendItem'
 import { inject, observer } from 'mobx-react';
+import Me from '../Me';
+import { Divider } from '@material-ui/core'
 
 @inject('stores')
 @observer
@@ -25,6 +27,8 @@ class FriendList extends React.Component {
     if (userList) {
       return (
         <div className={`${this.props.className}`}>
+          <Me isFriendList/>
+          <Divider variant="middle"/>
           {
             userList.map((v, idx) =>
               <FriendItem

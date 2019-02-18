@@ -6,6 +6,7 @@ import ChatBar from "../components/ChatBar";
 import ChatInput from "../components/ChatInput";
 import { Divider } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
+import EditProfilePage from "../components/EditProfilePage"
 
 @inject("stores")
 @observer
@@ -40,6 +41,12 @@ class RightContainer extends Component {
     switch (rightView) {
       case views.chatList:
         return this._renderChatList();
+      case views.editProfilePage:
+        return (
+          <div className="RightContainer Default">
+            <EditProfilePage/>
+          </div>
+        )
       default:
         return this._renderDefault();
     }

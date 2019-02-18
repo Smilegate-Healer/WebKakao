@@ -4,8 +4,10 @@ import axios from 'axios'
 const dummyUser = {
   user_idx: 2,
   name: "조영호",
-  profile_img: "base64",
-  token: 'i am token'
+  profile_img: "6",
+  access_token: 'i am token',
+  status_msg: "hi",
+  email: "email"
 }
 
 export default class User {
@@ -270,4 +272,22 @@ export default class User {
     }
   }
 
+  @action
+  uploadNewProfileImage = (image) => {
+    console.log(image)
+    var formData = new FormData()
+    formData.append("file", image)
+
+    this.authorizedAxios.post("http://localhost:8083/profile/new/" + this.userInfo.user_idx, formData, {
+      header: {
+        "Content-Type": "multipart/form-data"
+      }
+    })
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }
 }

@@ -302,6 +302,64 @@ export default class Chatroom {
   }
 
   /**
+   * Send a file
+   * 
+   */
+  @action sendFile = (chatroomId, file) => {
+    const { authorizedAxios } = this.root.user
+    console.log(file)
+    authorizedAxios.post("http://localhost:8083/upload", {
+      sender_idx: this.root.user.userInfo.user_idx,
+      chatroom_idx: chatroomId,
+      fileType: "p",
+      origin_name: file.name
+    })
+      .then(res => {
+        console.log(res)
+        var formData = new FormData()
+        formData.append("file", file)
+        const uploadUrl = res.data.param.uploadUrl
+        authorizedAxios.post("http://localhost:8083" + uploadUrl, formData, {
+          header: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+          .then(res => {
+            console.log(res)
+            
+            var fileType = file.type
+            var msgType = "f"
+            const slashIdx = fileType.indexOf("/")
+            if(slashIdx !== -1) {
+              var pre = fileType.substring(0, slashIdx - 1) 
+              switch(pre) {
+                case "image": 
+                  msgType = "p"
+                  break
+                case "video":
+                  msgType = "v"
+                  break
+                default:
+                  msgType = "f"
+              }
+            }
+
+            this.sendChat(chatroomId, {
+              sender: this.root.user.userInfo.user_idx,
+              msg: uploadUrl,
+              msg_type: msgType
+            })
+          })
+          .catch(err => {
+            console.error(err)
+          })
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }
+
+  /**
    * Unsubscribe if subscription is not null
    */
   @action unsubscribeChatroom = () => {
@@ -375,7 +433,7 @@ export default class Chatroom {
       }
     }
     let notReadUserCount = data.user_list.length;
-    for(var i=0; i<data.user_list.length; i++) {
+    for(var i = 0; i < data.user_list.length; i++) {
       if (data.user_list[i].last_read_msg_idx >= msg_idx) {
         notReadUserCount--;
       }

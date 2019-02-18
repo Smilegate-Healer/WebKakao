@@ -17,7 +17,7 @@ public class ProfileController {
   private ProfileService profileService;
 
   @RequestMapping(value = "/profile/new/{userId}", method = RequestMethod.POST)
-  public APIResponseWrapper addNewProfile(MultipartFile file,
+  public APIResponseWrapper addNewProfile(@RequestParam("file") MultipartFile file,
                                           @PathVariable long userId) {
     // TODO: User Authentication
     return profileService.saveProfileImageAndUpdate(userId, file);

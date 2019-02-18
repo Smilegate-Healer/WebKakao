@@ -7,18 +7,22 @@ import ChatroomList from "../components/ChatroomList";
 import FriendList from "../components/FriendList"
 import { inject, observer } from 'mobx-react';
 import { Divider } from '@material-ui/core'
+import More from '../components/More'
 
 @inject('stores')
 @observer
 class LeftContainer extends Component {
   
   _renderFunc() {
-    const { leftView } = this.props.stores.view;
-    if( leftView === 'ChatroomList') {
-      return (<ChatroomList />);
-    } else if( leftView === 'FriendList') {  
-      return (<FriendList />);
-    }
+    const { leftView, views } = this.props.stores.view;
+
+    switch(leftView) {
+      case views.chatroomList: return <ChatroomList/>
+      case views.friendList: return <FriendList/>
+      case views.more: return <More/>
+      default:
+        return null
+    }  
   }
 
   render() {

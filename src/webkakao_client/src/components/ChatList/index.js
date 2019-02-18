@@ -32,10 +32,11 @@ class ChatList extends React.Component {
     })
   }
 
+
   render() {
     return (
       <div className="List" ref={ref => this.div = ref}>
-        { this._renderItems()}
+        {this._renderItems()}
         <SideMenu/>
       </div>
     )

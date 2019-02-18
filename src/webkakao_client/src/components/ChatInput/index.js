@@ -3,6 +3,7 @@ import "./styles.scss"
 import SendBtn from './SendBtn';
 import { InputBase } from '@material-ui/core'
 import { inject, observer } from 'mobx-react'
+import Dropzone from 'react-dropzone'
 
 // TODO: action으로 분리할 것
 @inject("stores")
@@ -54,23 +55,38 @@ class ChatInput extends React.Component {
       return <SendBtn onClick={this._onClickSendBtn}/>
     }
   }
+  
+  _onDrop = (acceptedFiles, rejectedFiles) => {
+    const { chatroom, view } = this.props.stores
+    acceptedFiles.forEach(file => {
+      chatroom.sendFile(view.selectedChatroom, file) 
+    });
+  }
 
 
   render() {
-
     return (
-      <div className="ChatInputContainer">
-        <InputBase
-          className="input"
-          margin="dense"
-          onChange={this._onInputChange}
-          onKeyPress={this._onKeyPress}
-          value={this.state.inputText}
-          endAdornment={this._renderEndAdorment()}
-          multiline={this.state.multiline}
-          autoFocus={true}
-        />
-      </div>
+      <Dropzone onDrop={this._onDrop}>
+      {
+        ({getRootProps}) => {
+          return (
+            <div className="ChatInputContainer" {...getRootProps()}>
+
+              <InputBase
+                className="input"
+                margin="dense"
+                onChange={this._onInputChange}
+                onKeyPress={this._onKeyPress}
+                value={this.state.inputText}
+                endAdornment={this._renderEndAdorment()}
+                multiline={this.state.multiline}
+                autoFocus={true}
+              />
+            </div>
+          )
+        }
+      }
+      </Dropzone>
     )
   }
 }

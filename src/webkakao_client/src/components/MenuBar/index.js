@@ -28,9 +28,9 @@ class MenuBar extends Component {
             user.showAllFriendList();
             break;
         case 2:
-            view.showOption(value);
-            user.showAllFriendList();
-            chatroom.showAllChatroomList();
+            view.showMore(value);
+            // user.showAllFriendList();
+            // chatroom.showAllChatroomList();
             break;
         default:
         alert('Error in MenuBar');

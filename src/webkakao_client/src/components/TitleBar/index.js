@@ -4,7 +4,6 @@ import Title from "./Title";
 import Btn from "./Btn";
 import "./TitleBar.scss";
 import { observer, inject } from "mobx-react";
-import { allSettled } from "q";
 import SearchBar from "./SearchBar";
 
 
@@ -30,7 +29,7 @@ class TitleBar extends Component {
       case view.views.friendList:
         title = "Friends"
         break;
-      case view.views.option:
+      case view.views.more:
         title = "More"
         break;
       default:

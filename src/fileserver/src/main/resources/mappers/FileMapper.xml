@@ -21,7 +21,7 @@
     )
   </insert>
 
-  <update id="updateUploadComplete"
+  <update id="updateUploaded"
           parameterType="long">
     UPDATE
       file

@@ -5,11 +5,6 @@ import { Typography } from '@material-ui/core'
 import PropTypes from 'prop-types'
 
 class Title extends Component {
-  state = {
-    menu_type: "ChatroomList",
-    keyword: ""
-  };
-
   handleChange = e => {
     this.setState({
       [e.target.keyword]: e.target.value

@@ -5,7 +5,6 @@ import { Typography } from "@material-ui/core";
 import DateFormatter from '../../utils/DateFormatter'
 import DefaultProfileImg from "../../resources/img_person_no1.png"
 import { inject, observer } from "mobx-react"
-import { yellow } from "@material-ui/core/colors";
 
 @inject("stores")
 @observer
@@ -16,7 +15,6 @@ class ChatItem extends React.Component {
 
   _renderMine() {
     const { chat } = this.props
-    const { chatroom } = this.props.stores;
     var fullTime = DateFormatter.getKoreanDate(chat.timestamp)
     const notReadUserCount = this._renderNotReadUserCount();
     return (
@@ -28,13 +26,30 @@ class ChatItem extends React.Component {
         
         <div className="senderMsgContainer senderMsgContainerMine">
           <div className="msg msgMine">
-            <Typography className="text" variant="body1" color="textPrimary">
-              {chat.msg}
-            </Typography>
+            {this._renderContent(chat.msg_type)}
           </div>
         </div>
       </div>
     ) 
+  }
+
+  _renderMsg = () => {
+    const { chat } = this.props
+
+    return (
+      <Typography className="text" variant="body1" color="textPrimary">
+        {chat.msg}
+      </Typography>
+    )
+  }
+
+  _renderPhoto = () => {
+    const { chat } = this.props
+
+    return (
+      <img className="media" src={"http://localhost:8083" + chat.msg} alt={chat.msg}/>
+    )
+
   }
 
   _renderProfile = (profile) => {
@@ -47,9 +62,26 @@ class ChatItem extends React.Component {
     )
   }
 
+  _renderFile = () => {
+    const { chat } = this.props
+
+    return (
+      <a href={`http://localhost:8083` + chat.msg} download>File Link</a>
+    )
+  }
+
+  _renderContent = (type) => {
+    switch(type) {
+      case "p": return this._renderPhoto() 
+      case "f": return this._renderFile()
+      default:
+        return this._renderMsg()
+    }
+  }
+
   _renderNotReadUserCount = () => {
     const { chat } = this.props;
-    const { user, chatroom } = this.props.stores;
+    const { chatroom } = this.props.stores;
     const notReadUserCount = chatroom.getNotReadUserCount(chat.msg_idx);
     if(notReadUserCount > 0)
       return (<Typography variant="caption" className="notReadUserCount">{notReadUserCount}</Typography>);
@@ -74,9 +106,7 @@ class ChatItem extends React.Component {
             </Typography>
           </div>
           <div className="msg">
-            <Typography className="text" variant="body1" color="textPrimary" noWrap>
-              {chat.msg}
-            </Typography>
+            {this._renderContent(chat.msg_type)}
           </div>
         </div>
 
