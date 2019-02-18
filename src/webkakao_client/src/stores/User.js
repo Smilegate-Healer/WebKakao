@@ -134,7 +134,6 @@ export default class User {
   }
 
   @action getFriendList = () => {
-    debugger;
     this.friendAxios.post("http://localhost:8081/api/friend/list", { // TODO: REST???
       user_idx: this.userInfo.user_idx
     },{
