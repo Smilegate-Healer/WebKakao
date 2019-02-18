@@ -207,7 +207,7 @@ export default class Chatroom {
           for(var i=0; i<this.chatroomList.length; i++) {
             if(this.chatroomList[i].chatroom_idx === chatroom_idx) {
               if(this.chats[chatroom_idx].data.length > 0) {
-                this.chatroomList[i].last_msg_idx = this.chats[chatroom_idx].data[this.chats[chatroom_idx].data.length - 1].msg_idx;
+                this.chatroomList[i].last_read_msg_idx = this.chats[chatroom_idx].data[this.chats[chatroom_idx].data.length - 1].msg_idx;
               }
             }
           }
