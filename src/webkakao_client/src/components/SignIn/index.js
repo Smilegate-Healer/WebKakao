@@ -14,7 +14,7 @@ class SignIn extends Component {
     onLogin = () => {
         debugger;
         const { user } = this.props.stores;
-        user.login(this.state);
+        user.signIn(this.state);
     }
 
     emailChange = (e) => {

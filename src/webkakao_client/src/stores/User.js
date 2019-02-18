@@ -32,21 +32,9 @@ export default class User {
   constructor(root) {
     // from index
     this.root = root;
-  }
 
-  @action
-  initFriendList = (data) => {
-    this.friendList = data;
-  }
-
-  @action login = (data) => {
-    // TODO: Login logic
-    // Set the user infomation
-    // json object or something else
-
-
-    // if success
-    this.authorizedAxios = axios.create({
+     // if success
+     this.authorizedAxios = axios.create({
       //baseURL: this._domain,
       // baseURL: "localhost:8081",
       timeout: 30000,
@@ -93,8 +81,18 @@ export default class User {
         // "Authorization": `Bearer` + this.userInfo.token
       }
     })
-    debugger;
-    this.authorizedAxios.post("http://localhost:8084/auth/login", data).then(res => {
+  }
+
+  @action
+  initFriendList = (data) => {
+    this.friendList = data;
+  }
+
+  @action signIn = (data) => {
+    // TODO: Login logic
+    // Set the user infomation
+    // json object or something else
+    this.authorizedAxios.post("http://localhost:8084/auth/signin", data).then(res => {
       console.log(res)
       if (res.data.resultCode === 0) {
         debugger;
@@ -105,6 +103,24 @@ export default class User {
       }
     }).catch(err => console.error(err))
 
+  }
+
+  @action signUp = (data) => {
+    this.authorizedAxios.post("http://localhost:8084/auth/signup", data).then(res => {
+      console.log(res)
+      if (res.data.resultCode === 0) {
+
+      }
+    }).catch(err => console.error(err))
+  }
+
+  @action resetPassword = (data) => {
+    this.authorizedAxios.post("http://localhost:8084/auth/password/reset", data).then(res => {
+      console.log(res)
+      if (res.data.resultCode === 0) {
+
+      }
+    }).catch(err => console.error(err))
   }
 
   @action logout = () => {
