@@ -1,7 +1,7 @@
 import UserStore from './User';
 import Chatroom from './Chatroom';
 import View from './View';
-import { reaction } from 'mobx';
+import { reaction, autorun } from 'mobx';
 
 class RootStore {
   constructor() {
@@ -34,6 +34,26 @@ class RootStore {
         this.connecToChattingServer()
       }
     })
+
+    /**
+     * Reaction to user's information
+     * when user's information is fully received
+     * then loading is false
+     */
+    autorun(() => {
+      const { chatroom, user } = this
+      if(chatroom.chatroomList !== null && 
+        user.friendList !== null &&
+        user.isLogin && 
+        user.userInfo !== null &&
+        chatroom.isConnected) {
+          this.view.isLoading = false
+        } else {
+          this.view.isLoading = true
+        }
+    })
+
+     
   }
 
   /**

@@ -21,8 +21,8 @@ export default class User {
   @observable friendAxios = null
 
   @observable isLogin = false;  // test
-  @observable userInfo = dummyUser
-  @observable friendList = []
+  @observable userInfo = null
+  @observable friendList = null
 
   @observable searchUser = null;
   @observable userDetail = null;
@@ -130,7 +130,7 @@ export default class User {
     this.authorizedAxios = null;
     this.isLogin = false;
     this.userInfo = null;
-    this.friendList = [];
+    this.friendList = null;
   }
 
   @action getFriendList = () => {

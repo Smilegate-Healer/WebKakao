@@ -32,7 +32,7 @@ class App extends Component {
   }
 
   _renderLoadingPage = () => {
-    if (this.props.stores.chatroom.isConnected === false || this.props.stores.user.isLogin === false) {
+    if (this.props.stores.view.isLoading) {
       return (
         <div
           className="loading"

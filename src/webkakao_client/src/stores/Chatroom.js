@@ -25,7 +25,7 @@ export default class Chatroom {
    * 
    *
    */
-  @observable chatroomList = []
+  @observable chatroomList = null 
   @observable pollingAxios = null
   @observable chatroomAxios = null
 

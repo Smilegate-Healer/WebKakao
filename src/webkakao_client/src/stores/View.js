@@ -4,9 +4,17 @@ import {
 import cloneDeep from 'lodash/cloneDeep';
 
 export default class View {
-  views = { }
+  views = {
+    friendList: "FriendList",
+    chatroomList: "ChatroomList",
+    more: "More",
+    chatList: "ChatList",
+    emptyChatList: "EmptyChatList",
+    settings: "Settings",
+    editProfilePage: "EditProfilePage"
+  }
 
-  @observable leftView = null
+  @observable leftView = this.views.friendList
   @observable menuBarIdx = 0
   @observable rightView = null
   @observable notificationDOMRef = null;
@@ -27,9 +35,6 @@ export default class View {
 
   @observable searchUserList = null;
   @observable checkedUser = false;
-  /**
-   * TODO: Define which views want to show
-   */
   @observable modalView = ""
 
   /**
@@ -38,18 +43,10 @@ export default class View {
   @observable selectedChatroom = null
   @observable selectedChatroomName = null
 
+  @observable isLoading = false
+
   constructor(root) {
     this.root = root
-    this.views = {
-      friendList: "FriendList",
-      chatroomList: "ChatroomList",
-      more: "More",
-      chatList: "ChatList",
-      emptyChatList: "EmptyChatList",
-      settings: "Settings",
-      editProfilePage: "EditProfilePage"
-    }
-    this.friendList = this.views.friendList
   }
 
   /**
