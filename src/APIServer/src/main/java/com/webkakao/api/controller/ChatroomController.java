@@ -16,6 +16,7 @@ import com.webkakao.api.model.request.GetChatroomList;
 import com.webkakao.api.model.request.GetChatroomMessage;
 import com.webkakao.api.model.request.RenameChatroom;
 import com.webkakao.api.model.request.RequestChatroom;
+import com.webkakao.api.model.request.RequestChatroomWithUsers;
 import com.webkakao.api.model.request.UpdateChatroomName;
 import com.webkakao.api.response.wrapper.APIResponseWrapper;
 import com.webkakao.api.service.ChatroomService;
@@ -32,6 +33,15 @@ public class ChatroomController {
 	public ResponseEntity<APIResponseWrapper> requestChatroom(@RequestBody RequestChatroom param) {
 		
 		APIResponseWrapper response = chatroomService.requestChatroom(param);
+		
+		return new ResponseEntity<APIResponseWrapper>(response, HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(value = "/request/users", method = RequestMethod.POST)
+	public ResponseEntity<APIResponseWrapper> requestChatroomWithUsers(@RequestBody RequestChatroomWithUsers param) {
+		
+		APIResponseWrapper response = chatroomService.requestChatroomWithUsers(param);
 		
 		return new ResponseEntity<APIResponseWrapper>(response, HttpStatus.OK);
 		

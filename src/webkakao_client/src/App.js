@@ -10,6 +10,7 @@ import UserInfoModal from './components/Modal/UserInfoModal';
 import { hot } from 'react-hot-loader/root'
 import UserSearchModal from './components/Modal/UserSearchModal';
 import UserListModal from './components/Modal/UserListModal';
+import SignIn from './components/SignIn';
 import RenameChatroomModal from './components/Modal/RenameChatroomModal';
 
 @inject("stores")
@@ -23,45 +24,69 @@ class App extends Component {
   }
 
   componentWillMount() {
-    this.props.stores.user.login() // TODO: Test
-    this.props.stores.user.getFriendList()
-    this.props.stores.user.getChatroomList()
+    // this.props.stores.user.login() // TODO: Test
+    // this.props.stores.user.getFriendList()
+    // this.props.stores.user.getChatroomList()
   }
 
-  onClickNotification(e){
+  onClickNotification(e) {
     this.props.stores.view.showChatroom(this.props.stores.view.getNotificationChatroomIdx());
   }
 
   _renderLoadingPage = () => {
 
-    if(this.props.stores.chatroom.isConnected === false) {
+    if (this.props.stores.chatroom.isConnected === false) {
 
       return (
         <div className="loading" onClick={e => {
           e.stopPropagation() // disable click through this div
         }}>
-          <CircularProgress className="progress" size={60}/>
+          <CircularProgress className="progress" size={60} />
         </div>
-      ) 
+      )
+    }
+  }
+
+  _randerFunc = () => {
+    const { user } = this.props.stores;
+    if(user.isLogin) {
+    return (<div>{
+      this._renderLoadingPage()}
+      <ReactNotification ref={this.props.stores.view.notificationDOMRef} onClick={this.onClickNotification} />
+      <UserSearchModal />
+      <UserListModal />
+      <UserInfoModal />
+      <RenameChatroomModal />
+      <CssBaseline />
+      <div className="leftContainer">
+        <LeftContainer />
+      </div>
+      <div className="rightContainer">
+        <RightContainer />
+      </div></div>)
+    } else {
+      return (<div><SignIn/></div>)
     }
   }
 
   render() {
+    const component = this._randerFunc();
     return (
       <div className="root">
-        {this._renderLoadingPage()}
+      {component}
+        {/* {this._renderLoadingPage()}
         <ReactNotification ref={this.props.stores.view.notificationDOMRef} onClick={this.onClickNotification} />
-        <UserSearchModal/>
-        <UserListModal/>
-        <UserInfoModal/>
-        <RenameChatroomModal/>
-        <CssBaseline/>
+        <UserSearchModal />
+        <UserListModal />
+        <UserInfoModal />
+        <RenameChatroomModal />
+        <CssBaseline />
         <div className="leftContainer">
-          <LeftContainer/>
+          <LeftContainer />
         </div>
         <div className="rightContainer">
-          <RightContainer/>
-        </div>
+          <RightContainer />
+        </div> */}
       </div>
     );
   }

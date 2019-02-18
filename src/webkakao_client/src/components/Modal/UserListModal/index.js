@@ -80,8 +80,9 @@ class UserListModal extends React.Component {
         this.closeModal();
       break;
       case 'new':
-        alert("new")
-        // chatroom.newChatroomWithUserList();
+        // alert("new")
+        chatroom.newChatroomWithUserList();
+        this.closeModal();
       break;
       default:
       break;

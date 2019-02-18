@@ -6,6 +6,7 @@ import DateFormatter from '../../utils/DateFormatter'
 import ChatroomNameFormatter from '../../utils/ChatroomNameFormatter'
 import { observer } from 'mobx-react';
 import DefaultProfileImg from '../../resources/img_person_no1.png'
+import Badge from '@material-ui/core/Badge';
 
 @observer
 class ListItem extends React.Component {
@@ -31,6 +32,7 @@ class ListItem extends React.Component {
 
   render() {
     const { item } = this.props
+    const count = item.last_msg_idx - item.last_read_msg_idx;
 
     const date = DateFormatter.getKoreanDate(item.timestamp)
     const chatroomName = ChatroomNameFormatter.getChatroomName(item.user_list, item.chatroom_name)
@@ -51,6 +53,7 @@ class ListItem extends React.Component {
               </Typography>
             </div>
             <div className="msg">
+            
               <Typography
                 variant="body2"
                 color="textSecondary"
@@ -61,9 +64,14 @@ class ListItem extends React.Component {
           </div>
 
           <div className="dateContainer">
-            <Typography variant="body2" className="date">
+          <Typography variant="body2" className="date">
               {date}
             </Typography>
+            {/* <Typography variant="body2" className="date">
+              {date}
+            </Typography> */}
+            <Badge badgeContent={count} color="primary">
+            </Badge>
           </div>
         </li>
       )

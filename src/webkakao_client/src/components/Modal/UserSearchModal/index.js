@@ -110,7 +110,7 @@ class UserSearchModal extends React.Component {
             onChange={this._onInputChange}
             onKeyPress={this._onEnter}
             value={this.props.stores.view.targetEmail}
-            autoFocus="true"
+            autoFocus={true}
             style={{
               backgroundColor: "#f4f4f9",
               width: 300

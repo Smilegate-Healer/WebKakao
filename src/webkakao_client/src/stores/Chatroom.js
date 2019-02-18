@@ -108,6 +108,9 @@ export default class Chatroom {
         this.chatroomList[i].last_msg_idx = data.last_msg_idx;
         this.chatroomList[i].last_msg = data.last_msg;
         this.chatroomList[i].timestamp = data.timestamp;
+        if(this.chatroomList[i].chatroom_idx === this.root.view.selectedChatroom) {
+          this.chatroomList[i].last_read_msg_idx = data.last_msg_idx;
+        }
       }
     }
     this.chatroomList = this.root.chatroom.chatroomListSort();
@@ -188,14 +191,31 @@ export default class Chatroom {
 
     this.chatroomAxios.post("http://localhost:8081/api/chatroom/message", reqData).then(res => {
       if(res.data.resultCode === 0) {
+        debugger;
         if(!this.chats[chatroom_idx]) {
           this.chats[chatroom_idx] = res.data.param;
         } else {
           if(res.data.param.data.length > 0) {
-            this.chats[chatroom_idx].data.unshift(res.data.param.data);
+            const first_msg_idx = this.chats[chatroom_idx].data[0].msg_idx;
+            const responseMsg = res.data.param.data;
+            for(var i=responseMsg.length - 1; i>=0; i--) {
+              if(responseMsg[i].msg_idx < first_msg_idx) {
+                this.chats[chatroom_idx].data.unshift(responseMsg[i]);
+              }
+            }
+            // this.chats[chatroom_idx].data.unshift(res.data.param.data);
           }
           this.chats[chatroom_idx].object_id = res.data.param.object_id;
         }
+        debugger;
+          for(var i=0; i<this.chatroomList.length; i++) {
+            if(this.chatroomList[i].chatroom_idx === chatroom_idx) {
+              debugger;
+              if(this.chats[chatroom_idx].data.length > 0) {
+                this.chatroomList[i].last_msg_idx = this.chats[chatroom_idx].data[this.chats[chatroom_idx].data.length - 1].msg_idx;
+              }
+            }
+          }
       }
     }).catch(err => {
         console.error(err);
@@ -530,6 +550,37 @@ export default class Chatroom {
           }
         }
         this.root.view.hideChatroom();
+      }
+    }).catch(err => {
+        console.log(err);
+    })
+  }
+
+  @action newChatroomWithUserList = () => {
+    const users = [];
+    const searchUserList = this.root.view.searchUserList;
+    for(var i=0; i<searchUserList.length; i++) {
+      if(searchUserList[i].checked) {
+        users.push(searchUserList[i].user_idx);
+      }
+    }
+    const reqData = {
+      from_user_idx: this.root.user.userInfo.user_idx,
+      to_user_idx: users
+    };
+
+    this.chatroomAxios.post("http://localhost:8081/api/chatroom/request/users", reqData).then(res => {
+      debugger;
+      if(res.data.resultCode === 0) { 
+        res.data.param["user_list"] = [];
+        for(var i=0; i<searchUserList.length; i++) {
+          if(searchUserList[i].checked) {
+            const user_info = this.createUserInfo(this.root.user.getFriendByUserIdx(searchUserList[i].user_idx, res.data.param.chatroom_idx));
+            res.data.param.user_list.push(user_info);
+          }
+        }
+        this.chatroomList.push(res.data.param);
+        this.root.view.showChatroom(res.data.param.chatroom_idx);
       }
     }).catch(err => {
         console.log(err);
