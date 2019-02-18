@@ -1,17 +1,20 @@
 package com.webkakao.auth.service;
 
-import com.webkakao.auth.model.UserInfo;
-import com.webkakao.auth.model.request.Login;
+import com.webkakao.auth.model.request.PasswordReset;
+import com.webkakao.auth.model.request.SignIn;
+import com.webkakao.auth.model.request.SignUp;
 import com.webkakao.auth.model.response.wrapper.AuthResponseWrapper;
 
 public interface UserService {
 
-	public AuthResponseWrapper login(Login loginIngo, String ip);
+	public AuthResponseWrapper signIn(SignIn param, String ip);
 
-//	public UserInfo join(UserInfo userInfo);
-//
-//	boolean userInfoCheck(UserInfo userInfo);
-//
-//	public String resetPassword(UserInfo userInfo);
+	public AuthResponseWrapper signUp(SignUp param);
+
+//	boolean userInfoCheck(UserInfo param);
+
+//	public String resetPassword(UserInfo param);
+
+	public AuthResponseWrapper passwordReset(PasswordReset param);
 	
 }

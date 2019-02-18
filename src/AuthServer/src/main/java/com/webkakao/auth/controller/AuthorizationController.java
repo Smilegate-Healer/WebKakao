@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.webkakao.auth.model.UserInfo;
-import com.webkakao.auth.model.request.Login;
+import com.webkakao.auth.model.request.PasswordReset;
+import com.webkakao.auth.model.request.SignIn;
+import com.webkakao.auth.model.request.SignUp;
 import com.webkakao.auth.model.response.wrapper.AuthResponseWrapper;
 import com.webkakao.auth.model.util.IPAddressUtil;
 import com.webkakao.auth.service.UserService;
@@ -25,53 +26,43 @@ public class AuthorizationController {
 	
 	private IPAddressUtil ipAddressUtil = new IPAddressUtil();
 	
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ResponseEntity<AuthResponseWrapper> login(@RequestBody Login loginIngo) {
+	@RequestMapping(value = "/signin", method = RequestMethod.POST)
+	public ResponseEntity<AuthResponseWrapper> login(@RequestBody SignIn param) {
 
-		HttpStatus status = HttpStatus.UNAUTHORIZED;
-		
 		String ip = ipAddressUtil.getIPAddress();
 		
-		AuthResponseWrapper result = userService.login(loginIngo, ip);
+		AuthResponseWrapper result = userService.signIn(param, ip);
 
-		if (result != null)
-			status = HttpStatus.OK;
-
-		return new ResponseEntity<AuthResponseWrapper>(result, status);
+		return new ResponseEntity<AuthResponseWrapper>(result, HttpStatus.OK);
 
 	}
 
-//	@RequestMapping(value = "/join", method = RequestMethod.POST)
-//	public ResponseEntity<String> reg(@RequestBody UserInfo userInfo) {
-//
-//		HttpStatus status = HttpStatus.UNAUTHORIZED;
-//		String result = "fail";
-//		
-//		UserInfo resultUserInfo = userService.join(userInfo);
-//
-//		if (resultUserInfo != null) {
-//			status = HttpStatus.OK;
-//			result = "success";
-//		}
-//
-//		return new ResponseEntity<String>(result, status);
-//	}
-//	
-//
-//	@RequestMapping(value = "/password", method = RequestMethod.POST)
-//	public ResponseEntity<String> password(@RequestBody UserInfo userInfo) {
-//
-//		HttpStatus status = HttpStatus.UNAUTHORIZED;
-//		String result = "fail";
-//		
-//		boolean passwd = userService.userInfoCheck(userInfo);
-//
-//		if (passwd) {
-//			String tempPasswd = userService.resetPassword(userInfo);
-//			status = HttpStatus.OK;
-//			result = tempPasswd;
-//		}
-//
-//		return new ResponseEntity<String>(result, status);
-//	}
+	@RequestMapping(value = "/signup", method = RequestMethod.POST)
+	public ResponseEntity<AuthResponseWrapper> reg(@RequestBody SignUp param) {
+
+		AuthResponseWrapper result = userService.signUp(param);
+
+		return new ResponseEntity<AuthResponseWrapper>(result, HttpStatus.OK);
+		
+	}
+	
+
+	@RequestMapping(value = "/password/reset", method = RequestMethod.POST)
+	public ResponseEntity<AuthResponseWrapper> passwordReset(@RequestBody PasswordReset param) {
+
+		AuthResponseWrapper result = userService.passwordReset(param);
+
+		return new ResponseEntity<AuthResponseWrapper>(result, HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(value = "/password/change", method = RequestMethod.POST)
+	public ResponseEntity<AuthResponseWrapper> passwordChange(@RequestBody PasswordReset param) {
+
+		AuthResponseWrapper result = userService.passwordReset(param);
+
+		return new ResponseEntity<AuthResponseWrapper>(result, HttpStatus.OK);
+		
+	}
+	
 }
