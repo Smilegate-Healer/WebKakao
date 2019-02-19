@@ -6,7 +6,7 @@ import {
   Close
 } from '@material-ui/icons'
 import PropTypes from 'prop-types'
-// import './styles.scss'
+import './styles.scss'
 
 class CloseBtn extends React.Component {
 
@@ -15,7 +15,7 @@ class CloseBtn extends React.Component {
       <IconButton
         aria-label="Send the message"
         onClick={this.props.onClick}
-        className="SendBtn"
+        className="closeButton"
         style={{
           backgroundColor: "#ffffff"
         }}>
