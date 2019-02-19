@@ -3,6 +3,7 @@ import ChatItem from './ChatItem'
 import './styles.scss'
 import { inject, observer } from "mobx-react"
 import SideMenu from './SideMenu';
+import InfiniteScroll from 'react-infinite-scroller';
 
 @inject("stores")
 @observer
@@ -12,7 +13,7 @@ class ChatList extends React.Component {
   }
 
   componentDidUpdate() {
-    this._scrollToBottom()
+    // this._scrollToBottom()
   }
 
   _renderItems = () => {
@@ -25,18 +26,33 @@ class ChatList extends React.Component {
       return (
         <ChatItem
           chat={v}
-          key={idx}
+          key={v.msg_idx}
           isMine={v.sender === user.userInfo.user_idx}
         />
       )
     })
   }
 
+  loadFunc = () => {
+    const { view, chatroom } = this.props.stores;
+    if(chatroom.chats[view.selectedChatroom]) {
+      chatroom.getChatroomScrollMessage(view.selectedChatroom); 
+    }
+  }
+
 
   render() {
     return (
       <div className="List" ref={ref => this.div = ref}>
+        <InfiniteScroll
+        pageStart={0}
+        loadMore={this.loadFunc}
+        isReverse={true}
+        hasMore={true || false}
+        // loader={<div className="loader" key={0}>Loading ...</div>}
+        useWindow={false}>
         {this._renderItems()}
+        </InfiniteScroll>
         <SideMenu/>
       </div>
     )
