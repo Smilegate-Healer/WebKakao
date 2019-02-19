@@ -7,46 +7,31 @@ import {
   CheckCircle
 } from '@material-ui/icons'
 import PropTypes from 'prop-types'
-// import './styles.scss'
+import './styles.scss'
 
 class CheckIcon extends React.Component {
 
-  _randerFunc = () => {
-    const checked = this.props.checked;
-    if(checked) {
-      return (
-        <IconButton
-          aria-label="Send the message"
-          onClick={this.props.onClick}
-          className="SendBtn">
-          <CheckCircle 
-            className="icon"
-            fontSize="large"
-            // color="#F9DC09"
-            />
-        </IconButton>
-      )
-    } else {
-      return (
-        <IconButton
-          aria-label="Send the message"
-          onClick={this.props.onClick}
-          className="SendBtn">
-          <PanoramaFishEye 
-            className="icon"
-            fontSize="large"
-            />
-        </IconButton>
-      )
-    }
-  }
-
   render() {
-    const compenent = this._randerFunc();
+    const checked = this.props.checked;
     return (
-      <div>
-        {compenent}
-      </div>
+      <IconButton
+        aria-label="Checked box"
+        onClick={this.props.onClick}
+        className="checkButton"
+      >
+      {
+        checked
+        ? <CheckCircle 
+          className="icon"
+          fontSize="default"
+          style={{color: "#F9DC09"}}
+        />
+        : <PanoramaFishEye 
+          className="icon"
+          fontSize="default"
+        />
+      }
+      </IconButton>
     )
   }
 }

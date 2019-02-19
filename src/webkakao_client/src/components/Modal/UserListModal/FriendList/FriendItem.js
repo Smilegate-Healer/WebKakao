@@ -5,6 +5,7 @@ import { Typography } from '@material-ui/core'
 import DefaultProfileImg from '../../../../resources/img_person_no1.png'
 import { inject, observer } from 'mobx-react';
 import CheckIcon from './CheckIcon';
+import ProfileImage from '../../../ProfileImage';
 
 @inject('stores')
 @observer
@@ -14,24 +15,20 @@ class FriendItem extends React.Component {
     const { view } = this.props.stores;
     view.checkUserList(this.props.user.user_idx);
   }
-  
 
   _renderProfile = (profile_img) => {
     return (
-      <img
-        className="profile"
-        alt="profile"
-        src={profile_img && profile_img !== 'default' ? profile_img : DefaultProfileImg} // TODO: delete "defualt"
+      <ProfileImage
+        image={profile_img} 
       />
     )
   }
 
-  _randerFunc = () => {
+  render() {
     const { user } = this.props
     if (!user.hide) {
       return (
       <div className="Item" onClick={this.onClick}>
-        {/* <div className="profileContainer" onClick={this.props.onProfileClick}> */}
         <div className="profileContainer">
           {this._renderProfile(user.profile_img)}
         </div>
@@ -41,24 +38,15 @@ class FriendItem extends React.Component {
             <Typography className="text" variant="body1" color="textPrimary">
               {user.name}
             </Typography>
-            <CheckIcon checked={user.checked}/>
           </div>
+        </div>
+        <div className="checkButtonContainer">
+          <CheckIcon checked={user.checked}/>
         </div>
       </div>)
     } else {
       return (<div></div>)
     }
-  }
-
-  render() {
-    const component = this._randerFunc();
-
-    return (
-      <div>
-        { component }
-      </div>
-    )
-
   }
 }
 

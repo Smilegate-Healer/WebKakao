@@ -26,10 +26,6 @@ class UserListModal extends React.Component {
     timer: null
   }
 
-  constructor() {
-    super();
-  }
-
   componentDidMount() {
     Modal.setAppElement('body');
   }

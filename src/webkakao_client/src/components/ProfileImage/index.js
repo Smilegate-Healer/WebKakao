@@ -1,6 +1,7 @@
 import React from 'react'
 import "./styles.scss"
 import DefaultProfileImg from "../../resources/img_person_no1.png"
+import PropTypes from 'prop-types'
 
 export default class ProfileImage extends React.Component {
  render() {
@@ -13,4 +14,8 @@ export default class ProfileImage extends React.Component {
       /> 
     )
   }
+}
+
+ProfileImage.propTypes = {
+  image: PropTypes.string
 }

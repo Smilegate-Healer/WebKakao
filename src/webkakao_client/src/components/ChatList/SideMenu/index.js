@@ -25,9 +25,6 @@ const styles = {
 @inject("stores")
 @observer
 class SideMenu extends React.Component {
-  state = {
-    right: false
-  };
 
   hideChatroomSideMenu = () => {
     const { view } = this.props.stores;
@@ -62,7 +59,7 @@ class SideMenu extends React.Component {
     }
   };
 
-  _randerFriendList = () => {
+  _renderMemberList = () => {
     const { chatroom } = this.props.stores;
     const userList = chatroom.getSelectedChatroomUserList();
     if (userList) {
@@ -76,9 +73,9 @@ class SideMenu extends React.Component {
     }
   };
 
-  _randerFunc = () => {
+  _renderFunc = () => {
     const { classes } = this.props;
-    const userList = this._randerFriendList();
+    const userList = this._renderMemberList();
     return (
       <div className={classes.list}>
         <List>
@@ -122,7 +119,7 @@ class SideMenu extends React.Component {
   render() {
     const { view } = this.props.stores;
 
-    const sideList = this._randerFunc();
+    const sideList = this._renderFunc();
 
     return (
       <div>
