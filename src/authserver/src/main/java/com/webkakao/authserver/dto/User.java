@@ -13,6 +13,8 @@ public class User implements Serializable {
     private int user_idx;
     private String email;
     private String name;
+    private String profile_img;
+    private String back_img;
 
 
     public void update(final SignUpReq signUpReq) {

@@ -7,6 +7,7 @@ import com.webkakao.authserver.service.AuthService;
 import com.webkakao.authserver.utils.ResponseMessage;
 import com.webkakao.authserver.utils.StatusCode;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

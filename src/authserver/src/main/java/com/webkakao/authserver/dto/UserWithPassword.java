@@ -13,4 +13,6 @@ public class UserWithPassword implements Serializable {
     private String email;
     private String password;
     private String name;
+    private String profile_img;
+    private String back_img;
 }

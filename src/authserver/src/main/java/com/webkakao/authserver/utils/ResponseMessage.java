@@ -7,6 +7,8 @@ public class ResponseMessage {
     public static final String ALREADY_USER = "이미 존재하는 Email";
     public static final String CREATED_USER = "회원가입 성공";
     public static final String FAIL_CREATED_USER = "회원가입 실패";
+    public static final String UPDATE_USER = "회원 정보 수정 성공";
+    public static final String DELETE_USER = "회원 탈퇴 성공";
 
     public static final String AUTHORIZED = "인증 성공";
     public static final String UNAUTHORIZED = "인증 실패";

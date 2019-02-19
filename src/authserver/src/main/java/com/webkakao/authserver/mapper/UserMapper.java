@@ -42,4 +42,21 @@ public interface UserMapper {
      */
     @Select("SELECT * FROM user WHERE user_idx=#{user_idx}")
     User findByUserIdx(@Param("user_idx") final int userIdx);
+
+    /**
+     * 회원 정보 수정
+     *
+     * @param user 회원 정보
+     */
+    @Update("UPDATE user SET name = #{name}, password = #{password}, profile_img = #{profile_img}, back_img = #{back_img} WHERE user_idx = #{user_idx}")
+    void update(@Param("user") final User user);
+
+    /**
+     * 회원 탈퇴
+     *
+     * @param userIdx
+     */
+    @Delete("DELETE FROM user WHERE user_idx = #{user_idx}")
+    void deleteByUserIdx(@Param("user_idx") final int userIdx);
+
 }

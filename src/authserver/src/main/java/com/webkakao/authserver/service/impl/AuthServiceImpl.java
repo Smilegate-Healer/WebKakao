@@ -10,9 +10,13 @@ import com.webkakao.authserver.utils.ResponseMessage;
 import com.webkakao.authserver.utils.StatusCode;
 import com.webkakao.authserver.utils.auth.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.security.SecureRandom;
 
 @Slf4j
 @Service
@@ -22,6 +26,7 @@ public class AuthServiceImpl implements AuthService {
     public AuthServiceImpl(final UserMapper userMapper){ this.userMapper=userMapper; }
 
     @Override
+    @Cacheable()
     public DefaultRes<JwtUtils.TokenRes> login(LoginReq loginReq) {
         if(loginReq.getEmail()!=null && loginReq.getPassword()!=null){
             try{
@@ -32,6 +37,9 @@ public class AuthServiceImpl implements AuthService {
                 final User user = userMapper.findByEmailAndPassword(loginReq.getEmail(),loginReq.getPassword());
                 if(user!=null) {
                     final JwtUtils.TokenRes tokenDto = new JwtUtils.TokenRes(JwtUtils.create(user.getUser_idx()));
+                    HttpHeaders httpHeaders = new HttpHeaders();
+                    httpHeaders.add("token", tokenDto.getToken());
+                    ResponseEntity.status(HttpStatus.OK).header(httpHeaders.toString()).build();
                     return DefaultRes.res(StatusCode.OK, ResponseMessage.LOGIN_SUCCESS, tokenDto);
 
                 }
