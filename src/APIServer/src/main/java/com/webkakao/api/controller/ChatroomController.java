@@ -92,6 +92,15 @@ public class ChatroomController {
 		
 	}
 	
+	@RequestMapping(value = "/message/scroll", method = RequestMethod.POST)
+	public ResponseEntity<APIResponseWrapper> getChatroomScroolMessage(@RequestBody GetChatroomMessage param) {
+		
+		APIResponseWrapper response = chatroomService.getChatroomScrollMessage(param);
+		
+		return new ResponseEntity<APIResponseWrapper>(response, HttpStatus.OK);
+		
+	}
+	
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	public ResponseEntity<APIResponseWrapper> getChatroomList(@RequestBody GetChatroomList param) {
 		

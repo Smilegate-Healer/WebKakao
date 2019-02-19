@@ -195,7 +195,7 @@ public class ChatroomServiceImpl implements ChatroomService {
 					messages.addAll(0, mongoData);
 				object_id = mongoModel.getPre_id();
 
-				if (param.getLast_read_msg_idx() > mongoData.get(0).getMsg_idx()) {
+				if (mongoData == null || param.getLast_read_msg_idx() > mongoData.get(0).getMsg_idx()) {
 					break;
 				}
 
@@ -259,15 +259,6 @@ public class ChatroomServiceImpl implements ChatroomService {
 			resultParam.setData(mongoData);
 			resultParam.setPre_object_id(mongoModel.getPre_id());
 
-		}
-
-		if (resultParam.getData() != null && resultParam.getData().size() > 0) {
-			long last_read_msg_idx = resultParam.getData().get(resultParam.getData().size() - 1).getMsg_idx();
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("chatroom_idx", param.getChatroom_idx());
-			map.put("user_idx", param.getUser_idx());
-			map.put("last_read_msg_idx", last_read_msg_idx);
-			chatroomMapper.updateLastReadMsgIdx(map);
 		}
 
 		wrapper.setParam(resultParam);
