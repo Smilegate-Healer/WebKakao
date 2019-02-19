@@ -276,6 +276,22 @@ export default class User {
   }
 
   @action
+  getNameOnChatroom = (user_idx) => {
+    debugger;
+    const chatroomList = this.root.chatroom.chatroomList;
+    for (var i = 0; i < chatroomList.length; i++) {
+      if (chatroomList[i].chatroom_idx === this.root.view.selectedChatroom) {
+      for (var j = 0; j < chatroomList[i].user_list.length; j++) {
+        if (chatroomList[i].user_list[j].user_idx === user_idx)
+          return chatroomList[i].user_list[j].name;
+      }
+      return this.userInfo.name;
+      }
+    }
+    
+  }
+
+  @action
   getUserIdx = () => {
     return this.userInfo.user_idx;
   }

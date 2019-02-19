@@ -23,14 +23,14 @@ class ChatItem extends React.Component {
           {notReadUserCount}
           <Typography variant="caption">{fullTime}</Typography>
         </div>
-        
+
         <div className="senderMsgContainer senderMsgContainerMine">
           <div className="msg msgMine">
             {this._renderContent(chat.msg_type)}
           </div>
         </div>
       </div>
-    ) 
+    )
   }
 
   _renderMsg = () => {
@@ -47,7 +47,7 @@ class ChatItem extends React.Component {
     const { chat } = this.props
 
     return (
-      <img className="media" src={"http://localhost:8083" + chat.msg} alt={chat.msg}/>
+      <img className="media" src={"http://localhost:8083" + chat.msg} alt={chat.msg} />
     )
 
   }
@@ -71,8 +71,8 @@ class ChatItem extends React.Component {
   }
 
   _renderContent = (type) => {
-    switch(type) {
-      case "p": return this._renderPhoto() 
+    switch (type) {
+      case "p": return this._renderPhoto()
       case "f": return this._renderFile()
       default:
         return this._renderMsg()
@@ -83,7 +83,7 @@ class ChatItem extends React.Component {
     const { chat } = this.props;
     const { chatroom } = this.props.stores;
     const notReadUserCount = chatroom.getNotReadUserCount(chat.msg_idx);
-    if(notReadUserCount > 0)
+    if (notReadUserCount > 0)
       return (<Typography variant="caption" className="notReadUserCount">{notReadUserCount}</Typography>);
   }
 
@@ -118,11 +118,29 @@ class ChatItem extends React.Component {
     );
   }
 
-  render() {
-    if (this.props.isMine) {
-      return this._renderMine();
+  _renderInvite = () => {
+    const { chat } = this.props;
+    const { user } = this.props.stores;
+    const user_idxs = chat.msg.trim().split(" ");
+    const senderName = user.getNameOnChatroom(chat.sender)
+    let names = '';
+    for(var i=0; i<user_idxs.length; i++) {
+      names = names.concat(user.getNameOnChatroom(+user_idxs[i]) + ' ')
     }
-    return this._renderNotMine();
+    return (<div>{senderName} 님이 {names} 님을 초대하였습니다.</div>)
+  }
+
+  render() {
+    const { chat } = this.props;
+    if (chat.msg_type === 'm') {
+      if (this.props.isMine) {
+        return this._renderMine();
+      }
+      return this._renderNotMine();
+    }
+    else if(chat.msg_type === 'i') {
+      return this._renderInvite();
+    }
   }
 }
 
