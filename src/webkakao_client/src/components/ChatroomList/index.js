@@ -16,7 +16,6 @@ class ChatroomList extends React.Component {
         item={v}
         key={idx}
         onClick={e => this._onItemClick(e, v.chatroom_idx)}
-        // onLogoClick={e => this._onLogoClick(e, idx)}
       />
     )
   }

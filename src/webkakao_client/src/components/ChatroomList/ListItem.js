@@ -7,7 +7,6 @@ import ChatroomNameFormatter from "../../utils/ChatroomNameFormatter";
 import { observer } from "mobx-react";
 import DefaultProfileImg from "../../resources/img_person_no1.png";
 import Badge from "@material-ui/core/Badge";
-import { reaction } from "mobx";
 
 @observer
 class ListItem extends React.Component {
@@ -21,13 +20,19 @@ class ListItem extends React.Component {
   };
 
   _renderLogo = logo => {
+    const { item } = this.props
+    
+    if(item.user_list.length === 1) {
+      logo = item.user_list[0].profile_img
+    }
+
     return (
       <img
-        src={logo ? logo : DefaultProfileImg}
+        src={logo ? "http://localhost:8083/profile/" + logo : DefaultProfileImg}
         alt="chatroomLogo"
         className="logo"
       />
-    );
+    )
   };
 
   render() {

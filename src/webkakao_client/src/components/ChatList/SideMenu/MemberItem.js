@@ -7,7 +7,7 @@ import { inject, observer } from 'mobx-react';
 
 @inject('stores')
 @observer
-class FriendItem extends React.Component {
+class MemberItem extends React.Component {
 
   onClick = () => {
     const { user } = this.props.stores;
@@ -67,7 +67,7 @@ class FriendItem extends React.Component {
   }
 }
 
-FriendItem.propTypes = {
+MemberItem.propTypes = {
   info: PropTypes.shape({
     profile_img: PropTypes.string,
     name: PropTypes.string.isRequired,
@@ -77,4 +77,4 @@ FriendItem.propTypes = {
   onProfileClick: PropTypes.func
 }
 
-export default FriendItem
+export default MemberItem 
