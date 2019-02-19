@@ -31,4 +31,6 @@ public interface ChatroomService {
 
 	APIResponseWrapper requestChatroomWithUsers(RequestChatroomWithUsers param);
 
+	APIResponseWrapper getChatroomScrollMessage(GetChatroomMessage param);
+
 }
