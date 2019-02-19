@@ -4,6 +4,7 @@ public class GetChatroomMessage {
 
 	private long chatroom_idx;
 	private long user_idx;
+	private long last_read_msg_idx;
 	private String object_id;
 
 	public long getChatroom_idx() {
@@ -28,6 +29,14 @@ public class GetChatroomMessage {
 
 	public void setUser_idx(long user_idx) {
 		this.user_idx = user_idx;
+	}
+	
+	public long getLast_read_msg_idx() {
+		return last_read_msg_idx;
+	}
+
+	public void setLast_read_msg_idx(long last_read_msg_idx) {
+		this.last_read_msg_idx = last_read_msg_idx;
 	}
 
 }
