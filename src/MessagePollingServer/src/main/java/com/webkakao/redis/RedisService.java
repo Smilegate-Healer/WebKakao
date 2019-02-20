@@ -32,4 +32,19 @@ public class RedisService {
 		return data;
 	}
 
+	public long getLastMsgIdx(long chatroom_idx) {
+
+		long msg_idx = 0;
+		
+		Optional<ChatroomInfoModel> object = chatroomInfoRepository.findById(chatroom_idx);
+		
+		if (object.isPresent()) {
+			ChatroomInfoModel model = object.get();
+			msg_idx = model.getLast_msg_idx(); 
+		}
+		
+		return msg_idx;
+
+	}
+
 }

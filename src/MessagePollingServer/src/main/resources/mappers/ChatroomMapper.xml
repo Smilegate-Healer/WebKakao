@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webkakao.database.ChatroomMapper">
+
+	<resultMap id="ChatroomUserList" type="com.webkakao.model.ChatroomUserList">
+		<result property="chatroom_idx" column="chatroom_idx" />
+		<result property="user_idx" column="user_idx" />
+		<result property="name" column="name" />
+		<result property="profile_img" column="profile_img" />
+		<result property="start_msg_idx" column="start_msg_idx" />
+		<result property="last_read_msg_idx" column="last_read_msg_idx" />
+	</resultMap>
+ 
+	<select id="getChatroomInfo" parameterType="Map" resultType="com.webkakao.model.ChatroomInfo">
+		select 
+	    	start_msg_idx,
+	    	last_read_msg_idx,
+	    	chat_room.chatroom_idx,
+	    	chat_room.last_msg_idx,
+	    	chat_room.chatroom_name,
+	    	UNIX_TIMESTAMP(now()) as timestamp
+		from
+			chatroom_member
+		left join
+			chat_room
+		on
+			chatroom_member.chatroom_idx = chat_room.chatroom_idx
+			
+		where 
+			chat_room.chatroom_idx = #{chatroom_idx} and user_idx = #{user_idx};
+	</select>
+	
+	<select id="getChatroomUserList" parameterType="Long" resultMap="ChatroomUserList">
+		select
+			A.chatroom_idx, A.user_idx, B.name, B.profile_img, A.start_msg_idx, A.last_read_msg_idx
+		from
+			chatroom_member A
+		join
+			user B
+		on
+			A.user_idx = B.user_idx
+		where 
+			A.chatroom_idx = #{chatroom_idx};
+	</select>
+	
+	<select id="getUserName" parameterType="Long" resultType="String">
+		select
+			name
+		from 
+			user
+		where 
+			user_idx = #{user_idx}
+	</select>
+
+</mapper>

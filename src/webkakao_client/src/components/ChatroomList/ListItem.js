@@ -22,7 +22,9 @@ class ListItem extends React.Component {
   _renderLogo = logo => {
     const { item } = this.props
     
-    if(item.user_list.length === 1) {
+    if(!item.user_list) {
+      logo = null
+    } else if(item.user_list.length === 1) {
       logo = item.user_list[0].profile_img
     }
 

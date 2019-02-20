@@ -55,6 +55,7 @@
     "react-dom": "^16.7.0",
     "react-dropzone": "^8.1.0",
     "react-hot-loader": "^4.6.5",
+    "react-infinite-scroller": "^1.2.4",
     "react-modal": "^3.8.1",
     "react-notifications-component": "^1.0.1",
     "react-stomp": "^4.1.0",
