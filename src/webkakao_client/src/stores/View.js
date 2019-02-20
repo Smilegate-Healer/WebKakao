@@ -44,6 +44,7 @@ export default class View {
   @observable selectedChatroomName = null
 
   @observable isLoading = false
+  @observable isEnterKeyPress = false;
 
   constructor(root) {
     this.root = root
@@ -300,5 +301,20 @@ export default class View {
     for (var i = 0; i < this.searchUserList.length; i++) {
       this.searchUserList[i].hide = false;
     }
+  }
+
+  @action enterKeyPressed = () => {
+    this.isEnterKeyPress = true;
+  }
+
+  @action completeEnterKeyPressed = () => {
+    this.isEnterKeyPress = false;
+  }
+
+  @action checkEnterKeyPress = () => {
+    if(this.isEnterKeyPress === true) {
+      return true;
+    }
+    return false;
   }
 }

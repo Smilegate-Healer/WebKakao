@@ -19,6 +19,7 @@ class ChatInput extends React.Component {
     if(this.state.inputText === '') return
 
     const { chatroom, user, view } = this.props.stores
+    view.enterKeyPressed();
     chatroom.sendChat(view.selectedChatroom, {
       sender: user.userInfo.user_idx,
       msg: this.state.inputText,

@@ -28,7 +28,7 @@ export default class Chatroom {
   @observable chatroomList = null
   @observable pollingAxios = null
   @observable chatroomAxios = null
-
+  @observable isLoading = false;
   /**
    * 
    * Chat Object
@@ -144,11 +144,10 @@ export default class Chatroom {
       const chatroomIdx = this.getChatroomIdx(data.chatroom_idx);
       const users = data.last_msg.trim().split("/");
       const names = users[1].trim();
-      if(this.chatroomList[chatroomIdx]) {
+      if (this.chatroomList[chatroomIdx]) {
         this.chatroomList[chatroomIdx].last_msg = names + '님이 초대되었습니다.'
       }
     } else if (data.msg_type === 'e') {
-      debugger;
       if (this.root.user.userInfo.user_idx !== data.sender) {
         const chatroom_idx = this.getChatroomIdx(data.chatroom_idx);
         this.chatroomList[chatroom_idx].timestamp = data.timestamp;
@@ -156,7 +155,6 @@ export default class Chatroom {
         this.chatroomList[chatroom_idx].last_msg = data.last_msg + '님이 퇴장하였습니다.';
         this.chatroomList[chatroom_idx].last_read_msg_idx = data.last_msg_idx;
         const userList = this.chatroomList[chatroom_idx].user_list;
-        debugger;
         for (var i = 0; i < userList.length; i++) {
           if (userList[i].user_idx == data.sender) {
             userList.splice(i, 1);
@@ -166,8 +164,8 @@ export default class Chatroom {
       }
     }
     this.chatroomList = this.root.chatroom.chatroomListSort();
-    if ((this.root.view.selectedChatroom !== data.chatroom_idx) 
-     && (data.msg_type === 'm')) {
+    if ((this.root.view.selectedChatroom !== data.chatroom_idx)
+      && (data.msg_type === 'm')) {
       // this.root.view.showPollingMessage(data);
       this.root.view.showPollingMessage(data);
     }
@@ -231,7 +229,7 @@ export default class Chatroom {
       console.log(err);
     })
 
-    
+
 
   }
 
@@ -254,28 +252,56 @@ export default class Chatroom {
       object_id: object_id
     }
 
-    this.chatroomAxios.post("http://localhost:8081/api/chatroom/message/scroll", reqData).then(res => {
-      if (res.data.resultCode === 0) {
-        // if(!this.chats[chatroom_idx]) {
-        //   this.chats[chatroom_idx] = res.data.param;
-        // } else {
-        if (res.data.param.data.length > 0) {
-          debugger;
-          const first_msg_idx = this.chats[chatroom_idx].data[0].msg_idx;
-          const responseMsg = res.data.param.data;
-          for (var i = responseMsg.length - 1; i >= 0; i--) {
-            if (responseMsg[i].msg_idx < first_msg_idx) {
-              this.chats[chatroom_idx].data.unshift(responseMsg[i]);
-            }
+    if (this.isLoading === false) {
+      this.startLoading();
+      return new Promise((resolve, reject) => {
+        this.chatroomAxios.post("http://localhost:8081/api/chatroom/message/scroll", reqData).then(res => {
+          if (res.data.resultCode === 0) {
+            resolve(res.data.param);
+            // // if(!this.chats[chatroom_idx]) {
+            // //   this.chats[chatroom_idx] = res.data.param;
+            // // } else {
+            // if (res.data.param.data.length > 0) {
+            //   debugger;
+            //   const first_msg_idx = this.chats[chatroom_idx].data[0].msg_idx;
+            //   const responseMsg = res.data.param.data;
+            //   for (var i = responseMsg.length - 1; i >= 0; i--) {
+            //     if (responseMsg[i].msg_idx < first_msg_idx) {
+            //       this.chats[chatroom_idx].data.unshift(responseMsg[i]);
+            //     }
+            //   }
+            //   // this.chats[chatroom_idx].data.unshift(res.data.param.data);
+            //   // }
+            //   this.chats[chatroom_idx].pre_object_id = res.data.param.pre_object_id;
+            // }
           }
-          // this.chats[chatroom_idx].data.unshift(res.data.param.data);
-          // }
-          this.chats[chatroom_idx].pre_object_id = res.data.param.pre_object_id;
-        }
-      }
-    }).catch(err => {
-      console.error(err);
-    })
+        }).catch(err => {
+          // console.error(err);
+          reject(err);
+          this.endLoading();
+        })
+      })
+        .then((param) => {
+          // if(!this.chats[chatroom_idx]) {
+          //   this.chats[chatroom_idx] = res.data.param;
+          // } else {
+            debugger;
+          if (param.data.length > 0) {
+            const first_msg_idx = this.chats[chatroom_idx].data[0].msg_idx;
+            const responseMsg = param.data;
+            for (var i = responseMsg.length - 1; i >= 0; i--) {
+              if (responseMsg[i].msg_idx < first_msg_idx) {
+                this.chats[chatroom_idx].data.unshift(responseMsg[i]);
+              }
+            }
+            // this.chats[chatroom_idx].data.unshift(res.data.param.data);
+            // }
+            this.chats[chatroom_idx].pre_object_id = param.pre_object_id;
+          } else {
+            this.endLoading();
+          }
+        })
+    }
   }
 
   /**
@@ -313,7 +339,6 @@ export default class Chatroom {
         for (var i = 0; i < this.chatroomList.length; i++) {
           if (this.chatroomList[i].chatroom_idx === chatroom_idx) {
             if (this.chats[chatroom_idx].data.length > 0) {
-              debugger;
               this.chatroomList[i].last_read_msg_idx = responseMsg[responseMsg.length - 1].msg_idx;
             }
           }
@@ -687,7 +712,7 @@ export default class Chatroom {
         this.chats[this.root.view.selectedChatroom] = null;
         this.root.view.hideChatroom();
         this.unsubscribeChatroom();
-        
+
       }
     }).catch(err => {
       console.log(err);
@@ -743,6 +768,18 @@ export default class Chatroom {
       }
     }
     return -1;
+  }
+
+  @action startLoading = () => {
+    this.isLoading = true;
+  }
+
+  @action setLoading = () => {
+    this.isLoading = false;
+  }
+
+  @action endLoading = () => {
+    setTimeout(() => this.setLoading(), 1000)
   }
 
 }
