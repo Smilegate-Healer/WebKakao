@@ -408,8 +408,8 @@ export default class Chatroom {
 
             this.sendChat(chatroomId, {
               sender: this.root.user.userInfo.user_idx,
-              msg: uploadUrl,
-              msg_type: msgType
+              msg: uploadUrl + " " + file.name,
+              msg_type: msgType,
             })
           })
           .catch(err => {

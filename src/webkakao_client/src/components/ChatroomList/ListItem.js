@@ -44,6 +44,23 @@ class ListItem extends React.Component {
       item.user_list,
       item.chatroom_name
     );
+
+    var lastMsg = null
+    switch(item.msg_type) {
+      case "p": 
+        lastMsg = "Photo"
+        break
+      case "v":
+        lastMsg = "Video"
+        break
+      case "f":
+        var indexOfSpace = item.last_msg.indexOf(" ")
+        lastMsg = "File " + item.last_msg.substring(indexOfSpace, item.last_msg.length)
+        break
+      default:
+        lastMsg = item.last_msg
+    }
+
     if (!item.hide) {
       return (
         <li className="ListItem" onClick={this.props.onClick}>
@@ -59,7 +76,7 @@ class ListItem extends React.Component {
             </div>
             <div className="msg">
               <Typography variant="body2" color="textSecondary" noWrap={true}>
-                {item.last_msg}
+                {lastMsg}
               </Typography>
             </div>
           </div>

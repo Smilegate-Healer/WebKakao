@@ -41,6 +41,10 @@ class EditProfilePage extends React.Component {
   }
 
   _onProfileDrop = (acceptedFiles, rejectedFiles) => {
+    if(acceptedFiles.length === 0) {
+      alert("only image")
+      return
+    }
     this.props.stores.user.uploadNewProfileImage(acceptedFiles[0])
   }
 
@@ -51,13 +55,14 @@ class EditProfilePage extends React.Component {
       <div className="EditProfileContainer">
 
         <div className="profileContainer">
-          <Dropzone onDrop={this._onProfileDrop}> 
+          <Dropzone 
+            onDrop={this._onProfileDrop}
+            accept="image/*">
           {
             ({getRootProps, isDragActive}) => {
               return (
                 <div 
                   {...getRootProps()}
-                  accept="image/*"
                 >
                   <ProfileImage
                     className="profile"

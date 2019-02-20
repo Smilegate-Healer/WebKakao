@@ -64,9 +64,22 @@ class ChatItem extends React.Component {
 
   _renderFile = () => {
     const { chat } = this.props
+    const indexOfSpace = chat.msg.indexOf(" ")
+    const url = chat.msg.substring(0, indexOfSpace) 
+    const filename = chat.msg.substring(indexOfSpace, chat.msg.length)
 
     return (
-      <a href={`http://localhost:8083` + chat.msg} download>File Link</a>
+      <div>
+        <Typography>
+          <a 
+            href={`http://localhost:8083` + url}
+            download
+            className="link"
+          >
+            {filename}
+          </a>
+        </Typography>
+      </div>
     )
   }
 

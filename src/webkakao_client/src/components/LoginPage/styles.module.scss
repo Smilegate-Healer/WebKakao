@@ -1,0 +1,105 @@
+@import "../../colors.scss";
+
+$inputHeight: 48px;
+
+.InputBase {
+  border: 1px;
+  border-style: solid;
+  border-color: #dcdcdc;
+  margin-top: 10px;
+  height: $inputHeight;
+
+  .input {
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+
+  &.error {
+    border-color: red;
+  }
+
+}
+
+
+
+.LoginPageContainer {
+  flex: 1;
+
+  background-color: $kakaoYellow;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .formContainer {
+    flex-basis: 450px;
+    flex-grow: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: white;
+
+    padding: 20px;
+
+    .titleContainer {
+    }
+
+    .inputContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-left: 1px;
+      padding-right: 1px;
+
+      .email {
+      }
+
+      .password {
+      }
+    }
+
+    .buttonContainer {
+      margin-top: 10px;
+    }
+
+    .optionContainer {
+      margin-top: 10px;
+      display: flex;
+      justify-content: flex-end;
+
+      .reset {
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+}
+
+.buttonBase {
+  height: $inputHeight;
+
+  &.yellow {
+    background-color: $kakaoYellow;
+
+    &:hover {
+      background-color: $kakaoYellow;
+    }
+  
+  }
+
+  &.ripple {
+    color: white;
+  }
+
+
+  &.white {
+    background-color: white;
+  }
+}

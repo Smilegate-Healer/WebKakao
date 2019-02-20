@@ -187,6 +187,8 @@ public class ChatroomService {
     String chatroomIdStr = String.valueOf(chatroomId);
     redisTemplate.opsForList().rightPush(chatroomIdStr, msgStr);
 
+
+
     this.moveToMongo(chatroomIdStr, MAX_SIZE);
 
 //    log.debug("Publish the message to Redis");

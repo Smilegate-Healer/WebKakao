@@ -14,6 +14,7 @@ import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import PasswordReset from "./components/PasswordReset";
 import RenameChatroomModal from "./components/Modal/RenameChatroomModal";
+import LoginPage from "./components/LoginPage";
 
 @inject("stores")
 @observer
@@ -71,7 +72,9 @@ class App extends Component {
     } else {
       return (
         <div className="root">
-          <div>
+          <CssBaseline />
+          <LoginPage/>
+          {/* <div>
             <SignIn />
           </div>
           <hr />
@@ -81,7 +84,7 @@ class App extends Component {
           <hr/>
           <div>
             <PasswordReset />
-          </div>
+          </div> */}
         </div>
       );
     }

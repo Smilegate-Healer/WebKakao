@@ -104,19 +104,26 @@ export default class User {
   }
 
   @action signUp = (data) => {
-    this.authorizedAxios.post("http://localhost:8084/auth/signup", data).then(res => {
-      console.log(res)
-      if (res.data.resultCode === 0) {
-
-      }
-    }).catch(err => console.error(err))
+    console.debug(data)
+    return new Promise((resolve, reject) => {
+      axios.post("http://localhost:8084/auth/signup", data).then(res => {
+        console.log(res)
+        if (res.data.resultCode === 0) {
+          resolve()
+          // TODO:
+        }
+      }).catch(err => {
+        console.error(err)
+        reject()
+      })
+    })
   }
 
   @action resetPassword = (data) => {
     this.authorizedAxios.post("http://localhost:8084/auth/password/reset", data).then(res => {
       console.log(res)
       if (res.data.resultCode === 0) {
-
+        // TODO:
       }
     }).catch(err => console.error(err))
   }
@@ -304,20 +311,24 @@ export default class User {
 
   @action
   uploadNewProfileImage = (image) => {
-    console.log(image)
-    var formData = new FormData()
-    formData.append("file", image)
+    return new Promise((resolve, reject) => {
+      console.log(image)
+      var formData = new FormData()
+      formData.append("file", image)
 
-    this.authorizedAxios.post("http://localhost:8083/profile/new/" + this.userInfo.user_idx, formData, {
-      header: {
-        "Content-Type": "multipart/form-data"
-      }
+      this.authorizedAxios.post("http://localhost:8083/profile/new/" + this.userInfo.user_idx, formData, {
+        header: {
+          "Content-Type": "multipart/form-data"
+        }
+      })
+        .then(res => {
+          console.log(res)
+          resolve()
+        })
+        .catch(err => {
+          console.error(err)
+          reject()
+        })
     })
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.error(err)
-      })
   }
 }

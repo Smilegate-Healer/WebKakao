@@ -29,7 +29,7 @@
 	</select>
 	
 	<insert id="insertUser" parameterType="com.webkakao.auth.model.request.SignUp">
-    	insert into USER (
+    	insert into user (
     		password,
     		email,
     		name,
