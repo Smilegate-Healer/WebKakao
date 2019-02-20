@@ -20,7 +20,8 @@ class LoginPage extends React.Component {
   state = {
     email: "",
     password: "",
-    isPasswordReset: false
+    isPasswordReset: false,
+    modal: false
   };
 
   _handleChange = event => {

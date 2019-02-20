@@ -11,6 +11,7 @@ import com.healer.webkakao.chatting.model.mysql.Chatroom;
 import com.healer.webkakao.chatting.util.MessageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,6 +43,9 @@ public class ChatroomService {
 
   @Autowired
   private ChatroomMapper chatroomMapper;
+
+  @Autowired
+  private SimpMessagingTemplate simpMessagingTemplate;
 
   /**
    * Update the chatroom information by chatroomId chatroomId is made by MySQL
@@ -193,6 +197,18 @@ public class ChatroomService {
 
 //    log.debug("Publish the message to Redis");
     redisTemplate.convertAndSend("chatroom/" + chatroomId, objectMapper.writeValueAsString(message)); // Send the content of the message using Pub/Sub
+  }
+
+
+  public void subscribe(long userId, long chatroomId) {
+    log.debug("New subscriber=" + userId + " at " + chatroomId);
+
+    ChatModel chat = ChatModel.builder()
+            .msg_type("s") // TODO: new subscribe type
+            .msg(String.valueOf(userId))
+            .build();
+    simpMessagingTemplate.convertAndSend("/topic/chatroom/" + chatroomId, chat);
+
   }
 
 }
