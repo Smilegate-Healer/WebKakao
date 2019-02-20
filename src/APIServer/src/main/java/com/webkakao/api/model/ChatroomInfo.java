@@ -8,6 +8,7 @@ public class ChatroomInfo {
 	private long start_msg_idx;
 	private long last_msg_idx;
 	private long last_read_msg_idx;
+	private String msg_type;
 	private String chatroom_name;
 	private String logo;
 	private String last_msg;
@@ -16,6 +17,14 @@ public class ChatroomInfo {
 
 	public long getTimestamp() {
 		return timestamp;
+	}
+
+	public String getMsg_type() {
+		return msg_type;
+	}
+
+	public void setMsg_type(String msg_type) {
+		this.msg_type = msg_type;
 	}
 
 	public void setTimestamp(long timestamp) {

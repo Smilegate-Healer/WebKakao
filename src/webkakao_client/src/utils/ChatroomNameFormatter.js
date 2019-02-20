@@ -4,7 +4,7 @@ module.exports = {
 
       let chatroomName = '';
 
-      if(!list) {
+      if(!list || list.length === 0) {
         return '대화상대 없음'
       }
 
