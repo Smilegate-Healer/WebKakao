@@ -71,8 +71,16 @@ public class RedisService {
 			Optional<ChatroomInfoModel> object = chatroomInfoRepository.findById(list.get(i).getChatroom_idx());
 			if (object.isPresent()) {
 				ChatroomInfoModel model = object.get();
+				if ("i".equals(list.get(i).getMsg_type())) {
+					String [] words = model.getLast_msg().split("/");
+					list.get(i).setLast_msg(words[1] + "님이 입장하였습니다.");
+				} else if ("e".equals(list.get(i).getMsg_type())) {
+					list.get(i).setLast_msg(model.getLast_msg() +"님이 퇴장하였습니다.");
+				} else {
+					list.get(i).setLast_msg(model.getLast_msg());
+				}
 				list.get(i).setLast_msg_idx(model.getLast_msg_idx());
-				list.get(i).setLast_msg(model.getLast_msg());
+
 				// TODO: Timestamp Setting
 				list.get(i).setTimestamp(model.getTimestamp());
 			}
@@ -88,14 +96,14 @@ public class RedisService {
 	public long getLastMsgIdx(long chatroom_idx) {
 
 		Optional<ChatroomInfoModel> object = chatroomInfoRepository.findById(chatroom_idx);
-		
+
 		if (object.isPresent()) {
 			ChatroomInfoModel model = object.get();
 			return model.getLast_msg_idx();
 		}
-		
+
 		return -1;
-		
+
 	}
 
 }
