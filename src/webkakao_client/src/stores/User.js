@@ -360,4 +360,12 @@ export default class User {
         })
     })
   }
+
+  @action getUserName = (user_idx) => {
+    for(var i=0; i<this.friendList.length; i++) {
+      if(this.friendList[i].user_idx === user_idx) {
+        return this.friendList[i].name;
+      }
+    }
+  }
 }

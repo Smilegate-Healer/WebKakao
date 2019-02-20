@@ -141,10 +141,11 @@ export default class Chatroom {
           }
         }
       }
+      const chatroomIdx = this.getChatroomIdx(data.chatroom_idx);
       const users = data.last_msg.trim().split("/");
       const names = users[1].trim();
-      if(this.chatroomList[chatroom_idx]) {
-        this.chatroomList[chatroom_idx].last_msg = names + '님이 초대되었습니다.'
+      if(this.chatroomList[chatroomIdx]) {
+        this.chatroomList[chatroomIdx].last_msg = names + '님이 초대되었습니다.'
       }
     } else if (data.msg_type === 'e') {
       debugger;
@@ -166,7 +167,7 @@ export default class Chatroom {
     }
     this.chatroomList = this.root.chatroom.chatroomListSort();
     if ((this.root.view.selectedChatroom !== data.chatroom_idx) 
-     && !(data.msg_type === 'e' && data.sender === this.root.user.userInfo.user_ifx)) {
+     && (data.msg_type === 'm')) {
       // this.root.view.showPollingMessage(data);
       this.root.view.showPollingMessage(data);
     }
@@ -196,12 +197,12 @@ export default class Chatroom {
         return;
       }
     }
-
-    this.root.chatroom.requestChatroom(this.root.user.getUserIdx(), to_user_idx);
+    const to_user_name = this.root.user.getUserName(to_user_idx);
+    this.root.chatroom.requestChatroom(this.root.user.getUserIdx(), to_user_idx, to_user_name);
 
   }
 
-  @action requestChatroom = (from_user_idx, to_user_idx) => {
+  @action requestChatroom = (from_user_idx, to_user_idx, to_user_name) => {
 
     const reqData = {
       from_user_idx: from_user_idx,
@@ -214,11 +215,23 @@ export default class Chatroom {
         const user_info = this.createUserInfo(this.root.user.getFriendByUserIdx(to_user_idx, res.data.param.chatroom_idx));
         res.data.param.user_list.push(user_info);
         this.chatroomList.push(res.data.param);
+        this.chats[res.data.param.chatroom_idx] = {};
+        this.chats[res.data.param.chatroom_idx].data = [];
+
         this.root.view.showChatroom(res.data.param.chatroom_idx);
+
+        this.sendChat(res.data.param.chatroom_idx, {
+          sender: this.root.user.userInfo.user_idx,
+          msg: to_user_idx + '/' + to_user_name,
+          msg_type: "i"
+        })
+
       }
     }).catch(err => {
       console.log(err);
     })
+
+    
 
   }
 
@@ -247,6 +260,7 @@ export default class Chatroom {
         //   this.chats[chatroom_idx] = res.data.param;
         // } else {
         if (res.data.param.data.length > 0) {
+          debugger;
           const first_msg_idx = this.chats[chatroom_idx].data[0].msg_idx;
           const responseMsg = res.data.param.data;
           for (var i = responseMsg.length - 1; i >= 0; i--) {
@@ -299,6 +313,7 @@ export default class Chatroom {
         for (var i = 0; i < this.chatroomList.length; i++) {
           if (this.chatroomList[i].chatroom_idx === chatroom_idx) {
             if (this.chats[chatroom_idx].data.length > 0) {
+              debugger;
               this.chatroomList[i].last_read_msg_idx = responseMsg[responseMsg.length - 1].msg_idx;
             }
           }
@@ -662,14 +677,17 @@ export default class Chatroom {
             chatroomList.splice(i, 1);
           }
         }
+
         this.sendChat(this.root.view.selectedChatroom, {
           sender: this.root.user.userInfo.user_idx,
           msg: this.root.user.userInfo.name,
           msg_type: "e"
         })
 
-        this.unsubscribeChatroom();
+        this.chats[this.root.view.selectedChatroom] = null;
         this.root.view.hideChatroom();
+        this.unsubscribeChatroom();
+        
       }
     }).catch(err => {
       console.log(err);

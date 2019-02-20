@@ -19,7 +19,7 @@ class ChatList extends React.Component {
   _renderItems = () => {
     const { view, chatroom, user } = this.props.stores
 
-    if(!view.selectedChatroom || !chatroom.chats[view.selectedChatroom]) return 
+    if(!view.selectedChatroom || !chatroom.chats[view.selectedChatroom] || chatroom.chats[view.selectedChatroom].length === 0) return 
     
     return chatroom.chats[view.selectedChatroom].data.map((v, idx) => {
 
