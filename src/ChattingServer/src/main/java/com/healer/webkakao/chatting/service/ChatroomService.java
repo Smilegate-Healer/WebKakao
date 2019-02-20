@@ -67,14 +67,14 @@ public class ChatroomService {
     return true;
   }
 
-  public boolean updateLastMsg(long chatroomId, long lastMsgIdx, String msg) {
+  public boolean updateLastMsg(long chatroomId, long lastMsgIdx, String msg, String msg_type) {
     log.debug("Update the last message index by chatroomId=" + chatroomId);
     Optional<ChatroomInfoModel> chatroom = redisRepository.findById(chatroomId);
     if (!chatroom.isPresent())
       return false;
 
     ChatroomInfoModel chatroomInfoModel = ChatroomInfoModel.builder().chatroom_id(chatroomId)
-            .object_id(chatroom.get().getObject_id()).last_msg_idx(lastMsgIdx).last_msg(msg).timestamp(new Date().getTime()).build();
+            .object_id(chatroom.get().getObject_id()).last_msg_idx(lastMsgIdx).last_msg(msg).msg_type(msg_type).timestamp(new Date().getTime()).build();
 
     log.debug("Save the changed chatroominfo into Redis");
     redisRepository.save(chatroomInfoModel);
@@ -178,7 +178,7 @@ public class ChatroomService {
     message.setMsg_idx(lastMsgIdx + 1);
     // TODO: Which time do I set???
     message.setTimestamp(System.currentTimeMillis());
-    this.updateLastMsg(chatroomId, lastMsgIdx + 1, message.getMsg());
+    this.updateLastMsg(chatroomId, lastMsgIdx + 1, message.getMsg(), message.getMsg_type());
 
     String msgStr = objectMapper.writeValueAsString(message);
 
