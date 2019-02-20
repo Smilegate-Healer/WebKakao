@@ -33,8 +33,8 @@ export default class User {
     // from index
     this.root = root;
 
-     // if success
-     this.authorizedAxios = axios.create({
+    // if success
+    this.authorizedAxios = axios.create({
       //baseURL: this._domain,
       // baseURL: "localhost:8081",
       timeout: 30000,
@@ -136,31 +136,33 @@ export default class User {
   @action getFriendList = () => {
     this.friendAxios.post("http://localhost:8081/api/friend/list", { // TODO: REST???
       user_idx: this.userInfo.user_idx
-    },{
-      headers: {
-        access_token: this.root.user.userInfo.access_token
-    }}).then(res => {
-      console.log(res)
-      if (res.data.resultCode === 0) {
-        this.initFriendList(res.data.param.list)
-      }
-    }).catch(err => console.error(err))
+    }, {
+        headers: {
+          access_token: this.root.user.userInfo.access_token
+        }
+      }).then(res => {
+        console.log(res)
+        if (res.data.resultCode === 0) {
+          this.initFriendList(res.data.param.list)
+        }
+      }).catch(err => console.error(err))
   }
 
   @action getChatroomList = () => {
     this.root.chatroom.chatroomAxios.post('http://localhost:8081/api/chatroom/list', {
       user_idx: this.userInfo.user_idx
-    },{
-      headers: {
-        access_token: this.root.user.userInfo.access_token
-    }}).then(res => {
-      console.log(res)
-      if (res.data.resultCode === 0) {
-        this.root.chatroom.initChatroomList(res.data.param.list)
-        this.root.chatroom.updateWholeChatroomList();
-        this.isLogin = true;
-      }
-    }).catch(err => console.error(err))
+    }, {
+        headers: {
+          access_token: this.root.user.userInfo.access_token
+        }
+      }).then(res => {
+        console.log(res)
+        if (res.data.resultCode === 0) {
+          this.root.chatroom.initChatroomList(res.data.param.list)
+          this.root.chatroom.updateWholeChatroomList();
+          this.isLogin = true;
+        }
+      }).catch(err => console.error(err))
   }
 
   /**
@@ -277,18 +279,29 @@ export default class User {
 
   @action
   getNameOnChatroom = (user_idx) => {
-    debugger;
     const chatroomList = this.root.chatroom.chatroomList;
     for (var i = 0; i < chatroomList.length; i++) {
       if (chatroomList[i].chatroom_idx === this.root.view.selectedChatroom) {
-      for (var j = 0; j < chatroomList[i].user_list.length; j++) {
-        if (chatroomList[i].user_list[j].user_idx === user_idx)
-          return chatroomList[i].user_list[j].name;
+        if (!chatroomList[i].user_list) {
+          return '대화상대 없음';
+        }
+        for (var j = 0; j < chatroomList[i].user_list.length; j++) {
+          if (chatroomList[i].user_list[j].user_idx === user_idx)
+            return chatroomList[i].user_list[j].name;
+        }
       }
-      return this.userInfo.name;
+
+      for (var i = 0; i < this.friendList.length; i++) {
+        if (this.friendList[i].user_idx === user_idx)
+          return this.friendList[i].name;
+      }
+
+      if (user_idx === this.userInfo.user_idx) {
+        return this.userInfo.name;
+      } else {
+        return '알 수 없음'
       }
     }
-    
   }
 
   @action

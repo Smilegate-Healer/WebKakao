@@ -105,7 +105,7 @@ export default class View {
   /**
    * Show the settings
    */
-  @action showSettings = () => { 
+  @action showSettings = () => {
     this.rightView = this.views.settings
     this.selectedChatroom = null
   }
@@ -113,7 +113,7 @@ export default class View {
   @action showPollingMessage = (message) => {
     const senderName = this.root.chatroom.getNameByChatroomUserList(message);
     let msg = message.last_msg;
-    if(msg.length > 30) {
+    if (msg.length > 30) {
       msg = msg.substring(0, 30).concat("...");
     }
     this.root.view.notificationDOMRef.current.removeNotification(this.root.view.notificationId);
@@ -128,7 +128,7 @@ export default class View {
       animationOut: ["animated", "fadeOut"],
       dismiss: { duration: 4000 },
       width: 250,
-      dismissable: { 
+      dismissable: {
         click: true,
         touch: true
       },
@@ -137,7 +137,7 @@ export default class View {
         cubicBezier: "ease-in",
         delay: 0
       },
-    
+
       touchSlidingExit: {
         swipe: {
           duration: 300,
@@ -170,7 +170,7 @@ export default class View {
     this.root.view.userInfoModal = true;
   }
 
-  @action hideUserInfoModal = () => { 
+  @action hideUserInfoModal = () => {
     this.root.view.userInfoModal = false;
   }
 
@@ -178,16 +178,16 @@ export default class View {
     this.root.view.userListModal = true;
     this.root.view.userListType = type;
     this.searchUserList = cloneDeep(this.root.user.friendList);
-    if(type === 'invite'){
+    if (type === 'invite') {
       let entrants;
-      for(var i=0; i<this.root.chatroom.chatroomList.length; i++) {
-        if(this.root.chatroom.chatroomList[i].chatroom_idx === this.root.view.selectedChatroom) {
+      for (var i = 0; i < this.root.chatroom.chatroomList.length; i++) {
+        if (this.root.chatroom.chatroomList[i].chatroom_idx === this.root.view.selectedChatroom) {
           entrants = this.root.chatroom.chatroomList[i].user_list;
         }
       }
-      for(var i=0; i<this.searchUserList.length; i++) {
-        for(var j=0; j<entrants.length; j++) {
-          if(this.searchUserList[i].user_idx === entrants[j].user_idx) {
+      for (var j = 0; j < entrants.length; j++) {
+        for (var i = 0; i < this.searchUserList.length; i++) {
+          if (this.searchUserList[i].user_idx === entrants[j].user_idx) {
             this.searchUserList.splice(i, 1);
           }
         }
@@ -195,41 +195,41 @@ export default class View {
     }
   }
 
-  @action hideUserListModal = () => { 
+  @action hideUserListModal = () => {
     this.root.view.userListModal = false;
     this.root.view.userListType = '';
     this.searchUserList = null;
   }
 
-  @action showUserSearchModal = () => { 
+  @action showUserSearchModal = () => {
     this.root.view.userSearchModal = true;
   }
 
-  @action hideUserSearchModal = () => { 
+  @action hideUserSearchModal = () => {
     this.root.view.userSearchModal = false;
   }
 
-  @action showRenameChatroomModal = () => { 
+  @action showRenameChatroomModal = () => {
     this.root.view.renameChatroomModal = true;
   }
 
-  @action hideRenameChatroomModal = () => { 
+  @action hideRenameChatroomModal = () => {
     this.root.view.renameChatroomModal = false;
   }
 
-  @action showSearchBar = () => { 
+  @action showSearchBar = () => {
     this.root.view.isSearchBar = true;
   }
 
-  @action hideSearchBar = () => { 
+  @action hideSearchBar = () => {
     this.root.view.isSearchBar = false;
   }
 
-  @action showChatroomSideMenu = () => { 
+  @action showChatroomSideMenu = () => {
     this.root.view.chatroomSideMenu = true;
   }
 
-  @action hideChatroomSideMenu = () => { 
+  @action hideChatroomSideMenu = () => {
     this.root.view.chatroomSideMenu = false;
   }
 
@@ -267,37 +267,37 @@ export default class View {
 
     let count = 0;
 
-    for(var i=0; i<this.searchUserList.length; i++) {
-      if(this.searchUserList[i].user_idx === user_idx) {
-        if(this.searchUserList[i].checked) {
+    for (var i = 0; i < this.searchUserList.length; i++) {
+      if (this.searchUserList[i].user_idx === user_idx) {
+        if (this.searchUserList[i].checked) {
           this.searchUserList[i].checked = false;
         } else {
           this.searchUserList[i].checked = true;
         }
       }
-      if(this.searchUserList[i].checked) {
+      if (this.searchUserList[i].checked) {
         count++;
       }
     }
-    if(count > 0) {
+    if (count > 0) {
       this.checkedUser = true;
     } else {
       this.checkedUser = false;
     }
   }
 
-  @action getSelectedUserCount  = () => {
+  @action getSelectedUserCount = () => {
     let count = 0;
-    for(var i=0; i<this.searchUserList.length; i++) {
-      if(this.searchUserList[i].checked === true) {
+    for (var i = 0; i < this.searchUserList.length; i++) {
+      if (this.searchUserList[i].checked === true) {
         count++;
-      } 
+      }
     }
     return count;
   }
 
   @action showAllSelectedUser = () => {
-    for(var i=0; i<this.searchUserList.length; i++) {
+    for (var i = 0; i < this.searchUserList.length; i++) {
       this.searchUserList[i].hide = false;
     }
   }

@@ -121,13 +121,20 @@ class ChatItem extends React.Component {
   _renderInvite = () => {
     const { chat } = this.props;
     const { user } = this.props.stores;
-    const user_idxs = chat.msg.trim().split(" ");
+    // const user_idxs = chat.msg.trim().split(" ");
     const senderName = user.getNameOnChatroom(chat.sender)
-    let names = '';
-    for(var i=0; i<user_idxs.length; i++) {
-      names = names.concat(user.getNameOnChatroom(+user_idxs[i]) + ' ')
-    }
-    return (<div>{senderName} 님이 {names} 님을 초대하였습니다.</div>)
+    const users = chat.msg.trim().split("/");
+    const user_names = users[1];
+    // let names = '';
+    // for(var i=0; i<user_idxs.length; i++) {
+    //   names = names.concat(user.getNameOnChatroom(+user_idxs[i]) + ' ')
+    // }
+    return (<div>{senderName} 님이 {user_names} 님을 초대하였습니다.</div>)
+  }
+
+  _renderExit = () => {
+    const { chat } = this.props;
+    return (<div>{chat.msg} 님이 퇴장하였습니다.</div>)
   }
 
   render() {
@@ -140,6 +147,8 @@ class ChatItem extends React.Component {
     }
     else if(chat.msg_type === 'i') {
       return this._renderInvite();
+    } else if(chat.msg_type === 'e') {
+      return this._renderExit();
     }
   }
 }
