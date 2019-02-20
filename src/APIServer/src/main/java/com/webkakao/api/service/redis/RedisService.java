@@ -71,10 +71,10 @@ public class RedisService {
 			Optional<ChatroomInfoModel> object = chatroomInfoRepository.findById(list.get(i).getChatroom_idx());
 			if (object.isPresent()) {
 				ChatroomInfoModel model = object.get();
-				if ("i".equals(list.get(i).getMsg_type())) {
+				if ("i".equals(model.getMsg_type())) {
 					String [] words = model.getLast_msg().split("/");
 					list.get(i).setLast_msg(words[1] + "님이 입장하였습니다.");
-				} else if ("e".equals(list.get(i).getMsg_type())) {
+				} else if ("e".equals(model.getMsg_type())) {
 					list.get(i).setLast_msg(model.getLast_msg() +"님이 퇴장하였습니다.");
 				} else {
 					list.get(i).setLast_msg(model.getLast_msg());
