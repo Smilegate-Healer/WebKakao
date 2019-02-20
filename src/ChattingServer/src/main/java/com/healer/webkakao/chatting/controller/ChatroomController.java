@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,5 +23,10 @@ public class ChatroomController {
   @MessageMapping("/chatroom/{chatroomId}")
   public void chat(ChatModel message, @DestinationVariable long chatroomId) throws Exception {
     chatroomService.chat(message, chatroomId);
+  }
+
+  @SubscribeMapping("/topic/chatroom/{chatroomId}")
+  public void chatInit(@Header long userId, @DestinationVariable long chatroomId) {
+    chatroomService.subscribe(userId, chatroomId);
   }
 }

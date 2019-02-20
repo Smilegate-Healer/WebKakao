@@ -396,12 +396,37 @@ export default class Chatroom {
     this.unsubscribeChatroom()
 
     this.stompSubscription = this.stompClient.subscribe("/topic/chatroom/" + chatroomId, msg => {
+      console.log(msg)
+
+      
       if (!this.chats[chatroomId]) {
         this.chats[chatroomId] = {}
         this.chats[chatroomId].data = [];
+        debugger
       }
-      this.chats[chatroomId].data.push(JSON.parse(msg.body))
-      console.log(msg)
+
+      debugger
+
+      const data = JSON.parse(msg.body)
+
+      if(data.msg_type === "s") {
+        this.chatroomList.map((chatroomInfo, idx) => {
+          if(chatroomInfo.chatroom_idx === chatroomId) {
+            debugger
+            chatroomInfo.user_list.map((user, idx) => {
+              if(user.user_idx === parseInt(data.msg)) {
+                user["isJoin"] = true 
+                debugger
+              }
+            })
+          }
+        })
+      } else {
+        debugger
+        this.chats[chatroomId].data.push(data)
+      }
+    }, {
+      userId: this.root.user.userInfo.user_idx
     })
   }
 
