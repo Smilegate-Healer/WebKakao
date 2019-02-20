@@ -103,6 +103,7 @@ public class PollingServiceImpl implements PollingService {
 		response.setTimestamp(new Date().getTime());
 		response.setMsg_type(message.getMsg_type());
 		List<ChatroomUserList> user_list = null;
+		String splited[] = response.getLast_msg().trim().split("/");
 		if("i".equals(response.getMsg_type())) {
 			user_list = chatroomMapper.getChatroomUserList(chatroom_idx);
 			response.setUser_list(user_list);
@@ -118,7 +119,7 @@ public class PollingServiceImpl implements PollingService {
 		
 		if("i".equals(response.getMsg_type())) {
 			
-			String [] users_str = response.getLast_msg().split(" ");
+			String [] users_str = splited[0].trim().split(" ");
 			long last_read_msg_idx = redisService.getLastMsgIdx(chatroom_idx);
 			
 			for(int i=0; i<users_str.length; i++) {

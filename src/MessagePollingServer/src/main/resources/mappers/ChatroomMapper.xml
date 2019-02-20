@@ -43,5 +43,14 @@
 		where 
 			A.chatroom_idx = #{chatroom_idx};
 	</select>
+	
+	<select id="getUserName" parameterType="Long" resultType="String">
+		select
+			name
+		from 
+			user
+		where 
+			user_idx = #{user_idx}
+	</select>
 
 </mapper>

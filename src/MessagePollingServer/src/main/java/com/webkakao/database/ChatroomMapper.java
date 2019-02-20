@@ -15,4 +15,6 @@ public interface ChatroomMapper {
 	
 	List<ChatroomUserList> getChatroomUserList(long chatroom_idx);
 
+	String getUserName(long user_idx);
+
 }

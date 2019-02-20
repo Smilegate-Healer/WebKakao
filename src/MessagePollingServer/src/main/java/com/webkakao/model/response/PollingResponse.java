@@ -15,6 +15,15 @@ public class PollingResponse {
 	private String msg_type;
 	private Object chatroom_info;
 	private List<ChatroomUserList> user_list;
+	private String names;
+
+	public String getNames() {
+		return names;
+	}
+
+	public void setNames(String names) {
+		this.names = names;
+	}
 
 	public String getMsg_type() {
 		return msg_type;
