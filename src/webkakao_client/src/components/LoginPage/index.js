@@ -19,7 +19,8 @@ import classnames from "classnames";
 class LoginPage extends React.Component {
   state = {
     email: "",
-    password: ""
+    password: "",
+    isPasswordReset: false
   };
 
   _handleChange = event => {
@@ -43,12 +44,16 @@ class LoginPage extends React.Component {
 
   _onSignupClick = event => {
     this.setState({
+      isPasswordReset: false,
       modal: true
     });
   };
 
   _onResetPwdClick = event => {
-    alert("reset password");
+    this.setState({
+      isPasswordReset: true,
+      modal: true
+    })
   };
 
   _handleModalClose = () => {
@@ -83,47 +88,106 @@ class LoginPage extends React.Component {
       })
   }
 
+  _renderSingupContent = () => {
+    return (
+      <DialogContent>
+        <DialogContentText />
+        {this._renderEmailInput("signupEmail")}
+        {this._renderPasswordInput("signupPassword")}
+        {this._renderPasswordInput("signupPasswordAgain", "Password again")}
+        <InputBase
+          fullWidth
+          placeholder="Name"
+          required
+          className={styles.InputBase}
+          classes={{
+            input: styles.input
+          }}
+          type="text"
+          name="name"
+          onChange={this._handleChange}
+        />
+        <div>
+          <Button
+            className={classnames(
+              styles.buttonBase, {
+                [styles.yellow]: true
+              }
+            )}
+            fullWidth
+            variant="outlined"
+            onClick={this._onSignupApplyClick}
+            style={{
+              marginTop: "10px"
+            }}>
+            Apply
+          </Button>
+        </div>
+      </DialogContent>
+    )
+  }
+
+  _renderResetPasswordContent = () => {
+    return (
+      <DialogContent>
+        <DialogContentText />
+        {this._renderEmailInput("resetEmail")}
+        <InputBase
+          fullWidth
+          placeholder="Name"
+          required
+          className={styles.InputBase}
+          classes={{
+            input: styles.input
+          }}
+          type="text"
+          name="resetName"
+          onChange={this._handleChange}
+        />
+        <div>
+          <Button
+            className={classnames(
+              styles.buttonBase, {
+                [styles.yellow]: true
+              }
+            )}
+            fullWidth
+            variant="outlined"
+            onClick={this._onResetPasswordClick}
+            style={{
+              marginTop: "10px"
+            }}>
+            Confirm
+          </Button>
+        </div>
+      </DialogContent>
+    )
+  }
+
+  _onResetPasswordClick = event => {
+
+  }
+
+
   _renderModal = () => {
+
     return (
       <Dialog
         open={this.state.modal}
         onClose={this._handleModalClose}
         aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Sign up</DialogTitle>
-        <DialogContent>
-          <DialogContentText />
-          {this._renderEmailInput("signupEmail")}
-          {this._renderPasswordInput("signupPassword")}
-          {this._renderPasswordInput("signupPasswordAgain", "Password again")}
-          <InputBase
-            fullWidth
-            placeholder="Name"
-            required
-            className={styles.InputBase}
-            classes={{
-              input: styles.input
-            }}
-            type="text"
-            name="name"
-            onChange={this._handleChange}
-          />
-          <div>
-            <Button
-              className={classnames(
-                styles.buttonBase, {
-                  [styles.yellow]: true
-                }
-              )}
-              fullWidth
-              variant="outlined"
-              onClick={this._onSignupApplyClick}
-              style={{
-                marginTop: "10px"
-              }}>
-              Apply
-            </Button>
-          </div>
-        </DialogContent>
+        <DialogTitle id="form-dialog-title">
+          {
+            this.state.isPasswordReset
+            ? "Reset password"
+            : "Sign up"
+          }
+        </DialogTitle>
+          {
+            this.state.isPasswordReset
+            ? this._renderResetPasswordContent()
+            : this._renderSingupContent()
+          }
       </Dialog>
     );
   };
