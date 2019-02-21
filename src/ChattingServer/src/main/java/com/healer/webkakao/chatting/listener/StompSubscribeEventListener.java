@@ -5,20 +5,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
+import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
 @Component
 @Slf4j
-public class StompUnSubscribeEventListener implements ApplicationListener<SessionUnsubscribeEvent> {
+public class StompSubscribeEventListener implements ApplicationListener<SessionSubscribeEvent> {
 
   @Autowired
   private ChatroomService chatroomService;
 
   @Override
-  public void onApplicationEvent(SessionUnsubscribeEvent event) {
-    log.debug("Unsubscription");
+  public void onApplicationEvent(SessionSubscribeEvent event) {
+    log.debug("New subscribe");
     log.debug(event.toString());
-    chatroomService.unsubscribe(event);
-
+//    chatroomService.subscribe(event);
   }
 }

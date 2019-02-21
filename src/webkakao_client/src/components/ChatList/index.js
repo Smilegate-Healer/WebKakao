@@ -19,7 +19,11 @@ class ChatList extends React.Component {
   _renderItems = () => {
     const { view, chatroom, user } = this.props.stores
 
-    if(!view.selectedChatroom || !chatroom.chats[view.selectedChatroom] || chatroom.chats[view.selectedChatroom].length === 0) return 
+    if(!view.selectedChatroom 
+      || !chatroom.chats[view.selectedChatroom] 
+      || chatroom.chats[view.selectedChatroom] === undefined
+      || chatroom.chats[view.selectedChatroom].data === undefined
+      || chatroom.chats[view.selectedChatroom].length === 0) return 
     
     return chatroom.chats[view.selectedChatroom].data.map((v, idx) => {
 
@@ -44,15 +48,15 @@ class ChatList extends React.Component {
   render() {
     return (
       <div className="List" ref={ref => this.div = ref}>
-        <InfiniteScroll
+        {/* <InfiniteScroll
         pageStart={0}
         loadMore={this.loadFunc}
         isReverse={true}
         hasMore={true || false}
         // loader={<div className="loader" key={0}>Loading ...</div>}
-        useWindow={false}>
+        useWindow={false}> */}
         {this._renderItems()}
-        </InfiniteScroll>
+        {/* </InfiniteScroll> */}
         <SideMenu/>
       </div>
     )

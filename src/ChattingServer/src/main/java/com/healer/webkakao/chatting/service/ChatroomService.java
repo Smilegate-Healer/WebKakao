@@ -1,10 +1,7 @@
 package com.healer.webkakao.chatting.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.healer.webkakao.chatting.database.ChatroomMapper;
 import com.healer.webkakao.chatting.model.mysql.Chatroom;
@@ -22,6 +19,7 @@ import com.healer.webkakao.chatting.repository.ChatroomInfoRedisRepository;
 import com.healer.webkakao.chatting.repository.ChatsMongoRepository;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.socket.messaging.*;
 
 @Service
 @Slf4j
@@ -46,6 +44,10 @@ public class ChatroomService {
 
   @Autowired
   private SimpMessagingTemplate simpMessagingTemplate;
+
+
+  private HashMap<String, Long> sessionidWithUserId = new HashMap<>();
+  private HashMap<String, Long> sessionidWithChatroomId = new HashMap<>();
 
   /**
    * Update the chatroom information by chatroomId chatroomId is made by MySQL
@@ -191,8 +193,6 @@ public class ChatroomService {
     String chatroomIdStr = String.valueOf(chatroomId);
     redisTemplate.opsForList().rightPush(chatroomIdStr, msgStr);
 
-
-
     this.moveToMongo(chatroomIdStr, MAX_SIZE);
 
 //    log.debug("Publish the message to Redis");
@@ -200,15 +200,85 @@ public class ChatroomService {
   }
 
 
-  public void subscribe(long userId, long chatroomId) {
+  public ChatModel subscribe(long userId, long chatroomId, String sessionId) {
     log.debug("New subscriber=" + userId + " at " + chatroomId);
+    String key = this.getJoiningKey(chatroomId);
+
+    String joiningMember = redisTemplate.opsForSet().members(key).toString();
+    redisTemplate.opsForSet().add(key, String.valueOf(userId));
+    ChatModel ret = null;
+    if(sessionidWithChatroomId.get(sessionId) == null
+      || sessionidWithChatroomId.get(sessionId) == 0
+      || sessionidWithChatroomId.get(sessionId) != chatroomId) {
+      // New subscribe of this chatroom
+      // so send all joining members list
+
+      ret = ChatModel.builder()
+              .msg_type("s")
+              .msg(joiningMember)
+              .build();
+    }
+
+    sessionidWithChatroomId.put(sessionId, chatroomId);
+    sessionidWithUserId.put(sessionId, userId);
 
     ChatModel chat = ChatModel.builder()
-            .msg_type("s") // TODO: new subscribe type
+            .msg_type("ns") // TODO: new subscribe type
             .msg(String.valueOf(userId))
             .build();
-    simpMessagingTemplate.convertAndSend("/topic/chatroom/" + chatroomId, chat);
 
+    simpMessagingTemplate.convertAndSend("/topic/chatroom/" + chatroomId, chat);
+    return ret;
+  }
+
+  public void unsubscribe(SessionUnsubscribeEvent e) {
+    String key = (String)e.getMessage().getHeaders().get("simpSessionId");
+
+    if(sessionidWithUserId.containsKey(key) && sessionidWithChatroomId.containsKey(key)) {
+      long chatroomId = sessionidWithChatroomId.get(key);
+      long userId = sessionidWithUserId.get(key);
+
+      redisTemplate.opsForSet().remove(this.getJoiningKey(chatroomId), String.valueOf(userId));
+
+      sessionidWithChatroomId.put(key, Long.valueOf(0));
+
+      simpMessagingTemplate.convertAndSend("/topic/chatroom/" + chatroomId, ChatModel.builder()
+        .msg(String.valueOf(userId))
+        .msg_type("us")
+        .build());
+    } else {
+      log.error("Request unsubscribe but no key");
+    }
+  }
+
+
+  public void disconnect(SessionDisconnectEvent e) {
+    String key = e.getSessionId();
+
+    Long chatroomId = sessionidWithChatroomId.get(key);
+    if(chatroomId == null) {
+      log.error("have to exist but not");
+    } else if(chatroomId == 0) {
+      log.debug("There is a user but not joining a chatroom");
+    } else {
+      Long userId = sessionidWithUserId.get(key);
+      if(userId == null) log.error("no user found");
+      else {
+        redisTemplate.opsForSet().remove(this.getJoiningKey(chatroomId), String.valueOf(userId));
+        log.debug("remove the user from Redis joining members because of disconnection");
+        simpMessagingTemplate.convertAndSend("/topic/chatroom/" + chatroomId, ChatModel.builder()
+          .msg(String.valueOf(userId))
+          .msg_type("us")
+          .build());
+      }
+    }
+
+    sessionidWithUserId.remove(key);
+    sessionidWithChatroomId.remove(key);
+  }
+
+  private String getJoiningKey(long chatroomId) {
+    return "joining_" + chatroomId;
   }
 
 }

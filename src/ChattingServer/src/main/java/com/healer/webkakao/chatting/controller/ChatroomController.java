@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,7 +27,7 @@ public class ChatroomController {
   }
 
   @SubscribeMapping("/topic/chatroom/{chatroomId}")
-  public void chatInit(@Header long userId, @DestinationVariable long chatroomId) {
-    chatroomService.subscribe(userId, chatroomId);
+  public ChatModel chatInit(@Header long userId, @DestinationVariable long chatroomId, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
+    return chatroomService.subscribe(userId, chatroomId, simpMessageHeaderAccessor.getSessionId());
   }
 }
