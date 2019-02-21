@@ -464,15 +464,28 @@ export default class Chatroom {
 
 
         if (data.msg_type === "s") {
-          const subscribers = JSON.parse(data.msg);
+          const msg = JSON.parse(data.msg);
+  
+          const subscribers = msg.joining
+          const lastReadMsgIdxByUsers = msg.lastReadMsgIdx
 
           const idxOfChatroom = this.findIdxOfChatroom(chatroomId)
           if(idxOfChatroom === -1) {
             console.error("No chatroom info in list!!")
             return
           } 
+          
+          for(var key in lastReadMsgIdxByUsers) {
+            var idx = this.findIdxOfUser(idxOfChatroom, parseInt(key))
+            if(idx === -1) {
+              console.debug("no user in chatroom user list")
+              continue
+            }
 
-          console.log(this.chatroomList)
+            this.chatroomList[idxOfChatroom].user_list[idx].last_read_msg_idx
+              = lastReadMsgIdxByUsers[key]
+          }
+
           // TODO: Refactoring
           subscribers.forEach((userId) => {
 
@@ -482,9 +495,9 @@ export default class Chatroom {
               return
             }
             
-            debugger
             this.createReactionForLastReadMsgIdx(idxOfUser, idxOfChatroom)
           })
+
         } else if (data.msg_type === "ns") {
           const newSubUserId = parseInt(data.msg)
 

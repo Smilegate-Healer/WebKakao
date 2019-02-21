@@ -19,8 +19,6 @@ public class RedisListenerService implements MessageListener {
   @Override
   public void onMessage(Message message, byte[] pattern) {
     log.debug("message:" + message.toString() + " channel:" + new String(message.getChannel()) + " pattern:" + new String(pattern));
-    simpMessagingTemplate.setSendTimeout(1);
-    log.debug(String.valueOf(simpMessagingTemplate.getSendTimeout()));
     simpMessagingTemplate.convertAndSend("/topic/" + new String(message.getChannel()), message.toString());
   }
 }

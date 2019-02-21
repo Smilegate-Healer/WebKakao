@@ -22,12 +22,12 @@ public class ChatroomController {
   private ChatroomService chatroomService;
 
   @MessageMapping("/chatroom/{chatroomId}")
-  public void chat(ChatModel message, @DestinationVariable long chatroomId) throws Exception {
+  public void chat(ChatModel message, @DestinationVariable long chatroomId, SimpMessageHeaderAccessor simpMessageHeaderAccessor) throws Exception {
     chatroomService.chat(message, chatroomId);
   }
 
   @SubscribeMapping("/topic/chatroom/{chatroomId}")
-  public ChatModel chatInit(@Header long userId, @DestinationVariable long chatroomId, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
+  public ChatModel chatInit(@Header long userId, @DestinationVariable long chatroomId, SimpMessageHeaderAccessor simpMessageHeaderAccessor) throws Exception {
     return chatroomService.subscribe(userId, chatroomId, simpMessageHeaderAccessor.getSessionId());
   }
 }

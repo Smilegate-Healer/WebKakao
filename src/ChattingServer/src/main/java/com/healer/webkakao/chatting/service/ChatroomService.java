@@ -3,6 +3,7 @@ package com.healer.webkakao.chatting.service;
 import java.io.IOException;
 import java.util.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.healer.webkakao.chatting.database.ChatroomMapper;
 import com.healer.webkakao.chatting.model.mysql.Chatroom;
 import com.healer.webkakao.chatting.util.MessageType;
@@ -24,7 +25,6 @@ import org.springframework.web.socket.messaging.*;
 @Service
 @Slf4j
 public class ChatroomService {
-  public static final String REDIS_KEY = "chatroomInfo";
   private final long MAX_SIZE = 20;
 
   @Autowired
@@ -76,11 +76,19 @@ public class ChatroomService {
   public boolean updateLastMsg(long chatroomId, long lastMsgIdx, String msg, String msg_type) {
     log.debug("Update the last message index by chatroomId=" + chatroomId);
     Optional<ChatroomInfoModel> chatroom = redisRepository.findById(chatroomId);
-    if (!chatroom.isPresent())
+    if (!chatroom.isPresent()) {
+      log.error("No chatroom info exist!");
       return false;
+    }
 
-    ChatroomInfoModel chatroomInfoModel = ChatroomInfoModel.builder().chatroom_id(chatroomId)
-            .object_id(chatroom.get().getObject_id()).last_msg_idx(lastMsgIdx).last_msg(msg).msg_type(msg_type).timestamp(new Date().getTime()).build();
+    ChatroomInfoModel chatroomInfoModel = ChatroomInfoModel.builder()
+            .chatroom_id(chatroomId)
+            .object_id(chatroom.get().getObject_id())
+            .last_msg_idx(lastMsgIdx)
+            .last_msg(msg)
+            .msg_type(msg_type)
+            .timestamp(new Date().getTime())
+            .build();
 
     log.debug("Save the changed chatroominfo into Redis");
     redisRepository.save(chatroomInfoModel);
@@ -173,7 +181,7 @@ public class ChatroomService {
     log.debug("Receive from a client chatroomId=" + chatroomId);
 
     long lastMsgIdx = this.getLastMsgIdx(chatroomId);
-    if(lastMsgIdx == -1) {
+    if (lastMsgIdx == -1) {
       log.warn("There is no chatroomInfo by chatroomId=" + chatroomId);
       return;
     }
@@ -186,17 +194,20 @@ public class ChatroomService {
     message.setTimestamp(System.currentTimeMillis());
     this.updateLastMsg(chatroomId, lastMsgIdx + 1, message.getMsg(), message.getMsg_type());
 
+    // Set the last read msg index for this user to the same with chatroom's last msg idx
+
     String msgStr = objectMapper.writeValueAsString(message);
 
     // Add the message into the List of Redis
-//    log.debug("Add the message into the list of Redis");
+    log.debug("Add the message into the list of Redis");
     String chatroomIdStr = String.valueOf(chatroomId);
     redisTemplate.opsForList().rightPush(chatroomIdStr, msgStr);
 
     this.moveToMongo(chatroomIdStr, MAX_SIZE);
 
-//    log.debug("Publish the message to Redis");
+    log.debug("Publish the message to Redis");
     redisTemplate.convertAndSend("chatroom/" + chatroomId, objectMapper.writeValueAsString(message)); // Send the content of the message using Pub/Sub
+
   }
 
 
@@ -204,18 +215,30 @@ public class ChatroomService {
     log.debug("New subscriber=" + userId + " at " + chatroomId);
     String key = this.getJoiningKey(chatroomId);
 
-    String joiningMember = redisTemplate.opsForSet().members(key).toString();
+    Set<Long> joiningMember = redisTemplate.opsForSet().members(key);
     redisTemplate.opsForSet().add(key, String.valueOf(userId));
     ChatModel ret = null;
-    if(sessionidWithChatroomId.get(sessionId) == null
-      || sessionidWithChatroomId.get(sessionId) == 0
-      || sessionidWithChatroomId.get(sessionId) != chatroomId) {
+    if (sessionidWithChatroomId.get(sessionId) == null
+            || sessionidWithChatroomId.get(sessionId) == 0
+            || sessionidWithChatroomId.get(sessionId) != chatroomId) {
       // New subscribe of this chatroom
       // so send all joining members list
+      // and all last read msg idx by userid
+
+      HashMap<String, Object> msg = new HashMap<>();
+      msg.put("lastReadMsgIdx", redisTemplate.opsForHash().entries(this.getLastReadKey(chatroomId)));
+      msg.put("joining", joiningMember);
+
+      String msgStr = null;
+      try {
+        msgStr = objectMapper.writeValueAsString(msg);
+      } catch (JsonProcessingException e) {
+        log.error(e.getMessage());
+      }
 
       ret = ChatModel.builder()
+              .msg(msgStr)
               .msg_type("s")
-              .msg(joiningMember)
               .build();
     }
 
@@ -227,25 +250,35 @@ public class ChatroomService {
             .msg(String.valueOf(userId))
             .build();
 
-    simpMessagingTemplate.convertAndSend("/topic/chatroom/" + chatroomId, chat);
+    try {
+      redisTemplate.convertAndSend("chatroom/" + chatroomId, objectMapper.writeValueAsString(chat));
+    } catch (JsonProcessingException e) {
+      log.error(e.getMessage());
+    }
+
     return ret;
   }
 
   public void unsubscribe(SessionUnsubscribeEvent e) {
-    String key = (String)e.getMessage().getHeaders().get("simpSessionId");
+    String key = (String) e.getMessage().getHeaders().get("simpSessionId");
 
-    if(sessionidWithUserId.containsKey(key) && sessionidWithChatroomId.containsKey(key)) {
+    if (sessionidWithUserId.containsKey(key) && sessionidWithChatroomId.containsKey(key)) {
       long chatroomId = sessionidWithChatroomId.get(key);
       long userId = sessionidWithUserId.get(key);
 
       redisTemplate.opsForSet().remove(this.getJoiningKey(chatroomId), String.valueOf(userId));
+      this.updateLastReadMsgIdx(chatroomId, userId);
 
       sessionidWithChatroomId.put(key, Long.valueOf(0));
 
-      simpMessagingTemplate.convertAndSend("/topic/chatroom/" + chatroomId, ChatModel.builder()
-        .msg(String.valueOf(userId))
-        .msg_type("us")
-        .build());
+      try {
+        redisTemplate.convertAndSend("chatroom/" + chatroomId, objectMapper.writeValueAsString(ChatModel.builder()
+                .msg(String.valueOf(userId))
+                .msg_type("us")
+                .build()));
+      } catch (JsonProcessingException ex) {
+        log.error(ex.getMessage());
+      }
     } else {
       log.error("Request unsubscribe but no key");
     }
@@ -256,20 +289,27 @@ public class ChatroomService {
     String key = e.getSessionId();
 
     Long chatroomId = sessionidWithChatroomId.get(key);
-    if(chatroomId == null) {
+    if (chatroomId == null) {
       log.error("have to exist but not");
-    } else if(chatroomId == 0) {
+    } else if (chatroomId == 0) {
       log.debug("There is a user but not joining a chatroom");
     } else {
       Long userId = sessionidWithUserId.get(key);
-      if(userId == null) log.error("no user found");
+      if (userId == null) log.error("no user found");
       else {
-        redisTemplate.opsForSet().remove(this.getJoiningKey(chatroomId), String.valueOf(userId));
+        this.updateLastReadMsgIdx(chatroomId, userId);
+
         log.debug("remove the user from Redis joining members because of disconnection");
-        simpMessagingTemplate.convertAndSend("/topic/chatroom/" + chatroomId, ChatModel.builder()
-          .msg(String.valueOf(userId))
-          .msg_type("us")
-          .build());
+        redisTemplate.opsForSet().remove(this.getJoiningKey(chatroomId), String.valueOf(userId));
+
+        try {
+          redisTemplate.convertAndSend("chatroom/" + chatroomId, objectMapper.writeValueAsString(ChatModel.builder()
+                  .msg(String.valueOf(userId))
+                  .msg_type("us")
+                  .build()));
+        } catch (JsonProcessingException ex) {
+          log.error(ex.getMessage());
+        }
       }
     }
 
@@ -277,8 +317,17 @@ public class ChatroomService {
     sessionidWithChatroomId.remove(key);
   }
 
+  private void updateLastReadMsgIdx(long chatroomId, long userId) {
+    ChatroomInfoModel info = redisRepository.findById(chatroomId).get();
+
+    redisTemplate.opsForHash().put(this.getLastReadKey(chatroomId), String.valueOf(userId), String.valueOf(info.getLast_msg_idx()));
+  }
+
   private String getJoiningKey(long chatroomId) {
     return "joining_" + chatroomId;
   }
 
+  private String getLastReadKey(long chatroomId) {
+    return "lastRead_" + chatroomId;
+  }
 }

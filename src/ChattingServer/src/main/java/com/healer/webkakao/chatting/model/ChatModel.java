@@ -20,8 +20,8 @@ public class ChatModel {
   @JsonProperty("msg_type")
   private String msg_type;
 
-  private long msg_idx = 0;
-  private long timestamp = 0;
+  private long msg_idx;
+  private long timestamp;
 
   /**
    * {

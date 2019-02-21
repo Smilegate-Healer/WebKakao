@@ -19,6 +19,5 @@ public class StompUnSubscribeEventListener implements ApplicationListener<Sessio
     log.debug("Unsubscription");
     log.debug(event.toString());
     chatroomService.unsubscribe(event);
-
   }
 }
