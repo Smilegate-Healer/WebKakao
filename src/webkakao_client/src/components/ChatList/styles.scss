@@ -11,8 +11,13 @@ $nameSize: 20px;
   overflow: scroll;  
 }
 
-.notReadUserCount{
-  color: yellow;
+.info {
+  text-align: center;
+  background-color: #9fb4bf;
+  color: #4b5459;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  padding: 8px;
 }
 
 .ChatItem {
@@ -57,7 +62,7 @@ $nameSize: 20px;
     flex-basis: auto;
 
     margin-left: 8px;
-    margin-top: 2px;
+    margin-top: 1px;
          
     .sender {
       flex-basis: $nameSize;
@@ -108,6 +113,10 @@ $nameSize: 20px;
     align-items: flex-end;
 
     padding-left: 4px;
+
+    .notReadUserCount{
+      color: #fef02f;
+    }
   }
 
   .timeContainer {
@@ -119,6 +128,10 @@ $nameSize: 20px;
     justify-content: flex-start;
 
     padding-left: 4px;
+
+    .notReadUserCount{
+      color: #fef02f;
+    }
   }
 
 }
@@ -130,6 +143,7 @@ $nameSize: 20px;
   .timeMine {
     justify-content: flex-end;
     padding-right: 4px;
+    margin-bottom: 4px;
     flex-basis: auto;
     flex-direction: column;
   }

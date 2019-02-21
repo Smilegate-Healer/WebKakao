@@ -13,6 +13,31 @@ class ChatItem extends React.Component {
     isMine: false
   };
 
+  getNotReadUserCount = msg_idx => {
+    const { chatroomList } = this.props.stores.chatroom
+    const { view } = this.props.stores
+
+    let data;
+    for (var i = 0; i < chatroomList.length; i++) {
+      if (chatroomList[i].chatroom_idx === view.selectedChatroom) {
+        data = chatroomList[i];
+        break;
+      }
+    }
+    if (!data.user_list) {
+      return 0;
+    }
+    
+    let notReadUserCount = data.user_list.length;
+    for (var i = 0; i < data.user_list.length; i++) {
+      if (data.user_list[i].last_read_msg_idx >= msg_idx) {
+        notReadUserCount--;
+      }
+    }
+    return notReadUserCount;
+  };
+
+
   _renderMine() {
     const { chat } = this.props
     var fullTime = DateFormatter.getKoreanDate(chat.timestamp)
@@ -95,9 +120,13 @@ class ChatItem extends React.Component {
   _renderNotReadUserCount = () => {
     const { chat } = this.props;
     const { chatroom } = this.props.stores;
-    const notReadUserCount = chatroom.getNotReadUserCount(chat.msg_idx);
-    if (notReadUserCount > 0)
+    const notReadUserCount = this.getNotReadUserCount(chat.msg_idx);
+    if (notReadUserCount > 0){
       return (<Typography variant="caption" className="notReadUserCount">{notReadUserCount}</Typography>);
+    }
+      else {
+        return (<Typography variant="caption" className="notReadUserCount">{' '}</Typography>);
+      }
   }
 
   _renderNotMine() {
@@ -142,12 +171,12 @@ class ChatItem extends React.Component {
     // for(var i=0; i<user_idxs.length; i++) {
     //   names = names.concat(user.getNameOnChatroom(+user_idxs[i]) + ' ')
     // }
-    return (<div>{senderName} 님이 {user_names} 님을 초대하였습니다.</div>)
+    return (<div className="info"><Typography>{senderName} 님이 {user_names} 님을 초대하였습니다.</Typography></div>)
   }
 
   _renderExit = () => {
     const { chat } = this.props;
-    return (<div>{chat.msg} 님이 퇴장하였습니다.</div>)
+    return (<div lassName="info"><Typography>{chat.msg} 님이 퇴장하였습니다.</Typography></div>)
   }
 
   render() {

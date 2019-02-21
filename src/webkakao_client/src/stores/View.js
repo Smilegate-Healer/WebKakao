@@ -1,5 +1,5 @@
 import {
-  observable, action,
+  observable, action, computed,
 } from 'mobx'
 import cloneDeep from 'lodash/cloneDeep';
 
@@ -37,6 +37,8 @@ export default class View {
   @observable checkedUser = false;
   @observable modalView = ""
 
+  @observable scrollCount = 0;
+
   /**
    * The chatroom id
    */
@@ -44,6 +46,7 @@ export default class View {
   @observable selectedChatroomName = null
 
   @observable isLoading = false
+  @observable isEnterKeyPress = false;
 
   constructor(root) {
     this.root = root
@@ -87,11 +90,12 @@ export default class View {
    * TODO: idx or id
    * currently idx
    */
-  @action showChatroom = (chatroomIdx) => {
-    console.debug("Set chatroom to " + chatroomIdx)
+  @action showChatroom = (chatroomId) => {
+    console.debug("Set chatroom to " + chatroomId)
     this.rightView = this.views.chatList
-    this.selectedChatroom = chatroomIdx
+    this.selectedChatroom = chatroomId
     this.selectedChatroomName = this.root.chatroom.getChatroomName(this.selectedChatroom);
+    this.scrollCount = 0;
   }
 
   /**
@@ -99,6 +103,7 @@ export default class View {
    */
   @action hideChatroom = () => {
     this.rightView = this.views.emptyChatList
+    this.root.chatroom.unsubscribeChatroom(this.selectedChatroom)
     this.selectedChatroom = null
   }
 
@@ -301,4 +306,28 @@ export default class View {
       this.searchUserList[i].hide = false;
     }
   }
+
+  @action enterKeyPressed = () => {
+    this.isEnterKeyPress = true;
+  }
+
+  @action completeEnterKeyPressed = () => {
+    this.isEnterKeyPress = false;
+  }
+
+  @action checkEnterKeyPress = () => {
+    if(this.isEnterKeyPress === true) {
+      return true;
+    }
+    return false;
+  }
+
+  @action scrollCheck = () => {
+    return this.scrollCount;
+  }
+
+  @action scrollPlus = () => {
+    this.scrollCount++;
+  }
+
 }

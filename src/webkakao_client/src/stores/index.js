@@ -14,12 +14,14 @@ class RootStore {
     /**
      * Reaction to changing selected Chatroom id
      */
-    reaction(() => this.view.selectedChatroom, selectedChatroom => {
+    reaction(() => this.view.selectedChatroom, (selectedChatroom, pre) => {
       if(selectedChatroom !== null) {
         this.chatroom.moveToAnother(selectedChatroom)
         this.chatroom.getChatroomMessage(selectedChatroom)
       } else {
-        this.chatroom.unsubscribeChatroom()
+        debugger
+        console.log(pre)
+        this.chatroom.unsubscribeChatroom(pre.prevValue)
       }
     })
 

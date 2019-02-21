@@ -8,6 +8,8 @@ import { inject, observer } from "mobx-react";
 class ChatroomList extends React.Component {
   _onItemClick = (e, idx) => {
     this.props.stores.view.showChatroom(idx)
+    const { view } = this.props.stores;
+    view.enterKeyPressed();
   };
 
   _renderItem = (v, idx) => {

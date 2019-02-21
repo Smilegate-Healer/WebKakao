@@ -1,4 +1,4 @@
-import { observable, action } from "mobx";
+import { observable, action, reaction } from "mobx";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 import ChatroomNameFormatter from "../utils/ChatroomNameFormatter";
@@ -26,7 +26,7 @@ export default class Chatroom {
   @observable chatroomList = null;
   @observable pollingAxios = null;
   @observable chatroomAxios = null;
-
+  @observable isLoading = false;
   /**
    *
    * Chat Object
@@ -273,32 +273,35 @@ export default class Chatroom {
       object_id: object_id
     };
 
-    this.chatroomAxios
-      .post("http://localhost:8081/api/chatroom/message/scroll", reqData)
-      .then(res => {
-        if (res.data.resultCode === 0) {
-          // if(!this.chats[chatroom_idx]) {
-          //   this.chats[chatroom_idx] = res.data.param;
-          // } else {
-          if (res.data.param.data.length > 0) {
-            debugger;
-            const first_msg_idx = this.chats[chatroom_idx].data[0].msg_idx;
-            const responseMsg = res.data.param.data;
-            for (var i = responseMsg.length - 1; i >= 0; i--) {
-              if (responseMsg[i].msg_idx < first_msg_idx) {
-                this.chats[chatroom_idx].data.unshift(responseMsg[i]);
-              }
+    if (this.isLoading === false) {
+      this.startLoading();
+      return new Promise((resolve, reject) => {
+        this.chatroomAxios
+          .post("http://localhost:8081/api/chatroom/message/scroll", reqData)
+          .then(res => {
+            if (res.data.resultCode === 0) {
+              resolve(res.data.param);
             }
-            // this.chats[chatroom_idx].data.unshift(res.data.param.data);
-            // }
-            this.chats[chatroom_idx].pre_object_id =
-              res.data.param.pre_object_id;
+          })
+          .catch(err => {
+            reject(err);
+            this.endLoading();
+          });
+      }).then(param => {
+        if (param.data.length > 0) {
+          const first_msg_idx = this.chats[chatroom_idx].data[0].msg_idx;
+          const responseMsg = param.data;
+          for (var i = responseMsg.length - 1; i >= 0; i--) {
+            if (responseMsg[i].msg_idx < first_msg_idx) {
+              this.chats[chatroom_idx].data.unshift(responseMsg[i]);
+            }
           }
+          this.chats[chatroom_idx].pre_object_id = param.pre_object_id;
+        } else {
+          this.endLoading();
         }
-      })
-      .catch(err => {
-        console.error(err);
       });
+    }
   };
 
   /**
@@ -309,7 +312,11 @@ export default class Chatroom {
   @action getChatroomMessage = chatroom_idx => {
     let last_read_msg_idx = null;
 
-    if (this.chats[chatroom_idx]) {
+    if (
+      this.chats[chatroom_idx] &&
+      this.chats[chatroom_idx].data &&
+      this.chats[chatroom_idx].data.length !== 0
+    ) {
       last_read_msg_idx = this.chats[chatroom_idx].data[
         this.chats[chatroom_idx].data.length - 1
       ].msg_idx;
@@ -329,7 +336,7 @@ export default class Chatroom {
             this.chats[chatroom_idx] = res.data.param;
           } else {
             if (res.data.param.data.length > 0) {
-              for (var i = 0; i < responseMsg.length - 1; i++) {
+              for (var i = 0; i <= responseMsg.length - 1; i++) {
                 if (last_read_msg_idx < responseMsg[i].msg_idx) {
                   this.chats[chatroom_idx].data.push(responseMsg[i]);
                 }
@@ -343,15 +350,15 @@ export default class Chatroom {
                   responseMsg[responseMsg.length - 1].msg_idx;
               }
             }
-          }
 
-          // for(var i=0; i<this.chatroomList.length; i++) {
-          //   if(this.chatroomList[i].chatroom_idx === chatroom_idx) {
-          //     if(this.chats[chatroom_idx].data.length > 0) {
-          //       this.chatroomList[i].last_read_msg_idx = this.chats[chatroom_idx].data[this.chats[chatroom_idx].data.length - 1].msg_idx;
-          //     }
-          //   }
-          // }
+            // for(var i=0; i<this.chatroomList.length; i++) {
+            //   if(this.chatroomList[i].chatroom_idx === chatroom_idx) {
+            //     if(this.chats[chatroom_idx].data.length > 0) {
+            //       this.chatroomList[i].last_read_msg_idx = this.chats[chatroom_idx].data[this.chats[chatroom_idx].data.length - 1].msg_idx;
+            //     }
+            //   }
+            // }
+          }
         }
       })
       .catch(err => {
@@ -439,7 +446,9 @@ export default class Chatroom {
       return;
     }
 
-    this.unsubscribeChatroom();
+
+
+    this.unsubscribeChatroom(this.root.view.selectedChatroom);
 
     this.stompSubscription = this.stompClient.subscribe(
       "/topic/chatroom/" + chatroomId,
@@ -453,49 +462,57 @@ export default class Chatroom {
 
         const data = JSON.parse(msg.body);
 
+
         if (data.msg_type === "s") {
           const subscribers = JSON.parse(data.msg);
-          subscribers.map((userId, idx) => {
-            this.chatroomList.map((chatroomInfo, idx) => {
-              if (chatroomInfo.chatroom_idx === chatroomId) {
-                if (chatroomInfo.user_list) {
-                  chatroomInfo.user_list.map((user, idx) => {
-                    if (user.user_idx === parseInt(userId)) {
-                      user["isJoin"] = true;
-                    } else {
-                      user["isJoin"] = false
-                    }
-                  });
-                }
-              }
-            });
-          });
+
+          const idxOfChatroom = this.findIdxOfChatroom(chatroomId)
+          if(idxOfChatroom === -1) {
+            console.error("No chatroom info in list!!")
+            return
+          } 
+
+          console.log(this.chatroomList)
+          // TODO: Refactoring
+          subscribers.forEach((userId) => {
+
+            const idxOfUser = this.findIdxOfUser(idxOfChatroom, parseInt(userId))
+            if(idxOfUser === -1) {
+              console.debug("No user in chatroom user list")
+              return
+            }
+            
+            debugger
+            this.createReactionForLastReadMsgIdx(idxOfUser, idxOfChatroom)
+          })
         } else if (data.msg_type === "ns") {
-          this.chatroomList.map((chatroomInfo, idx) => {
-            if (chatroomInfo.chatroom_idx === chatroomId) {
-              if (chatroomInfo.user_list) {
-                chatroomInfo.user_list.map((user, idx) => {
-                  if (user.user_idx === parseInt(data.msg)) {
-                    user["isJoin"] = true;
-                  }
-                });
-              }
-            }
-          });
+          const newSubUserId = parseInt(data.msg)
+
+          const idxOfChatroom = this.findIdxOfChatroom(chatroomId)
+          if(idxOfChatroom === -1) {
+            console.error("No chatroom info in list!!")
+            return
+          }
+
+          const idxOfUser = this.findIdxOfUser(idxOfChatroom, newSubUserId)
+          if(idxOfUser === -1) {
+            console.debug("No user in chatroom user list")
+            return
+          }
+
+          this.createReactionForLastReadMsgIdx(idxOfUser, idxOfChatroom)
+
         } else if (data.msg_type === "us") {
-          this.chatroomList.map((chatroomInfo, idx) => {
-            if (chatroomInfo.chatroom_idx === chatroomId) {
-              if (chatroomInfo.user_list) {
-                chatroomInfo.user_list.map((user, idx) => {
-                  debugger
-                  if (user.user_idx === parseInt(data.msg)) {
-                    user["isJoin"] = false;
-                    console.log(this.chatroomList) 
-                  }
-                });
-              }
-            }
-          });
+          const unsubUserId = parseInt(data.msg)
+          debugger
+          const idxOfChatroom2 = this.findIdxOfChatroom(chatroomId)
+          if(idxOfChatroom2 === -1) {
+            console.error("No chatroom info in list!!")
+            return
+          }
+
+          this.chatroomList[idxOfChatroom2].lastReadReactions[unsubUserId]()
+          delete this.chatroomList[idxOfChatroom2].lastReadReactions[unsubUserId]
         } else {
           this.chats[chatroomId].data.push(data);
         }
@@ -583,10 +600,27 @@ export default class Chatroom {
   /**
    * Unsubscribe if subscription is not null
    */
-  @action unsubscribeChatroom = () => {
+  @action unsubscribeChatroom = (chatroomId) => {
     if (this.stompSubscription !== null) {
       this.stompSubscription.unsubscribe();
       this.stompSubscription = null;
+
+      if(chatroomId) {
+        console.debug("dispose all reaction for last read")
+        let chatroomIdx = this.findIdxOfChatroom(parseInt(chatroomId))
+        if(chatroomIdx === -1) {
+          console.error("no chatroom in list")
+          return
+        }
+  
+        for(var key in this.chatroomList[chatroomIdx].lastReadReactions) {
+          console.log(key)
+          this.chatroomList[chatroomIdx].lastReadReactions[key]()
+          delete this.chatroomList[chatroomIdx].lastReadReactions[key]
+        }
+
+        this.chatroomList[chatroomIdx].lastReadReactions = null
+      } 
     }
   };
 
@@ -642,29 +676,6 @@ export default class Chatroom {
   };
 
   @action
-  getNotReadUserCount = msg_idx => {
-    let data;
-    for (var i = 0; i < this.chatroomList.length; i++) {
-      if (
-        this.chatroomList[i].chatroom_idx === this.root.view.selectedChatroom
-      ) {
-        data = this.chatroomList[i];
-        break;
-      }
-    }
-    if (!data.user_list) {
-      return 0;
-    }
-    let notReadUserCount = data.user_list.length;
-    for (var i = 0; i < data.user_list.length; i++) {
-      if(data.user_list[i].isJoin) 
-        data.user_list[i].last_read_msg_idx = msg_idx
-      if (data.user_list[i].last_read_msg_idx >= msg_idx) {
-        notReadUserCount--;
-      }
-    }
-    return notReadUserCount;
-  };
 
   @action
   getSelectedChatroomUserList = () => {
@@ -854,4 +865,60 @@ export default class Chatroom {
     }
     return -1;
   };
+
+  @action startLoading = () => {
+    this.isLoading = true;
+  };
+
+  @action setLoading = () => {
+    this.isLoading = false;
+    this.root.view.scrollPlus();
+  };
+
+  @action endLoading = () => {
+    setTimeout(() => this.setLoading(), 700);
+  };
+
+  createReactionForLastReadMsgIdx = (idxOfUser, idxOfChatroom) => {
+    if(!this.chatroomList[idxOfChatroom].lastReadReactions) {
+      this.chatroomList[idxOfChatroom]["lastReadReactions"] = {}
+    }
+
+    const userId = this.chatroomList[idxOfChatroom].user_list[idxOfUser].user_idx
+    const chatroomId = this.chatroomList[idxOfChatroom].chatroom_idx
+
+    const reactNewMessage = (last_msg_idx) => {
+      console.debug("read event at " + chatroomId)
+      this.chatroomList[idxOfChatroom].user_list[idxOfUser].last_read_msg_idx = last_msg_idx
+    } 
+    
+    const reactionForRead = () => reaction(() => 
+      this.chatroomList[idxOfChatroom].last_msg_idx, 
+      reactNewMessage
+    )
+
+    reactNewMessage(this.chatroomList[idxOfChatroom].last_msg_idx)
+    
+    const disposer = reactionForRead()
+
+    this.chatroomList[idxOfChatroom].lastReadReactions = {
+      ...this.chatroomList[idxOfChatroom].lastReadReactions,
+      [userId]: disposer
+    }
+  }
+
+  findIdxOfChatroom = (chatroomId) => this.chatroomList.findIndex(info => {
+    debugger
+    return info.chatroom_idx === parseInt(chatroomId)
+  })
+  
+  findIdxOfUser = (idxOfChatroom, userId) => { 
+    if(this.chatroomList[idxOfChatroom].user_list) {
+      return this.chatroomList[idxOfChatroom].user_list.findIndex(user => {
+        return user.user_idx === userId
+      })
+    } else {
+      return -1
+    }
+  } 
 }
