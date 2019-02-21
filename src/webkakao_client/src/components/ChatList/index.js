@@ -18,13 +18,18 @@ class ChatList extends React.Component {
   componentDidUpdate = () => {
     const { chatroom, view } = this.props.stores;
     chatroom.endLoading();
+    const check = view.scrollCheck();
+    if(check == 0) {
+      this._scrollToBottom()
+    }    
     if(view.checkEnterKeyPress()) {
-        this._scrollToBottom()
-        view.completeEnterKeyPressed();
+      this._scrollToBottom()
+      view.completeEnterKeyPressed();
     }
   }
 
   _renderItems = () => {
+
     const { view, chatroom, user } = this.props.stores
 
     if(!view.selectedChatroom || 

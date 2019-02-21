@@ -772,6 +772,7 @@ export default class Chatroom {
 
   @action setLoading = () => {
     this.isLoading = false;
+    this.root.view.scrollPlus();
   }
 
   @action endLoading = () => {

@@ -37,6 +37,8 @@ export default class View {
   @observable checkedUser = false;
   @observable modalView = ""
 
+  @observable scrollCount = 0;
+
   /**
    * The chatroom id
    */
@@ -93,6 +95,7 @@ export default class View {
     this.rightView = this.views.chatList
     this.selectedChatroom = chatroomIdx
     this.selectedChatroomName = this.root.chatroom.getChatroomName(this.selectedChatroom);
+    this.scrollCount = 0;
   }
 
   /**
@@ -317,4 +320,13 @@ export default class View {
     }
     return false;
   }
+
+  @action scrollCheck = () => {
+    return this.scrollCount;
+  }
+
+  @action scrollPlus = () => {
+    this.scrollCount++;
+  }
+
 }
