@@ -146,12 +146,12 @@ class ChatItem extends React.Component {
     // for(var i=0; i<user_idxs.length; i++) {
     //   names = names.concat(user.getNameOnChatroom(+user_idxs[i]) + ' ')
     // }
-    return (<div className="info">{senderName} 님이 {user_names} 님을 초대하였습니다.</div>)
+    return (<div className="info"><Typography>{senderName} 님이 {user_names} 님을 초대하였습니다.</Typography></div>)
   }
 
   _renderExit = () => {
     const { chat } = this.props;
-    return (<div lassName="info">{chat.msg} 님이 퇴장하였습니다.</div>)
+    return (<div lassName="info"><Typography>{chat.msg} 님이 퇴장하였습니다.</Typography></div>)
   }
 
   render() {

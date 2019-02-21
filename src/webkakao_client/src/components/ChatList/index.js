@@ -31,7 +31,6 @@ class ChatList extends React.Component {
       !chatroom.chats[view.selectedChatroom] || 
       !chatroom.chats[view.selectedChatroom].data ||
       chatroom.chats[view.selectedChatroom].data.length === 0) return 
-    debugger;
     return chatroom.chats[view.selectedChatroom].data.map((v, idx) => {
 
       return (
@@ -47,7 +46,6 @@ class ChatList extends React.Component {
   loadFunc = () => {
     const { view, chatroom } = this.props.stores;
     if(chatroom.chats[view.selectedChatroom] && chatroom.chats[view.selectedChatroom].data && chatroom.chats[view.selectedChatroom].data.length !== 0) {
-      debugger;
       if(!chatroom.isLoading && !(chatroom.chats[view.selectedChatroom].pre_object_id === "null")) {
         chatroom.getChatroomScrollMessage(view.selectedChatroom); 
       }

@@ -258,34 +258,13 @@ export default class Chatroom {
         this.chatroomAxios.post("http://localhost:8081/api/chatroom/message/scroll", reqData).then(res => {
           if (res.data.resultCode === 0) {
             resolve(res.data.param);
-            // // if(!this.chats[chatroom_idx]) {
-            // //   this.chats[chatroom_idx] = res.data.param;
-            // // } else {
-            // if (res.data.param.data.length > 0) {
-            //   debugger;
-            //   const first_msg_idx = this.chats[chatroom_idx].data[0].msg_idx;
-            //   const responseMsg = res.data.param.data;
-            //   for (var i = responseMsg.length - 1; i >= 0; i--) {
-            //     if (responseMsg[i].msg_idx < first_msg_idx) {
-            //       this.chats[chatroom_idx].data.unshift(responseMsg[i]);
-            //     }
-            //   }
-            //   // this.chats[chatroom_idx].data.unshift(res.data.param.data);
-            //   // }
-            //   this.chats[chatroom_idx].pre_object_id = res.data.param.pre_object_id;
-            // }
           }
         }).catch(err => {
-          // console.error(err);
           reject(err);
           this.endLoading();
         })
       })
         .then((param) => {
-          // if(!this.chats[chatroom_idx]) {
-          //   this.chats[chatroom_idx] = res.data.param;
-          // } else {
-            debugger;
           if (param.data.length > 0) {
             const first_msg_idx = this.chats[chatroom_idx].data[0].msg_idx;
             const responseMsg = param.data;
@@ -294,8 +273,6 @@ export default class Chatroom {
                 this.chats[chatroom_idx].data.unshift(responseMsg[i]);
               }
             }
-            // this.chats[chatroom_idx].data.unshift(res.data.param.data);
-            // }
             this.chats[chatroom_idx].pre_object_id = param.pre_object_id;
           } else {
             this.endLoading();
@@ -313,7 +290,7 @@ export default class Chatroom {
 
     let last_read_msg_idx = null;
 
-    if (this.chats[chatroom_idx]) {
+    if (this.chats[chatroom_idx] && this.chats[chatroom_idx].data && this.chats[chatroom_idx].data.length !== 0) {
       last_read_msg_idx = this.chats[chatroom_idx].data[this.chats[chatroom_idx].data.length - 1].msg_idx;
     }
     const reqData = {
@@ -329,7 +306,7 @@ export default class Chatroom {
           this.chats[chatroom_idx] = res.data.param;
         } else {
           if (res.data.param.data.length > 0) {
-            for (var i = 0; i < responseMsg.length - 1; i++) {
+            for (var i = 0; i <= responseMsg.length - 1; i++) {
               if (last_read_msg_idx < responseMsg[i].msg_idx) {
                 this.chats[chatroom_idx].data.push(responseMsg[i]);
               }
@@ -442,27 +419,21 @@ export default class Chatroom {
       if (!this.chats[chatroomId]) {
         this.chats[chatroomId] = {}
         this.chats[chatroomId].data = [];
-        debugger
       }
-
-      debugger
 
       const data = JSON.parse(msg.body)
 
       if(data.msg_type === "s") {
         this.chatroomList.map((chatroomInfo, idx) => {
           if(chatroomInfo.chatroom_idx === chatroomId) {
-            debugger
             chatroomInfo.user_list.map((user, idx) => {
               if(user.user_idx === parseInt(data.msg)) {
                 user["isJoin"] = true 
-                debugger
               }
             })
           }
         })
       } else {
-        debugger
         this.chats[chatroomId].data.push(data)
       }
     }, {
@@ -804,7 +775,7 @@ export default class Chatroom {
   }
 
   @action endLoading = () => {
-    setTimeout(() => this.setLoading(), 1000)
+    setTimeout(() => this.setLoading(), 700)
   }
 
 }
