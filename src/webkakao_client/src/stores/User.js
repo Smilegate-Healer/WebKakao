@@ -278,10 +278,10 @@ export default class User {
 
   @action
   getFriendNameByUserIdx = (user_idx) => {
-    for (var i = 0; i < this.friendList.length; i++) {
-      if (this.friendList[i].user_idx === user_idx)
-        return this.friendList[i].name;
-    }
+    const found = this.friendList.find((friend) => {
+      return friend.user_idx === user_idx
+    })
+    return found ? found.name : "null"
   }
 
   @action

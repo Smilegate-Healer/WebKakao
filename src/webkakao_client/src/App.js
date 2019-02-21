@@ -10,11 +10,9 @@ import UserInfoModal from "./components/Modal/UserInfoModal";
 import { hot } from "react-hot-loader/root";
 import UserSearchModal from "./components/Modal/UserSearchModal";
 import UserListModal from "./components/Modal/UserListModal";
-import SignIn from "./components/SignIn";
-import SignUp from "./components/SignUp";
-import PasswordReset from "./components/PasswordReset";
 import RenameChatroomModal from "./components/Modal/RenameChatroomModal";
 import LoginPage from "./components/LoginPage";
+
 
 @inject("stores")
 @observer
@@ -74,17 +72,6 @@ class App extends Component {
         <div className="root">
           <CssBaseline />
           <LoginPage/>
-          {/* <div>
-            <SignIn />
-          </div>
-          <hr />
-          <div>
-            <SignUp />
-          </div>
-          <hr/>
-          <div>
-            <PasswordReset />
-          </div> */}
         </div>
       );
     }
@@ -95,19 +82,6 @@ class App extends Component {
     return (
       <div className="root">
         {component}
-        {/* {this._renderLoadingPage()}
-        <ReactNotification ref={this.props.stores.view.notificationDOMRef} onClick={this.onClickNotification} />
-        <UserSearchModal />
-        <UserListModal />
-        <UserInfoModal />
-        <RenameChatroomModal />
-        <CssBaseline />
-        <div className="leftContainer">
-          <LeftContainer />
-        </div>
-        <div className="rightContainer">
-          <RightContainer />
-        </div> */}
       </div>
     );
   }

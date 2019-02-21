@@ -7,6 +7,7 @@ import ChatInput from "../components/ChatInput";
 import { Divider } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
 import EditProfilePage from "../components/EditProfilePage"
+import Ryan from "../resources/settingImgLoading4@2x.png"
 
 @inject("stores")
 @observer
@@ -32,6 +33,11 @@ class RightContainer extends Component {
   _renderDefault = () => {
     return (
       <div className="RightContainer Default">
+        <img
+          src={Ryan}
+          alt="Ryan"
+          className="img"
+        />
       </div>
     );
   };

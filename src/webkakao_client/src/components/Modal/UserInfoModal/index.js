@@ -1,27 +1,24 @@
 import React from 'react';
-import Modal from 'react-modal';
-import Background from './Background'
-import Profile from './Profile'
+import ProfileImage from '../../ProfileImage'
 import { inject, observer } from 'mobx-react';
+import styles from "./styles.module.scss"
 import {
-  Close,
   Block,
   PersonAdd,
-  ChatBubble
+  ChatBubble,
 } from '@material-ui/icons'
-
-const customStyles = {
-  content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)',
-    width: 400,
-    height: 600
-  }
-};
+import {
+  Dialog,
+  Typography,
+  IconButton
+} from '@material-ui/core'
+import classnames from 'classnames'
+import AddFriendIcon from "../../../resources/btn_profile_add_friend@2x.png"
+import AddFriendPressIcon from "../../../resources/btn_profile_add_friend_press@2x.png"
+import NewChatIcon from "../../../resources/btn_profile_chat@2x.png"
+import NewChatPressIcon from "../../../resources/btn_profile_chat_press@2x.png"
+import BlockIcon from "../../../resources/btn_profile_block_friend@2x.png"
+import BlockPressIcon from "../../../resources/btn_profile_block_friend_press@2x.png"
 
 @inject('stores')
 @observer
@@ -30,11 +27,6 @@ class UserInfoModal extends React.Component {
     openModal = () => {
       const { view } = this.props.stores
       view.showUserInfoModal();
-    }
-  
-    afterOpenModal = () => {
-      // references are now sync'd and can be accessed.
-      // alert("after open modal");
     }
   
     closeModal = () => {
@@ -62,41 +54,71 @@ class UserInfoModal extends React.Component {
       user.removeSearchUser();
     }
 
-    _RanderFunc() {
+    _renderButton = (style, text, onClick) => {
+      return (
+        <div className={styles.button}>
+          <IconButton 
+            style={{padding: 0}}
+            onClick={onClick}
+          >
+            <div className={classnames(styles.base, style)}/>
+          </IconButton>
+          <Typography variant="" className={styles.text}>
+            {text}
+          </Typography>
+        </div>
+      )
+    }
+
+    _renderButtons() {
       const { user } = this.props.stores
       const isFriend = user.isFriend();
       
       if (isFriend) {
-        return (<div><ChatBubble onClick={this.onChatButtonClick}/></div>);
+        return [
+          this._renderButton(styles.newChat, "1:1 Chat", this.onChatButtonClick),
+          this._renderButton(styles.block, "Block")
+        ]
       } else {
-        return (<div><PersonAdd onClick={this.onAddFriendButtonClick}/><Block/></div>);
+        return [
+          this._renderButton(styles.add, "Add Friend", this.onAddFriendButtonClick),
+          this._renderButton(styles.block, "Block")
+        ]
       }
     }
 
     render() {
       const isOpen = this.props.stores.view.userInfoModal; 
-      const component = this._RanderFunc();
+      const { userDetail } = this.props.stores.user
+      if(!userDetail) return null
       return (
-        <div>
-          <Modal
-            isOpen={isOpen}
-            onAfterOpen={this.afterOpenModal}
-            onRequestClose={this.closeModal}
-            style={customStyles}
-            contentLabel="Example Modal"
-          >
-            <div>
-              <Close onClick={this.closeModal}
-                className="icon"
-              />
-              <Background/>
+        <Dialog
+          open={isOpen}
+          onClose={this.closeModal}>
+            <div className={styles.container}> 
+              <div className={styles.profileNameContainer}>
+                <ProfileImage
+                  className={styles.profile}
+                  image={userDetail.profile_img}
+                />
+                <Typography variant="h5" className={styles.name}>
+                  {userDetail.name}
+                </Typography>
+              </div>
+
+              <div className={styles.backgroundContainer}>
+                <div className={styles.statusContainer}>
+                  <Typography variant="h5">
+                    {userDetail.status_msg ? userDetail.status_msg : "-"}
+                  </Typography>
+                </div>
+              </div>
+
+              <div className={styles.buttonContainer}>
+                {this._renderButtons()}
+              </div>
             </div>
-              <Profile/>
-            <div>
-              {component}
-            </div>
-          </Modal>
-        </div>
+        </Dialog>
       );
     }
   }

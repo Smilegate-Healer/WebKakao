@@ -35,7 +35,6 @@ export default class View {
 
   @observable searchUserList = null;
   @observable checkedUser = false;
-  @observable modalView = ""
 
   @observable scrollCount = 0;
 

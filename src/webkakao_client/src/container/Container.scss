@@ -49,4 +49,13 @@
 
 .Default {
   background-color: #f5f5f5;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .img {
+    width: 140px;
+    height: auto;
+  }
 }

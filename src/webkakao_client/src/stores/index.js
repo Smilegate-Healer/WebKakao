@@ -19,7 +19,6 @@ class RootStore {
         this.chatroom.moveToAnother(selectedChatroom)
         this.chatroom.getChatroomMessage(selectedChatroom)
       } else {
-        debugger
         console.log(pre)
         this.chatroom.unsubscribeChatroom(pre.prevValue)
       }

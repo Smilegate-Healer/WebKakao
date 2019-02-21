@@ -176,7 +176,6 @@ export default class Chatroom {
       this.root.view.selectedChatroom !== data.chatroom_idx &&
       data.msg_type === "m"
     ) {
-      // this.root.view.showPollingMessage(data);
       this.root.view.showPollingMessage(data);
     }
   };
@@ -203,6 +202,7 @@ export default class Chatroom {
   @action openChatroom = to_user_idx => {
     for (var i = 0; i < this.chatroomList.length; i++) {
       if (
+        this.chatroomList[i].user_list && 
         this.chatroomList[i].user_list.length === 1 &&
         this.chatroomList[i].user_list[0].user_idx === to_user_idx
       ) {
@@ -350,14 +350,6 @@ export default class Chatroom {
                   responseMsg[responseMsg.length - 1].msg_idx;
               }
             }
-
-            // for(var i=0; i<this.chatroomList.length; i++) {
-            //   if(this.chatroomList[i].chatroom_idx === chatroom_idx) {
-            //     if(this.chats[chatroom_idx].data.length > 0) {
-            //       this.chatroomList[i].last_read_msg_idx = this.chats[chatroom_idx].data[this.chats[chatroom_idx].data.length - 1].msg_idx;
-            //     }
-            //   }
-            // }
           }
         }
       })
@@ -517,7 +509,6 @@ export default class Chatroom {
 
         } else if (data.msg_type === "us") {
           const unsubUserId = parseInt(data.msg)
-          debugger
           const idxOfChatroom2 = this.findIdxOfChatroom(chatroomId)
           if(idxOfChatroom2 === -1) {
             console.error("No chatroom info in list!!")
@@ -921,7 +912,6 @@ export default class Chatroom {
   }
 
   findIdxOfChatroom = (chatroomId) => this.chatroomList.findIndex(info => {
-    debugger
     return info.chatroom_idx === parseInt(chatroomId)
   })
   

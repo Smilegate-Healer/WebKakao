@@ -1,0 +1,121 @@
+@import "../../../colors.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 600px;
+  min-width: 450px;
+  height: 60vh;
+  width: 50vw;
+
+  .profileNameContainer {
+
+    position: absolute;
+    // left: 50%;
+    // right: 50%;
+    top: 69%;
+    bottom: 31%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+
+    .name {
+      margin-top: 10px;
+    }
+
+    .profile {
+      width: 100px;
+      height: 100px;
+    }
+  }
+
+  .backgroundContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex: 7;
+
+    background-color: $kakaoYellow;
+
+    .statusConatiner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .text {
+
+      }
+    }
+  }
+
+  .buttonContainer {
+    flex: 3;
+    display: flex;
+    flex-direction: hrow;
+    justify-content: center;
+    align-items: flex-end;
+
+    $buttonSize: 60px;
+
+    .button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin-bottom: 20px;
+      margin-left: 10px;
+      margin-right: 10px;
+
+      .text {
+        margin-top: 8px;
+      }
+
+      .base {
+        background-size: $buttonSize;
+
+        width: $buttonSize;
+        height: $buttonSize; 
+
+        &:hover {
+          background-size: $buttonSize;
+        }
+      }
+
+
+      .newChat {
+        background: url("../../../resources/btn_profile_add_friend@2x.png") no-repeat;
+        background-size: $buttonSize;
+
+        &:hover {
+          background: url("../../../resources/btn_profile_add_friend_press@2x.png") no-repeat;
+          background-size: $buttonSize;
+        }
+      }
+
+      .block {
+        background: url("../../../resources/btn_profile_block_friend@2x.png") no-repeat;
+        background-size: $buttonSize;
+
+        &:hover {
+          background: url("../../../resources/btn_profile_block_friend_press@2x.png") no-repeat;
+          background-size: $buttonSize;
+        }
+      }
+
+      .add {
+        background: url("../../../resources/btn_profile_add_friend@2x.png") no-repeat;
+        background-size: $buttonSize;
+
+        &:hover {
+          background: url("../../../resources/btn_profile_add_friend_press@2x.png") no-repeat;
+          background-size: $buttonSize;
+        }
+      }
+    }
+  }
+}

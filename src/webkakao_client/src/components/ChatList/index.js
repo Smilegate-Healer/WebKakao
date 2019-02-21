@@ -37,7 +37,6 @@ class ChatList extends React.Component {
       !chatroom.chats[view.selectedChatroom].data ||
       chatroom.chats[view.selectedChatroom].data.length === 0) return 
     return chatroom.chats[view.selectedChatroom].data.map((v, idx) => {
-
       return (
         <ChatItem
           chat={v}

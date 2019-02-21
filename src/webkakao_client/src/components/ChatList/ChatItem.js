@@ -3,7 +3,7 @@ import "./styles.scss";
 import PropTypes from "prop-types";
 import { Typography } from "@material-ui/core";
 import DateFormatter from '../../utils/DateFormatter'
-import DefaultProfileImg from "../../resources/img_person_no1.png"
+import ProfileImage from "../ProfileImage"
 import { inject, observer } from "mobx-react"
 
 @inject("stores")
@@ -79,10 +79,9 @@ class ChatItem extends React.Component {
 
   _renderProfile = (profile) => {
     return (
-      <img
+      <ProfileImage
         className="profileImg"
-        src={profile ? profile : DefaultProfileImg}
-        alt="profile"
+        image={profile}
       />
     )
   }
@@ -119,7 +118,6 @@ class ChatItem extends React.Component {
 
   _renderNotReadUserCount = () => {
     const { chat } = this.props;
-    const { chatroom } = this.props.stores;
     const notReadUserCount = this.getNotReadUserCount(chat.msg_idx);
     if (notReadUserCount > 0){
       return (<Typography variant="caption" className="notReadUserCount">{notReadUserCount}</Typography>);
@@ -133,12 +131,23 @@ class ChatItem extends React.Component {
     const { chat } = this.props;
     const { user } = this.props.stores;
     var fullTime = DateFormatter.getKoreanDate(chat.timestamp)
-    const senderName = user.getFriendNameByUserIdx(chat.sender)
+    const senderName = user.getNameOnChatroom(chat.sender)
     const notReadUserCount = this._renderNotReadUserCount();
+    const chatroomInfo = this.props.stores.chatroom.chatroomList
+      .find((info) => info.chatroom_idx === this.props.stores.view.selectedChatroom)
+
+    var profile = null
+    if(chatroomInfo && chatroomInfo.user_list) {
+      const userInfo = chatroomInfo.user_list.find(info => info.user_idx === parseInt(chat.sender))
+      if(userInfo) {
+        profile = userInfo.profile_img
+      }
+    }
+
     return (
       <div className="ChatItem">
         <div className="profileContainer">
-          {this._renderProfile(chat.profile)}
+          {this._renderProfile(profile)}
         </div>
 
         <div className="senderMsgContainer">
@@ -176,7 +185,7 @@ class ChatItem extends React.Component {
 
   _renderExit = () => {
     const { chat } = this.props;
-    return (<div lassName="info"><Typography>{chat.msg} 님이 퇴장하였습니다.</Typography></div>)
+    return (<div className="info"><Typography>{chat.msg} 님이 퇴장하였습니다.</Typography></div>)
   }
 
   render() {
