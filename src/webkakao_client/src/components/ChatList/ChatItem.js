@@ -96,8 +96,12 @@ class ChatItem extends React.Component {
     const { chat } = this.props;
     const { chatroom } = this.props.stores;
     const notReadUserCount = chatroom.getNotReadUserCount(chat.msg_idx);
-    if (notReadUserCount > 0)
+    if (notReadUserCount > 0){
       return (<Typography variant="caption" className="notReadUserCount">{notReadUserCount}</Typography>);
+    }
+      else {
+        return (<Typography variant="caption" className="notReadUserCount">{' '}</Typography>);
+      }
   }
 
   _renderNotMine() {
@@ -142,12 +146,12 @@ class ChatItem extends React.Component {
     // for(var i=0; i<user_idxs.length; i++) {
     //   names = names.concat(user.getNameOnChatroom(+user_idxs[i]) + ' ')
     // }
-    return (<div>{senderName} 님이 {user_names} 님을 초대하였습니다.</div>)
+    return (<div className="info">{senderName} 님이 {user_names} 님을 초대하였습니다.</div>)
   }
 
   _renderExit = () => {
     const { chat } = this.props;
-    return (<div>{chat.msg} 님이 퇴장하였습니다.</div>)
+    return (<div lassName="info">{chat.msg} 님이 퇴장하였습니다.</div>)
   }
 
   render() {
