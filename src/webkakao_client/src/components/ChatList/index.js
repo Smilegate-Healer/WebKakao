@@ -11,20 +11,31 @@ class ChatList extends React.Component {
   _scrollToBottom = () => {
     this.div.scrollTop = this.div.scrollHeight // to scroll bottom
   }
+  // componentWillUpdate() {
+  //   this._scrollToBottom()
+  // }
 
-  componentDidUpdate() {
-    // this._scrollToBottom()
+  componentDidUpdate = () => {
+    const { chatroom, view } = this.props.stores;
+    chatroom.endLoading();
+    const check = view.scrollCheck();
+    if(check == 0) {
+      this._scrollToBottom()
+    }    
+    if(view.checkEnterKeyPress()) {
+      this._scrollToBottom()
+      view.completeEnterKeyPressed();
+    }
   }
 
   _renderItems = () => {
+
     const { view, chatroom, user } = this.props.stores
 
-    if(!view.selectedChatroom 
-      || !chatroom.chats[view.selectedChatroom] 
-      || chatroom.chats[view.selectedChatroom] === undefined
-      || chatroom.chats[view.selectedChatroom].data === undefined
-      || chatroom.chats[view.selectedChatroom].length === 0) return 
-    
+    if(!view.selectedChatroom || 
+      !chatroom.chats[view.selectedChatroom] || 
+      !chatroom.chats[view.selectedChatroom].data ||
+      chatroom.chats[view.selectedChatroom].data.length === 0) return 
     return chatroom.chats[view.selectedChatroom].data.map((v, idx) => {
 
       return (
@@ -39,24 +50,28 @@ class ChatList extends React.Component {
 
   loadFunc = () => {
     const { view, chatroom } = this.props.stores;
-    if(chatroom.chats[view.selectedChatroom]) {
-      chatroom.getChatroomScrollMessage(view.selectedChatroom); 
+    if(chatroom.chats[view.selectedChatroom] && chatroom.chats[view.selectedChatroom].data && chatroom.chats[view.selectedChatroom].data.length !== 0) {
+      if(!chatroom.isLoading && !(chatroom.chats[view.selectedChatroom].pre_object_id === "null")) {
+        chatroom.getChatroomScrollMessage(view.selectedChatroom); 
+      }
     }
   }
 
-
   render() {
+    const hasMore = !this.props.stores.chatroom.isLoading;
     return (
       <div className="List" ref={ref => this.div = ref}>
-        {/* <InfiniteScroll
+        <InfiniteScroll
         pageStart={0}
         loadMore={this.loadFunc}
         isReverse={true}
-        hasMore={true || false}
+        hasMore={hasMore}
+        threshold={50}
+        initialLoad={true}
         // loader={<div className="loader" key={0}>Loading ...</div>}
-        useWindow={false}> */}
+        useWindow={false}>
         {this._renderItems()}
-        {/* </InfiniteScroll> */}
+        </InfiniteScroll>
         <SideMenu/>
       </div>
     )
