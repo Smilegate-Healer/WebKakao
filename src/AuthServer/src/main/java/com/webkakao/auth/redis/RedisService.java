@@ -31,15 +31,12 @@ public class RedisService {
 		// Redis키 만료시간 설
 		redisTemplate.expire(access_token, 3600L, TimeUnit.SECONDS);
 
-		System.out.println(access_token + " : " + hash.entries(access_token));
-
 	}
 
 	public Map<String, String> getUserInfo(String access_token) {
 
 		HashOperations<String, String, String> hash = redisTemplate.opsForHash();
 		Map<String, String> map = hash.entries(access_token);
-		System.out.println(access_token + " : " + map);
 
 		return map;
 		

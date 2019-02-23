@@ -98,6 +98,7 @@ export default class User {
         this.userInfo = res.data.param;
         this.getFriendList()
         this.getChatroomList()
+        this.root.connectToChattingServer()
       }
     }).catch(err => console.error(err))
 

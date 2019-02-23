@@ -9,8 +9,6 @@ class RootStore {
     this.user = new UserStore(this)
     this.view = new View(this)
 
-    this.connecToChattingServer()
-
     /**
      * Reaction to changing selected Chatroom id
      */
@@ -61,7 +59,7 @@ class RootStore {
    * Connect to the Chatting server 
    * until the connection is established
    */
-  connecToChattingServer = () => {
+  connectToChattingServer = () => {
     console.debug("Connect to the Chatting server")
     this.chatroom.openSocket()
       .then(() => {

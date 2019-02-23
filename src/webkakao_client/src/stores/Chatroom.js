@@ -387,11 +387,12 @@ export default class Chatroom {
 
       this.isConnecting = true;
 
-      const sock = new SockJS("http://localhost:8080/gs-guide-websocket");
-      this.stompClient = Stomp.over(sock);
+      const sock = new SockJS("http://localhost:8080/chat");
+      this.stompClient = Stomp.over(sock, {
+        heartbeat: false
+      });
 
-      this.stompClient.connect(
-        {},
+      this.stompClient.connect({},
         frame => {
           console.log("Successfully Connected");
           console.log(frame);

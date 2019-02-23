@@ -148,6 +148,5 @@
         "react-hot-loader/babel"
       ]
     ]
-  },
-  "proxy": "http://localhost:8080"
+  }
 }

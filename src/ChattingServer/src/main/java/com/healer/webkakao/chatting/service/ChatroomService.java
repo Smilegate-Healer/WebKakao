@@ -290,7 +290,7 @@ public class ChatroomService {
 
     Long chatroomId = sessionidWithChatroomId.get(key);
     if (chatroomId == null) {
-      log.error("have to exist but not");
+      log.error(" have to exist but not sessionId=" + key + " userId=" + sessionidWithUserId.get(key));
     } else if (chatroomId == 0) {
       log.debug("There is a user but not joining a chatroom");
     } else {
@@ -303,6 +303,7 @@ public class ChatroomService {
         redisTemplate.opsForSet().remove(this.getJoiningKey(chatroomId), String.valueOf(userId));
 
         try {
+          log.debug("Send unsub event to chatroom");
           redisTemplate.convertAndSend("chatroom/" + chatroomId, objectMapper.writeValueAsString(ChatModel.builder()
                   .msg(String.valueOf(userId))
                   .msg_type("us")
@@ -320,6 +321,7 @@ public class ChatroomService {
   private void updateLastReadMsgIdx(long chatroomId, long userId) {
     ChatroomInfoModel info = redisRepository.findById(chatroomId).get();
 
+    log.debug("Update last read msg idx to " + info.getLast_msg_idx() + " at chatroomId=" + chatroomId + " userId=" + userId);
     redisTemplate.opsForHash().put(this.getLastReadKey(chatroomId), String.valueOf(userId), String.valueOf(info.getLast_msg_idx()));
   }
 
