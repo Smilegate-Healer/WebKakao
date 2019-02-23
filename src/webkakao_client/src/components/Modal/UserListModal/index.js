@@ -1,22 +1,17 @@
 import React from "react";
 import Modal from "react-modal";
 import { inject, observer } from "mobx-react";
-import { InputBase, Typography } from "@material-ui/core";
+import styles from "./styles.module.scss";
+import {
+  InputBase,
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent
+} from "@material-ui/core";
 import InviteBtn from "./InviteBtn";
-import CloseBtn from "./CloseBtn";
 import FriendList from "./FriendList";
 import * as hangul from "hangul-js";
-
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)"
-  }
-};
 
 @inject("stores")
 @observer
@@ -108,53 +103,38 @@ class UserListModal extends React.Component {
   };
 
   render() {
-    const isOpen = this.props.stores.view.userListModal;
-    return (
-      <div>
-        <Modal
-          isOpen={isOpen}
-          onAfterOpen={this.afterOpenModal}
-          onRequestClose={this.closeModal}
-          style={customStyles}
-          contentLabel="Invite others">
-          <div className="modalContent">
-            <div className="topConatiner">
-              <InputBase
-                value="대화 상대 초대"
-                style={{
-                  color: "#000000",
-                  fontSize: 20,
-                  backgroundColor: "#FFFFFFF",
-                  width: 300,
-                  textAlign: "center"
-                }}
-                readOnly
-                startAdornment={<CloseBtn onClick={this.closeModal} />}
-                endAdornment={<InviteBtn onClick={this._onInviteBtnClick} />}
-              />
-            </div>
-            <div className="searchContainer">
-              <InputBase
-                className="input"
-                margin="none"
-                onChange={this._onInputChange}
-                onKeyPress={this._onEnter}
-                value={this.props.stores.view.searchTargerStr}
-                autoFocus={true}
-                style={{
-                  backgroundColor: "#f4f4f9"
-                }}
-                fullWidth
-                placeholder="이름 검색"
-              />
-            </div>
+    const { view } = this.props.stores;
 
-            <div className="friendListContainer">
-              <FriendList />
-            </div>
+    return (
+      <Dialog
+        open={view.userListModal}
+        onClose={this.closeModal}
+      >
+        <DialogTitle>대화 상대 초대</DialogTitle>
+        <DialogContent
+          className={styles.dialog}
+        >
+          <div className={styles.searchContainer}>
+            <InputBase
+              className={styles.input}
+              margin="none"
+              onChange={this._onInputChange}
+              onKeyPress={this._onEnter}
+              value={this.props.stores.view.searchTargerStr}
+              autoFocus={true}
+              style={{
+                backgroundColor: "#f4f4f9"
+              }}
+              fullWidth
+              placeholder="이름 검색"
+              endAdornment={<InviteBtn onClick={this._onInviteBtnClick} />}
+            />
           </div>
-        </Modal>
-      </div>
+          <div className={styles.listContainer}>
+            <FriendList />
+          </div>
+        </DialogContent>
+      </Dialog>
     );
   }
 }

@@ -21,6 +21,10 @@
   &:hover {
     background-color: rgb(96.1%, 96.1%, 96.1%);
   }
+
+  &.selected {
+    background-color: rgb(96.1%, 96.1%, 96.1%);
+  }
   
   .logoContainer {
     flex-shrink: 0;
@@ -36,6 +40,114 @@
       height: 80%;
 
       border-radius: 100%;
+    }
+
+    .two {
+      position: relative;
+      width: 100%;
+      height: 100%;
+
+      .base {
+        position: absolute;
+        width: 70%;
+        height: 70%;
+        border-radius: 100%;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .img1 {
+        top: 0;
+        left: 0;
+        z-index: 2;
+      }
+
+      .img2 {
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+      }
+    }
+
+    .three {
+      position: relative;
+      width: 100%;
+      height: 100%;
+
+      .base {
+        position: absolute;
+        width: 60%;
+        height: 60%;
+        border-radius: 100%;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .img1 {
+        z-index: 3;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .img2 {
+        z-index: 2;
+        bottom: 0;
+      }
+      
+      .img3 {
+        z-index: 1;
+        bottom: 0;
+        right: 0;
+      }
+
+    }
+
+    .four {
+      position: relative;
+      width: 100%;
+      height: 100%;
+
+      .base {
+        position: absolute;
+        width: 55%;
+        height: 55%;
+        border-radius: 100%;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .img1 {
+        top: 0;
+        left: 0;
+        z-index: 4;
+      }
+
+      .img2 {
+        right: 0;
+        top: 0;
+        z-index: 3;
+      }
+
+      .img3 {
+        left: 0;
+        bottom: 0;
+        z-index: 2;
+      }
+
+      .img4 {
+        bottom: 0;
+        right: 0;
+        z-index: 1;
+      }
     }
   }
 
@@ -58,12 +170,17 @@
       .text {
         font-size: 22px;
       }
+
     }
 
     .msg {
       flex: 1;
       display: 'flex';
       align-items: flex-start;
+    }
+
+    .count {
+      margin-left: 8px;
     }
 
   }

@@ -25,7 +25,6 @@ class ChatBar extends React.Component {
   _onMenuBtnClick = e => {
     const { view } = this.props.stores;
     view.showChatroomSideMenu();
-    // alert("menu button click")
   }
 
   getChatroomName() {
@@ -56,7 +55,8 @@ class ChatBar extends React.Component {
           </Typography>
         </div>
         <div className="rightButtonsContainer">
-          <ChatBarBtn type="search" onClick={this._onSearchBtnClick}/>
+          {/** TODO: Search */}
+          {/* <ChatBarBtn type="search" onClick={this._onSearchBtnClick}/> */}
           <ChatBarBtn type="menu" onClick={this._onMenuBtnClick}/>
         </div>
       </div>

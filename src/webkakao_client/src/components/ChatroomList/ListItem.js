@@ -7,6 +7,7 @@ import ChatroomNameFormatter from "../../utils/ChatroomNameFormatter";
 import { observer } from "mobx-react";
 import DefaultProfileImg from "../../resources/img_person_no1.png";
 import Badge from "@material-ui/core/Badge";
+import classnames from "classnames"
 
 @observer
 class ListItem extends React.Component {
@@ -16,7 +17,8 @@ class ListItem extends React.Component {
       logo: null,
       last_msg: "마지막 메시지 입니다.",
       timestamp: 1234123412342312
-    }
+    },
+    selected: false
   };
 
   _renderLogo = logo => {
@@ -26,15 +28,43 @@ class ListItem extends React.Component {
       logo = null
     } else if(item.user_list.length === 1) {
       logo = item.user_list[0].profile_img
+    } 
+
+    const memberCnt = item.user_list ? item.user_list.length : 1
+
+    const getImg = (logo, classname) => {
+      return (
+        <img
+          src={logo ? "http://localhost:8083/profile/" + logo : DefaultProfileImg}
+          alt="chatroomLogo"
+          className={`logo ${classname ? classname : ''}`}
+        />
+      )
     }
 
-    return (
-      <img
-        src={logo ? "http://localhost:8083/profile/" + logo : DefaultProfileImg}
-        alt="chatroomLogo"
-        className="logo"
-      />
-    )
+    const getImages = () => {
+      return item.user_list.map((user, idx) => {
+        return (
+          <div className={`base img${idx + 1}`}>
+            {getImg(user.profile_img)} 
+          </div>
+        )
+      }) 
+    }
+
+    if(memberCnt === 1) {
+      return getImg(logo)
+    } else {
+      return (
+        <div className={classnames({
+          two: memberCnt === 2,
+          three: memberCnt === 3,
+          four: memberCnt >= 4
+        })}>
+          {getImages()}
+        </div>
+      )
+    }
   };
 
   render() {
@@ -64,8 +94,15 @@ class ListItem extends React.Component {
     }
 
     if (!item.hide) {
+
+      var membersCount = item.user_list ? item.user_list.length + 1 : 1
+
       return (
-        <li className="ListItem" onClick={this.props.onClick}>
+        <li className={classnames("ListItem", {
+            selected: this.props.selected
+          })} 
+          onClick={this.props.onClick}
+        >
           <div className="logoContainer" onClick={this.props.onLogoClick}>
             {this._renderLogo(item.logo)}
           </div>
@@ -75,6 +112,15 @@ class ListItem extends React.Component {
               <Typography variant="body1" color="textPrimary" noWrap={true}>
                 {chatroomName}
               </Typography>
+              {
+                membersCount === 2
+                ? null
+                : <div className="count">
+                  <Typography variant="body1" color="textSecondary" noWrap={true}>
+                    {membersCount}
+                  </Typography>
+                </div>
+              }
             </div>
             <div className="msg">
               <Typography variant="body2" color="textSecondary" noWrap={true}>
@@ -115,7 +161,8 @@ ListItem.propTypes = {
     logo: PropTypes.string,
     lastMsg: PropTypes.string,
     date: PropTypes.string
-  })
+  }),
+  selected: PropTypes.bool
 };
 
 export default ListItem;

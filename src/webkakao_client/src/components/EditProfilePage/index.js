@@ -20,12 +20,15 @@ import Dropzone from 'react-dropzone';
 class EditProfilePage extends React.Component {
 
   state = {
-    dialog: false
+    dialog: false,
+    input: '',
+    changingPassword: false
   }
 
-  _onClick = (e) => {
+  _onClick = (e, isChagningPassword) => {
     this.setState({
-      dialog: true
+      dialog: true,
+      changingPassword: isChagningPassword
     })
   }
 
@@ -36,13 +39,15 @@ class EditProfilePage extends React.Component {
 
   _handleClose = () => {
     this.setState({
-      dialog: false
+      dialog: false,
+      isChagningPassword: false,
+      input: ''
     })
   }
 
   _onProfileDrop = (acceptedFiles, rejectedFiles) => {
     if(acceptedFiles.length === 0) {
-      alert("only image")
+      alert("이미지만 업로드 가능합니다.")
       return
     }
     this.props.stores.user.uploadNewProfileImage(acceptedFiles[0])
@@ -78,13 +83,16 @@ class EditProfilePage extends React.Component {
         <div className="listContainer">
           <List className="list">
             <ListItem button onClick={this._onClick}>
-              <ListItemText primary="Status message"/>
+              <ListItemText primary="상태 메세지"/>
               <ListItemText secondary={user.userInfo.status_msg}/>
+            </ListItem> 
+            <ListItem button onClick={e => this._onClick(e, true)}>
+              <ListItemText primary="비밀번호 변경"/>
             </ListItem> 
             <Divider/>
             <ListItem>
               <Button fullWidth onClick={this._onLogoutClick}>
-                Logout
+                로그아웃
               </Button>
             </ListItem>
           </List>
@@ -94,22 +102,33 @@ class EditProfilePage extends React.Component {
           open={this.state.dialog}
           onClose={this._handleClose}
         >
-          <DialogTitle>Edit status message</DialogTitle>
+          <DialogTitle>
+            {
+              this.state.changingPassword
+              ? "비밀번호 변경"
+              : "상태 메시지 변경"
+            }
+          </DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
               margin="dense"
-              id="statusMessag"
-              label="Status Message"
+              id="input"
+              label={this.state.changingPassword
+                ? "비밀번호 변경"
+                : "상태 메시지 변경"
+              }
+              name="input"
+              type={this.state.changingPassword ? "Password" : null}
               fullWidth
             />
           </DialogContent>
           <DialogActions>
             <Button onClick={this._handleClose}>
-              Cancel
+              취소
             </Button>
             <Button onClick={this._handleClose}>
-              Apply
+              적용
             </Button>
           </DialogActions>
         </Dialog>

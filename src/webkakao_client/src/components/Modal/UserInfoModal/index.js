@@ -3,22 +3,11 @@ import ProfileImage from '../../ProfileImage'
 import { inject, observer } from 'mobx-react';
 import styles from "./styles.module.scss"
 import {
-  Block,
-  PersonAdd,
-  ChatBubble,
-} from '@material-ui/icons'
-import {
   Dialog,
   Typography,
   IconButton
 } from '@material-ui/core'
 import classnames from 'classnames'
-import AddFriendIcon from "../../../resources/btn_profile_add_friend@2x.png"
-import AddFriendPressIcon from "../../../resources/btn_profile_add_friend_press@2x.png"
-import NewChatIcon from "../../../resources/btn_profile_chat@2x.png"
-import NewChatPressIcon from "../../../resources/btn_profile_chat_press@2x.png"
-import BlockIcon from "../../../resources/btn_profile_block_friend@2x.png"
-import BlockPressIcon from "../../../resources/btn_profile_block_friend_press@2x.png"
 
 @inject('stores')
 @observer
@@ -40,6 +29,7 @@ class UserInfoModal extends React.Component {
       view.hideUserSearchModal();
       view.hideUserInfoModal();
       chatroom.openChatroom(user.userDetail.user_idx);
+      view.showChatroomList(1) // TODO: refactoring
       user.removeUserInfo();
     }
 

@@ -41,17 +41,19 @@ class TitleBar extends Component {
   render() {
     return (
       <div>
-      <div className="titleBarContainer">
-        <div className="titleContainer">
-          <Title title={this._renderTitle()}/>
+        <div className="titleBarContainer">
+          <div className="titleContainer">
+            <Title title={this._renderTitle()}/>
+          </div>
+          <div className="buttonContainer">
+            <Btn btnName={this.state.firstBtn} />
+            <Btn btnName={this.state.secondBtn} />
+            <Btn btnName={this.state.thirdBtn} />
+          </div>
         </div>
-        <div className="buttonContainer">
-          <Btn btnName={this.state.firstBtn} />
-          <Btn btnName={this.state.secondBtn} />
-          <Btn btnName={this.state.thirdBtn} />
+        <div className="searchContainer">
+          <SearchBar/>
         </div>
-      </div>
-        <SearchBar/>
       </div>
     )
   }

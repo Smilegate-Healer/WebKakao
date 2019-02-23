@@ -6,6 +6,7 @@ import { inject, observer } from "mobx-react";
 @inject("stores")
 @observer
 class ChatroomList extends React.Component {
+
   _onItemClick = (e, idx) => {
     this.props.stores.view.showChatroom(idx)
     const { view } = this.props.stores;
@@ -18,6 +19,7 @@ class ChatroomList extends React.Component {
         item={v}
         key={idx}
         onClick={e => this._onItemClick(e, v.chatroom_idx)}
+        selected={v.chatroom_idx === this.props.stores.view.selectedChatroom}
       />
     )
   }

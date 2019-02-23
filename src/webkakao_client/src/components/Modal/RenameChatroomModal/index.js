@@ -1,94 +1,63 @@
-import React from 'react';
-import Modal from 'react-modal';
-import { inject, observer } from 'mobx-react';
-import { InputBase } from '@material-ui/core'
-import SearchBtn from './SearchBtn';
-import CloseBtn from './CloseBtn';
+import React from "react";
+import Modal from "react-modal";
+import { inject, observer } from "mobx-react";
+import {
+  InputBase,
+  DialogContent,
+  Dialog,
+  DialogTitle
+} from "@material-ui/core";
+import SearchBtn from "./SearchBtn";
+import CloseBtn from "./CloseBtn";
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-};
-
-@inject('stores')
+@inject("stores")
 @observer
 class RenameChatroomModal extends React.Component {
-
-  constructor() {
-    super();
-  }
-
   componentDidMount() {
-    Modal.setAppElement('body');
+    Modal.setAppElement("body");
   }
 
   openModal() {
-    const { view } = this.props.stores
+    const { view } = this.props.stores;
     view.showRenameChatroomModal();
   }
 
   afterOpenModal = () => {
     // references are now sync'd and can be accessed.
     // alert("after open modal");
-  }
+  };
 
   closeModal = () => {
-    const { view } = this.props.stores
+    const { view } = this.props.stores;
     view.hideRenameChatroomModal();
-    view.resetRenameChatroomTargerStr();
-  }
+    view.resetenameChatroomTargerStr();
+  };
 
-  _onEnter = (e) => {
+  _onEnter = e => {
     const { renameChatroomTargetStr } = this.props.stores.view;
-    if(e.key === 'Enter') {
-      if(renameChatroomTargetStr === '') return 
+    if (e.key === "Enter") {
+      if (renameChatroomTargetStr === "") return;
       this._onClickSearchBtn();
     }
-  }  
+  };
 
-  _onInputChange = (e) => {
+  _onInputChange = e => {
     const { view } = this.props.stores;
     view.setRenameChatroomTargerStr(e.target.value);
-  }
+  };
 
-  _onClickSearchBtn = (e) => {
+  _onClickSearchBtn = e => {
     const { view, chatroom } = this.props.stores;
     chatroom.renameChatroom(view.renameChatroomTargetStr);
-  }
+  };
 
   render() {
     const isOpen = this.props.stores.view.renameChatroomModal;
     return (
-      <div>
-        <Modal
-          isOpen={isOpen}
-          onAfterOpen={this.afterOpenModal}
-          onRequestClose={this.closeModal}
-          style={customStyles}
-          contentLabel="Example Modal"
-        >
-        <div>
+      <Dialog open={isOpen}>
+        <DialogTitle>채팅방 이름</DialogTitle>
+        <DialogContent>
           <InputBase
-            value="채팅방 이름"
-            style={{
-              color: "#000000",
-              fontSize: 22,
-              backgroundColor: "#FFFFFFF",
-              width: 300,
-              textAlign: "center"
-            }}
-            readOnly
-          />
-        </div>
-        <div>
-          <InputBase
-            className="input"
             margin="dense"
             onChange={this._onInputChange}
             onKeyPress={this._onEnter}
@@ -96,17 +65,18 @@ class RenameChatroomModal extends React.Component {
             autoFocus={true}
             style={{
               backgroundColor: "#f4f4f9",
-              width: 300
+              width: 300,
+              padding: "4px 8px 4px 8px"
             }}
-            startAdornment={<CloseBtn onClick={this.closeModal}/>}
+            startAdornment={<CloseBtn onClick={this.closeModal} />}
             endAdornment={<SearchBtn onClick={this._onClickSearchBtn} />}
             placeholder="변경할 채팅방 이름"
           />
-          </div>
-        </Modal>
-      </div>
+        </DialogContent>
+      </Dialog>
     );
   }
+
 }
 
-export default RenameChatroomModal
+export default RenameChatroomModal;

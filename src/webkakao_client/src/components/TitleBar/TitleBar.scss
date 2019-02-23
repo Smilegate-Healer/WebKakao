@@ -21,4 +21,36 @@
     display: flex;
     justify-content: space-around;
   }
+
+  .searchContainer {
+
+  }
+}
+
+.search {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-left: 16px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+
+  .input {
+    padding-left: 8px;
+    padding-right: 8px;
+
+    margin-right: 4px;
+    background-color: #f0f0f5;
+
+    flex: 1;
+
+    align-items: center;
+
+    .text {
+      margin-top: 4px;
+      margin-bottom: 4px;
+      margin-left: 4px;
+    }
+
+  }
 }

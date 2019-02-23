@@ -45,10 +45,19 @@ class MenuBar extends Component {
           value={this.props.stores.view.menuBarIdx}
           onChange={(e, v) => this._onClickButton(v)}
           variant="fullWidth"
-          classes={{root: "tabs"}}>
-          <Tab className="tab" icon={<PersonOutline/>}/>
-          <Tab className="tab" icon={<MessageOutlined/>}/>
-          <Tab className="tab" icon={<MoreHorizOutlined/>}/>
+          classes={{
+            root: "tabs",
+            indicator: "indicator"
+          }}>
+          <Tab className="tab" icon={<PersonOutline/>} classes={{
+            selected: "selected" 
+          }}/>
+          <Tab className="tab" icon={<MessageOutlined/>} classes={{
+            selected: "selected"
+          }}/>
+          <Tab className="tab" icon={<MoreHorizOutlined/>} classes={{
+            selected: "selected"
+          }}/>
         </Tabs>
       </div>
     )

@@ -1,9 +1,30 @@
+@import "../../colors.scss";
+
 .menuContainer {
   width: 100%;
   height: 48px;
 
   .tabs {
     height: 48px;
+
+    .tab {
+      
+      &:hover {
+        color: $kakaoYellow;
+        opacity: 1;
+      }
+
+      &.selected {
+        color: $kakaoYellow;
+      }
+    }
+
+    .indicator {
+      position: absolute;
+      top: 0;
+      background-color: $kakaoYellow;
+    }
+
   }
 
   .border {
