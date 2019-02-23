@@ -50,7 +50,7 @@
 			user_idx,
 			name,
 			profile_img,
-			status_msg
+			status_msg,
 			back_img
 		from 
 			user
