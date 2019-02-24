@@ -9,6 +9,7 @@ class RootStore {
     this.user = new UserStore(this)
     this.view = new View(this)
 
+
     /**
      * Reaction to changing selected Chatroom id
      */
@@ -28,7 +29,7 @@ class RootStore {
      * It will be occured when the status turns from true to false
      */
     reaction(() => this.chatroom.isConnected, isConnected => {
-      if(isConnected === false)  {
+      if(isConnected === false && this.user.isLogin)  {
         console.debug("Chatting server connection broken")
         this.connectToChattingServer()
       }
@@ -52,7 +53,15 @@ class RootStore {
         }
     })
 
-     
+
+    // auto login
+    const userInfo = sessionStorage.getItem("user")
+    if(userInfo) {
+      this.user.userInfo = JSON.parse(userInfo)
+      this.user.doAfterSignIn()
+    } else {
+      
+    }
   }
 
   /**
@@ -75,6 +84,7 @@ class RootStore {
         setTimeout(() => this.connectToChattingServer(), 5000)
       })
   }
+
 }
 
 export default RootStore;

@@ -1,8 +1,6 @@
 import React from "react";
 import {
   Paper,
-  Input,
-  ButtonBase,
   InputBase,
   Button,
   Typography,
@@ -12,10 +10,11 @@ import {
   DialogContentText
 } from "@material-ui/core";
 import styles from "./styles.module.scss"
-import { inject } from "mobx-react";
+import { inject, observer } from "mobx-react";
 import classnames from "classnames";
 
 @inject("stores")
+@observer
 class LoginPage extends React.Component {
   state = {
     email: "",
@@ -39,6 +38,8 @@ class LoginPage extends React.Component {
       this.props.stores.user.signIn({
         email,
         password
+      })
+      .then(() => {
       });
     }
   };

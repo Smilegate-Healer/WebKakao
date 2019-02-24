@@ -4,12 +4,15 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'mobx-react';
 import Stores from './stores'
+import {BrowserRouter } from 'react-router-dom'
 
 const stores = new Stores()
 
 ReactDOM.render(
   <Provider stores={stores}>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </Provider>,
   document.getElementById('root'));
 

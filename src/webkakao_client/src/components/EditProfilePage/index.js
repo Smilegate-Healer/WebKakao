@@ -10,13 +10,14 @@ import {
   DialogTitle,
   Button,
   Divider} from '@material-ui/core'
-import { inject } from 'mobx-react'
+import { inject, observer } from 'mobx-react'
 import "./styles.scss"
 import ProfileImage from '../ProfileImage';
 import Dropzone from 'react-dropzone';
 
 
 @inject("stores")
+@observer
 class EditProfilePage extends React.Component {
 
   state = {
@@ -33,7 +34,7 @@ class EditProfilePage extends React.Component {
   }
 
   _onLogoutClick = (e) => {
-    alert("logout")
+    this.props.stores.user.logout()
   }
 
 

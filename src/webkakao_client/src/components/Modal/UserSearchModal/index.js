@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import { inject, observer } from 'mobx-react';
 import FriendItem from './FriendItem'
-import { InputBase } from '@material-ui/core'
+import { InputBase, Dialog, DialogContent, DialogTitle } from '@material-ui/core'
 import SearchBtn from './SearchBtn';
 import CloseBtn from './CloseBtn';
 import InvalidUser from './InvalidUser';
@@ -21,10 +21,6 @@ const customStyles = {
 @inject('stores')
 @observer
 class UserSearchModal extends React.Component {
-
-  constructor() {
-    super();
-  }
 
   componentDidMount() {
     Modal.setAppElement('body');
@@ -82,28 +78,14 @@ class UserSearchModal extends React.Component {
     const isOpen = this.props.stores.view.userSearchModal;
     const user = this._userRanderFunc();
     return (
-      <div>
-        <Modal
+        <Dialog
           isOpen={isOpen}
-          onAfterOpen={this.afterOpenModal}
-          onRequestClose={this.closeModal}
-          style={customStyles}
-          contentLabel="Example Modal"
+          onClose={this.closeModal}
         >
-        <div>
-          <InputBase
-            value="이메일로 친구 추가"
-            style={{
-              color: "#000000",
-              fontSize: 22,
-              backgroundColor: "#FFFFFFF",
-              width: 300,
-              textAlign: "center"
-            }}
-            readOnly
-          />
-        </div>
-        <div>
+        <DialogTitle>
+          이메일로 친구 추가 
+        </DialogTitle>
+        <DialogContent>
           <InputBase
             className="input"
             margin="dense"
@@ -120,9 +102,8 @@ class UserSearchModal extends React.Component {
             placeholder="상대방 E-Mail"
           />
           {user}
-          </div>
-        </Modal>
-      </div>
+        </DialogContent>
+      </Dialog>
     );
   }
 }

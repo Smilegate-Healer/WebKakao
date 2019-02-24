@@ -85,9 +85,6 @@ export default class View {
 
   /**
    * Show the selected chatroom
-   * 
-   * TODO: idx or id
-   * currently idx
    */
   @action showChatroom = (chatroomId) => {
     console.debug("Set chatroom to " + chatroomId)

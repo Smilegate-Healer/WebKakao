@@ -1,35 +1,15 @@
 import React, { Component } from "react";
 import "./styles.scss";
-import LeftContainer from "./container/LeftContainer";
-import RightContainer from "./container/RightContainer";
-import { observer, inject } from "mobx-react";
-import { CssBaseline, CircularProgress } from "@material-ui/core";
-import ReactNotification from "react-notifications-component";
-import "react-notifications-component/dist/theme.css";
-import UserInfoModal from "./components/Modal/UserInfoModal";
 import { hot } from "react-hot-loader/root";
-import UserSearchModal from "./components/Modal/UserSearchModal";
-import UserListModal from "./components/Modal/UserListModal";
-import RenameChatroomModal from "./components/Modal/RenameChatroomModal";
-import LoginPage from "./components/LoginPage";
-
+import LoginPage from "./pages/LoginPage";
+import { Route } from "react-router-dom";
+import MainPage from "./pages/MainPage";
+import { inject, observer } from "mobx-react";
+import { CssBaseline, CircularProgress } from "@material-ui/core";
 
 @inject("stores")
 @observer
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.props.stores.view.showPollingMessage = this.props.stores.view.showPollingMessage.bind(
-      this
-    );
-    this.props.stores.view.notificationDOMRef = React.createRef();
-  }
-  onClickNotification(e) {
-    this.props.stores.view.showChatroom(
-      this.props.stores.view.getNotificationChatroomIdx()
-    );
-  }
-
   _renderLoadingPage = () => {
     if (this.props.stores.view.isLoading) {
       return (
@@ -44,44 +24,25 @@ class App extends Component {
     }
   };
 
-  _randerFunc = () => {
-    const { user } = this.props.stores;
-    if (user.isLogin) {
-      return (
-        <div className="root">
-          {this._renderLoadingPage()}
-          <ReactNotification
-            ref={this.props.stores.view.notificationDOMRef}
-            onClick={this.onClickNotification}
-          />
-          <UserSearchModal />
-          <UserListModal />
-          <UserInfoModal />
-          <RenameChatroomModal />
-          <CssBaseline />
-          <div className="leftContainer">
-            <LeftContainer />
-          </div>
-          <div className="rightContainer">
-            <RightContainer />
-          </div>
-        </div>
-      );
+  _renderContent = () => {
+    const { view, user } = this.props.stores
+    if(user.userInfo) {
+      if(view.isLoading) {
+        return this._renderLoadingPage()
+      } else {
+        return <MainPage/>
+      }
     } else {
-      return (
-        <div className="root">
-          <CssBaseline />
-          <LoginPage/>
-        </div>
-      );
+      return <LoginPage/>
     }
-  };
+  }
 
   render() {
-    const component = this._randerFunc();
     return (
       <div className="root">
-        {component}
+        <CssBaseline />
+        {/* <Route path="/" render={(props) => this._renderContent(props)} /> */}
+        {this._renderContent()}
       </div>
     );
   }

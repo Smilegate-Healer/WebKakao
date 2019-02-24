@@ -11,8 +11,8 @@ const dummyUser = {
 }
 
 export default class User {
-  static _domain = "http://localhost"
-  static _axiosHeaders = {
+  _domain = "http://localhost"
+  _axiosHeaders = {
     "Accept": "application/json",
     "Content-Type": "application/json"
   }
@@ -32,55 +32,6 @@ export default class User {
   constructor(root) {
     // from index
     this.root = root;
-
-    // if success
-    this.authorizedAxios = axios.create({
-      //baseURL: this._domain,
-      // baseURL: "localhost:8081",
-      timeout: 30000,
-      headers: {
-        // ...this._axiosHeaders, // TODO: right??
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        // "Authorization": `Bearer` + this.userInfo.token
-      }
-    })
-
-    this.friendAxios = axios.create({
-      //baseURL: this._domain,
-      // baseURL: "localhost:8081",
-      timeout: 30000,
-      headers: {
-        // ...this._axiosHeaders, // TODO: right??
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        // "Authorization": `Bearer` + this.userInfo.token
-      }
-    })
-
-    this.root.chatroom.chatroomAxios = axios.create({
-      //baseURL: this._domain,
-      // baseURL: "localhost:8081",
-      timeout: 30000,
-      headers: {
-        // ...this._axiosHeaders, // TODO: right??
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        // "Authorization": `Bearer` + this.userInfo.token
-      }
-    })
-
-    this.root.chatroom.pollingAxios = axios.create({
-      //baseURL: this._domain,
-      // baseURL: "localhost:8081",
-      timeout: 60000,
-      headers: {
-        // ...this._axiosHeaders, // TODO: right??
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        // "Authorization": `Bearer` + this.userInfo.token
-      }
-    })
   }
 
   @action
@@ -89,19 +40,36 @@ export default class User {
   }
 
   @action signIn = (data) => {
-    // TODO: Login logic
-    // Set the user infomation
-    // json object or something else
-    this.authorizedAxios.post("http://localhost:8084/auth/signin", data).then(res => {
-      console.log(res)
-      if (res.data.resultCode === 0) {
-        this.userInfo = res.data.param;
-        this.getFriendList()
-        this.getChatroomList()
-        this.root.connectToChattingServer()
-      }
-    }).catch(err => console.error(err))
+    return new Promise((resolve, reject) => {
+      axios.post("http://localhost:8084/auth/signin", data).then(res => {
+        console.log(res)
+        if (res.data.resultCode === 0) {
+          this.userInfo = res.data.param;
+          sessionStorage.setItem("user", JSON.stringify(this.userInfo))
+          resolve()
+          this.doAfterSignIn()
+        }
+        reject()
+      }).catch(err => {
+        console.error(err)
+        reject()
+      })
+    })
+  }
 
+  @action doAfterSignIn = () => {
+    this.authorizedAxios = axios.create({
+      baseURL: this._domain,
+      timeout: 30000,
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "access_token": this.userInfo.access_token
+      }
+    })
+    this.getFriendList()
+    this.getChatroomList()
+    this.root.connectToChattingServer()
   }
 
   @action signUp = (data) => {
@@ -111,66 +79,69 @@ export default class User {
         console.log(res)
         if (res.data.resultCode === 0) {
           resolve()
+          alert("회원가입 완료!")
           // TODO:
         }
       }).catch(err => {
         console.error(err)
+        alert("회원가입 실패!")
         reject()
       })
     })
   }
 
   @action resetPassword = (data) => {
-    this.authorizedAxios.post("http://localhost:8084/auth/password/reset", data).then(res => {
-      console.log(res)
-      if (res.data.resultCode === 0) {
-        // TODO:
-      }
-    }).catch(err => console.error(err))
+    this.authorizedAxios.post("http://localhost:8084/auth/password/reset", data)
+      .then(res => {
+        console.log(res)
+        if (res.data.resultCode === 0) {
+          // TODO:
+        }
+      })
+      .catch(err => console.error(err))
   }
 
   @action logout = () => {
-    // TODO: logout logic
-    // ex)
-    // go to login page
-
-
     this.authorizedAxios = null;
     this.isLogin = false;
     this.userInfo = null;
     this.friendList = null;
+    this.root.chatroomList = []
+    this.root.chats = {}
+    this.root.chatroom.unsubscribeChatroom()
+    this.root.chatroom.closeSocket()
+    this.root.chatroom.pollingCanceler.cancel()
+    this.root.chatroom.pollingCanceler = null
+
+    sessionStorage.clear()
   }
 
   @action getFriendList = () => {
-    this.friendAxios.post("http://localhost:8081/api/friend/list", { // TODO: REST???
+    this.authorizedAxios.post("http://localhost:8081/api/friend/list", { // TODO: REST???
       user_idx: this.userInfo.user_idx
-    }, {
-        headers: {
-          access_token: this.root.user.userInfo.access_token
-        }
-      }).then(res => {
+    })
+      .then(res => {
         console.log(res)
         if (res.data.resultCode === 0) {
           this.initFriendList(res.data.param.list)
         }
-      }).catch(err => console.error(err))
+      })
+      .catch(err => console.error(err))
   }
 
   @action getChatroomList = () => {
-    this.root.chatroom.chatroomAxios.post('http://localhost:8081/api/chatroom/list', {
+    this.authorizedAxios.post('http://localhost:8081/api/chatroom/list', {
       user_idx: this.userInfo.user_idx
-    }, {
-        headers: {
-          access_token: this.root.user.userInfo.access_token
-        }
-      }).then(res => {
+    })
+      .then(res => {
         console.log(res)
         if (res.data.resultCode === 0) {
           this.root.chatroom.initChatroomList(res.data.param.list)
           this.root.chatroom.updateWholeChatroomList();
-          this.isLogin = true;
+          this.isLogin = true; // TODO: ?
         }
-      }).catch(err => console.error(err))
+      })
+      .catch(err => console.error(err))
   }
 
   /**
@@ -184,15 +155,17 @@ export default class User {
    */
   @action
   requestFriend = (data) => {
-    this.friendAxios.post("http://localhost:8081/api/friend/request", data).then(res => {
-      console.log(res)
-      if (res.data.resultCode === 0) {
-        this.addUserList(res.data.param);
-        this.root.view.hideUserSearchModal();
-        this.root.view.hideUserInfoModal();
-        this.root.user.removeUserInfo();
-      }
-    }).catch(err => console.error(err))
+    this.authorizedAxios.post("http://localhost:8081/api/friend/request", data)
+      .then(res => {
+        console.log(res)
+        if (res.data.resultCode === 0) {
+          this.addUserList(res.data.param);
+          this.root.view.hideUserSearchModal();
+          this.root.view.hideUserInfoModal();
+          this.root.user.removeUserInfo();
+        }
+      })
+      .catch(err => console.error(err))
   }
 
   /**
@@ -207,12 +180,14 @@ export default class User {
    */
   @action
   updateFriend = (data) => {
-    this.friendAxios.post("http://localhost:8081/api/friend/status", data).then(res => {
-      console.log(res)
-      if (res.data.resultCode === 0) {
-        this.initFriendList(res.data.param.list)
-      }
-    }).catch(err => console.error(err))
+    this.authorizedAxios.post("http://localhost:8081/api/friend/status", data)
+      .then(res => {
+        console.log(res)
+        if (res.data.resultCode === 0) {
+          this.initFriendList(res.data.param.list)
+        }
+      })
+      .catch(err => console.error(err))
   }
 
   /**
@@ -225,14 +200,16 @@ export default class User {
    */
   @action
   searchFriend = (data) => {
-    this.friendAxios.post("http://localhost:8081/api/friend/search", data).then(res => {
-      console.log(res)
-      if (res.data.resultCode === 0) {
-        this.searchUser = res.data.param;
-      } else if (res.data.resultCode === 102) {
-        this.searchUser = 'Invalid User';
-      }
-    }).catch(err => console.error(err))
+    this.authorizedAxios.post("http://localhost:8081/api/friend/search", data)
+      .then(res => {
+        console.log(res)
+        if (res.data.resultCode === 0) {
+          this.searchUser = res.data.param;
+        } else if (res.data.resultCode === 102) {
+          this.searchUser = 'Invalid User';
+        }
+      })
+      .catch(err => console.error(err))
   }
 
   @action
@@ -250,13 +227,15 @@ export default class User {
    */
   @action
   getUserInfo = (data) => {
-    this.friendAxios.post("http://localhost:8081/api/user/info", data).then(res => {
-      console.log(res)
-      if (res.data.resultCode === 0) {
-        this.userDetail = res.data.param;
-        this.root.view.showUserInfoModal();
-      }
-    }).catch(err => console.error(err))
+    this.authorizedAxios.post("http://localhost:8081/api/user/info", data)
+      .then(res => {
+        console.log(res)
+        if (res.data.resultCode === 0) {
+          this.userDetail = res.data.param;
+          this.root.view.showUserInfoModal();
+        }
+      })
+      .catch(err => console.error(err))
   }
 
   @action
@@ -346,11 +325,12 @@ export default class User {
       var formData = new FormData()
       formData.append("file", image)
 
-      this.authorizedAxios.post("http://localhost:8083/profile/new/" + this.userInfo.user_idx, formData, {
-        header: {
-          "Content-Type": "multipart/form-data"
-        }
-      })
+      this.authorizedAxios.post("http://localhost:8083/profile/new/" + this.userInfo.user_idx, 
+        formData, {
+          header: {
+            "Content-Type": "multipart/form-data"
+          }
+        })
         .then(res => {
           console.log(res)
           resolve()
