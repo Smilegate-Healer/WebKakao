@@ -3,11 +3,7 @@ import ChatItem from './ChatItem'
 import './styles.scss'
 import { inject, observer } from "mobx-react"
 import SideMenu from './SideMenu';
-import InfiniteScroll from 'react-infinite-scroller';
-import { CircularProgress, Typography } from "@material-ui/core"
-import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 import { Waypoint } from 'react-waypoint'
-import { Divider } from '@material-ui/core'
 
 @inject("stores")
 @observer

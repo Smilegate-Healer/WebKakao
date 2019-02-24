@@ -26,7 +26,7 @@ class FriendList extends React.Component {
     const userList = this.props.stores.user.friendList;
     if (userList) {
       return (
-        <div className={`${this.props.className}`}>
+        <div className={`List ${this.props.className}`}>
           <Me isFriendList/>
           <Divider variant="middle"/>
           {

@@ -5,6 +5,7 @@
   height: 80px;
   width: 100%;
   align-items: stretch;
+  flex-shrink: 0;
 
   &:hover {
     background-color: rgb(96.1%, 96.1%, 96.1%);
