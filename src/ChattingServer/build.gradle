@@ -33,6 +33,7 @@ dependencies {
     compile group: 'org.mybatis', name: 'mybatis-spring', version: '1.3.2'
     compile group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '1.3.2'
     compile group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
+    compile 'org.redisson:redisson-spring-boot-starter:3.10.2'
     runtimeOnly('mysql:mysql-connector-java')
     
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

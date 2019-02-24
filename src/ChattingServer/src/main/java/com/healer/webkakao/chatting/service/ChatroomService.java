@@ -7,8 +7,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.healer.webkakao.chatting.database.ChatroomMapper;
 import com.healer.webkakao.chatting.model.mysql.Chatroom;
 import com.healer.webkakao.chatting.util.MessageType;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.redisson.client.RedisClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +50,9 @@ public class ChatroomService {
 
   @Autowired
   private SimpMessagingTemplate simpMessagingTemplate;
+
+  @Autowired
+  private RedissonClient redissonClient;
 
 
   private HashMap<String, Long> sessionidWithUserId = new HashMap<>();
@@ -178,11 +187,21 @@ public class ChatroomService {
   }
 
   public void chat(ChatModel message, long chatroomId) throws Exception {
-    log.debug("Receive from a client chatroomId=" + chatroomId);
+    log.debug("Receive from a chat chatroomId=" + chatroomId);
+
+    // TODO: Sync
+    log.debug("Get lock " + this.getLockKey(chatroomId));
+    RLock lock = redissonClient.getLock(this.getLockKey(chatroomId));
+
+    log.debug("Lock " + this.getLockKey(chatroomId));
+    lock.lock();
+    log.debug("Locked! " + this.getLockKey(chatroomId));
+
 
     long lastMsgIdx = this.getLastMsgIdx(chatroomId);
     if (lastMsgIdx == -1) {
       log.warn("There is no chatroomInfo by chatroomId=" + chatroomId);
+      lock.unlock();
       return;
     }
 
@@ -191,11 +210,15 @@ public class ChatroomService {
 
     message.setMsg_idx(lastMsgIdx + 1);
     // TODO: Which time do I set???
+    // TODO: what about sync time stored in Redis
     message.setTimestamp(System.currentTimeMillis());
-    this.updateLastMsg(chatroomId, lastMsgIdx + 1, message.getMsg(), message.getMsg_type());
+
+    if(this.updateLastMsg(chatroomId, lastMsgIdx + 1, message.getMsg(), message.getMsg_type()) == false) {
+      log.debug("Failed to update last msg");
+      lock.unlock();
+    }
 
     // Set the last read msg index for this user to the same with chatroom's last msg idx
-
     String msgStr = objectMapper.writeValueAsString(message);
 
     // Add the message into the List of Redis
@@ -205,9 +228,12 @@ public class ChatroomService {
 
     this.moveToMongo(chatroomIdStr, MAX_SIZE);
 
+    log.debug("Unlock " + this.getLockKey(chatroomId));
+    lock.unlock();
+    log.debug("Unlocked " + this.getLockKey(chatroomId));
+
     log.debug("Publish the message to Redis");
     redisTemplate.convertAndSend("chatroom/" + chatroomId, objectMapper.writeValueAsString(message)); // Send the content of the message using Pub/Sub
-
   }
 
 
@@ -318,7 +344,7 @@ public class ChatroomService {
     sessionidWithChatroomId.remove(key);
   }
 
-  private void updateLastReadMsgIdx(long chatroomId, long userId) {
+  public void updateLastReadMsgIdx(long chatroomId, long userId) {
     ChatroomInfoModel info = redisRepository.findById(chatroomId).get();
 
     log.debug("Update last read msg idx to " + info.getLast_msg_idx() + " at chatroomId=" + chatroomId + " userId=" + userId);
@@ -332,4 +358,6 @@ public class ChatroomService {
   private String getLastReadKey(long chatroomId) {
     return "lastRead_" + chatroomId;
   }
+
+  private String getLockKey(long chatroomId) { return "lock_" + chatroomId; }
 }

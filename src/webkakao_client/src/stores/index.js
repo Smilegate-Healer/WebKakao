@@ -30,7 +30,7 @@ class RootStore {
     reaction(() => this.chatroom.isConnected, isConnected => {
       if(isConnected === false)  {
         console.debug("Chatting server connection broken")
-        this.connecToChattingServer()
+        this.connectToChattingServer()
       }
     })
 
@@ -72,7 +72,7 @@ class RootStore {
       .catch(() => {
         console.error("ERROR: cannot open socket")
         console.debug("Retry")
-        setTimeout(() => this.connecToChattingServer(), 5000)
+        setTimeout(() => this.connectToChattingServer(), 5000)
       })
   }
 }

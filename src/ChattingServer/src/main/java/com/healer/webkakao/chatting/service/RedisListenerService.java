@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class RedisListenerService implements MessageListener {
+public class RedisListenerService implements MessageListener{
 
   @Autowired
   private SimpMessagingTemplate simpMessagingTemplate;

@@ -264,6 +264,7 @@ export default class Chatroom {
     }
 
     if (object_id === "null") {
+      console.debug("This chats object is the first one")
       return;
     }
 
@@ -281,25 +282,38 @@ export default class Chatroom {
           .then(res => {
             if (res.data.resultCode === 0) {
               resolve(res.data.param);
+            } else {
+              reject(res)
             }
           })
           .catch(err => {
             reject(err);
             this.endLoading();
           });
-      }).then(param => {
+      })
+      .then(param => {
         if (param.data.length > 0) {
           const first_msg_idx = this.chats[chatroom_idx].data[0].msg_idx;
           const responseMsg = param.data;
-          for (var i = responseMsg.length - 1; i >= 0; i--) {
-            if (responseMsg[i].msg_idx < first_msg_idx) {
-              this.chats[chatroom_idx].data.unshift(responseMsg[i]);
-            }
+          const idxOfDuplicateStart = responseMsg.findIndex(newChat => {
+            return newChat.msg_idx === first_msg_idx
+          })
+          
+          var newChats = responseMsg
+          if(idxOfDuplicateStart !== -1) {
+            console.debug("start of duplicate index= " + idxOfDuplicateStart)
+            newChats = responseMsg.slice(0, idxOfDuplicateStart)
           }
+
+          this.chats[chatroom_idx].data = newChats.concat(this.chats[chatroom_idx].data)
           this.chats[chatroom_idx].pre_object_id = param.pre_object_id;
         } else {
           this.endLoading();
         }
+      })
+      .catch(err => {
+        console.error("Can't get old messages by scrolling")
+        console.error(err)
       });
     }
   };
