@@ -37,6 +37,7 @@ export default class User {
           this.userInfo = res.data.param;
           sessionStorage.setItem("user", JSON.stringify(this.userInfo))
           resolve(true)
+          this.isLogin = true
           this.doAfterSignIn()
         } else if(res.data.resultCode === 100) {
           resolve(true)
