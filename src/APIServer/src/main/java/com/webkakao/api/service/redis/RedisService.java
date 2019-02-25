@@ -4,13 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import com.webkakao.api.model.ChatsModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import com.fasterxml.jackson.core.type.TypeReference;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webkakao.api.model.ChatModel;
 import com.webkakao.api.model.ChatroomInfo;
@@ -72,10 +73,10 @@ public class RedisService {
 			if (object.isPresent()) {
 				ChatroomInfoModel model = object.get();
 				if ("i".equals(model.getMsg_type())) {
-					String [] words = model.getLast_msg().split("/");
+					String[] words = model.getLast_msg().split("/");
 					list.get(i).setLast_msg(words[1] + "님이 입장하였습니다.");
 				} else if ("e".equals(model.getMsg_type())) {
-					list.get(i).setLast_msg(model.getLast_msg() +"님이 퇴장하였습니다.");
+					list.get(i).setLast_msg(model.getLast_msg() + "님이 퇴장하였습니다.");
 				} else {
 					list.get(i).setLast_msg(model.getLast_msg());
 				}
@@ -101,8 +102,16 @@ public class RedisService {
 			ChatroomInfoModel model = object.get();
 			return model.getLast_msg_idx();
 		}
-
 		return -1;
+	}
+	
+
+	public long getLastMsgIdx(long chatroom_idx, long user_idx) {
+
+		HashOperations<String, String, String> hash = redisTemplate.opsForHash();
+		Map<String, String> map = hash.entries("lastRead_" + chatroom_idx);
+		String idx = map.get(String.valueOf(user_idx));
+		return Long.parseLong(idx);
 
 	}
 

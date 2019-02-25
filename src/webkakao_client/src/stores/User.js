@@ -78,14 +78,41 @@ export default class User {
   }
 
   @action resetPassword = (data) => {
-    this.authorizedAxios.post("/auth/password/reset", data)
+    return new Promise((resolve, reject) => {
+      axios.post("/auth/password/reset", data)
       .then(res => {
         console.log(res)
         if (res.data.resultCode === 0) {
-          // TODO:
+          resolve()
+        } else {
+          reject();
         }
       })
-      .catch(err => console.error(err))
+      .catch(err => {console.error(err);
+        reject()})
+    })
+  }
+
+  @action changePassword = (password) => {
+    debugger;
+    const data = {
+      email: this.userInfo.email,
+      name: this.userInfo.name, 
+      password: password
+    }
+    return new Promise((resolve, reject) => {
+      this.authorizedAxios.post("/auth/password/change", data)
+      .then(res => {
+        console.log(res)
+        if (res.data.resultCode === 0) {
+          resolve()
+        } else {
+          reject();
+        }
+      })
+      .catch(err => {console.error(err);
+        reject()})
+    })
   }
 
   @action logout = () => {

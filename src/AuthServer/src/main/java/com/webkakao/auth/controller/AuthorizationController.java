@@ -59,7 +59,7 @@ public class AuthorizationController {
 	@RequestMapping(value = "/password/change", method = RequestMethod.POST)
 	public ResponseEntity<AuthResponseWrapper> passwordChange(@RequestBody PasswordReset param) {
 
-		AuthResponseWrapper result = userService.passwordReset(param);
+		AuthResponseWrapper result = userService.passwordChange(param);
 
 		return new ResponseEntity<AuthResponseWrapper>(result, HttpStatus.OK);
 		

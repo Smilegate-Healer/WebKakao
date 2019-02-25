@@ -140,4 +140,30 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+	@Override
+	public AuthResponseWrapper passwordChange(PasswordReset param) {
+		
+		AuthResponseWrapper wrapper = createWrapper();
+		
+		UserCheck user = userMapper.userCheck(param);
+
+		if(user != null) {
+			String tmpPasswd = param.getPassword();
+	
+			String salt = cryptoUtil.randomKey(10);
+			String encPasswd = cryptoUtil.sha256(salt + tmpPasswd);
+	
+			param.setSalt(salt);
+			param.setPassword(encPasswd);
+	
+			userMapper.passwordReset(param);
+			
+		} else {
+			wrapper.setResultCode(100);
+			wrapper.setMessage("not match information");
+		}
+		
+		return wrapper;
+	}
+
 }

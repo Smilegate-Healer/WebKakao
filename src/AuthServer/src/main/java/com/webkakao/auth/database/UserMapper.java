@@ -20,4 +20,6 @@ public interface UserMapper {
 
 	public UserCheck userCheck(PasswordReset param);
 
+	public void updatePassword(PasswordReset param);
+
 }
