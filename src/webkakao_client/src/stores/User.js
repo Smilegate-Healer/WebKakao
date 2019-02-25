@@ -107,6 +107,28 @@ export default class User {
     })
   }
 
+  @action changePassword = (password) => {
+    debugger;
+    const data = {
+      email: this.userInfo.email,
+      name: this.userInfo.name, 
+      password: password
+    }
+    return new Promise((resolve, reject) => {
+    axios.post("http://localhost:8084/auth/password/change", data)
+      .then(res => {
+        console.log(res)
+        if (res.data.resultCode === 0) {
+          resolve()
+        } else {
+          reject();
+        }
+      })
+      .catch(err => {console.error(err);
+        reject()})
+    })
+  }
+
   @action logout = () => {
     this.authorizedAxios = null;
     this.isLogin = false;

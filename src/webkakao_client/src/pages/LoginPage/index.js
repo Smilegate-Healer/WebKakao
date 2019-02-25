@@ -167,7 +167,6 @@ class LoginPage extends React.Component {
   }
 
   _onResetPasswordClick = event => {
-    debugger;
     const { resetEmail, resetName } = this.state;
     if (resetEmail !== "" && resetName !== "") {
       const data = {
