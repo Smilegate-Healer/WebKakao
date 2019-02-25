@@ -874,6 +874,7 @@ export default class Chatroom {
       .catch(err => {
         console.log(err);
       });
+      this.root.view.searchUserList = null;
   };
 
   @action getChatroomIdx = chatroom_idx => {
