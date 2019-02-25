@@ -16,5 +16,7 @@ public interface UserService {
 //	public String resetPassword(UserInfo param);
 
 	public AuthResponseWrapper passwordReset(PasswordReset param);
+
+	public AuthResponseWrapper passwordChange(PasswordReset param);
 	
 }
