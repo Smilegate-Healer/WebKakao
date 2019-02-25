@@ -40,7 +40,7 @@ export default class User {
           this.isLogin = true
           this.doAfterSignIn()
         } else if(res.data.resultCode === 100) {
-          resolve(true)
+          resolve(false)
         }
       }).catch(err => {
         console.error(err)

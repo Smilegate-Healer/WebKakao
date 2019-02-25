@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { inject, observer } from 'mobx-react';
-import FriendItem from './FriendItem'
+import FriendItem from '../../FriendList/FriendItem'
 import { InputBase, Dialog, DialogContent, DialogTitle } from '@material-ui/core'
 import SearchBtn from './SearchBtn';
 import CloseBtn from './CloseBtn';
@@ -79,7 +79,7 @@ class UserSearchModal extends React.Component {
     const user = this._userRanderFunc();
     return (
         <Dialog
-          isOpen={isOpen}
+          open={isOpen}
           onClose={this.closeModal}
         >
         <DialogTitle>

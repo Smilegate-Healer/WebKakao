@@ -28,9 +28,10 @@ class RenameChatroomModal extends React.Component {
   };
 
   closeModal = () => {
-    const { view } = this.props.stores;
+    const { view , user } = this.props.stores;
     view.hideRenameChatroomModal();
     view.resetenameChatroomTargerStr();
+    user.removeSearchUser();
   };
 
   _onEnter = e => {

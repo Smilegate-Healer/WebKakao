@@ -39,14 +39,14 @@ class LoginPage extends React.Component {
         email,
         password
       })
-      .then((success) => {
-        if(success === false) {
-          alert("이메일과 비밀번호를 확인해주세요.")
-        }   
-      })
-      .catch(() => {
-        alert("서버와 연결할 수 없습니다. 잠시후 다시 요청해주세요.")
-      });
+        .then((success) => {
+          if (success === false) {
+            alert("이메일과 비밀번호를 확인해주세요.")
+          }
+        })
+        .catch(() => {
+          alert("서버와 연결할 수 없습니다. 잠시후 다시 요청해주세요.")
+        });
     }
   };
 
@@ -74,11 +74,11 @@ class LoginPage extends React.Component {
     const { signupEmail, signupPassword, signupPasswordAgain, name }
       = this.state
 
-    if(signupEmail === '' || signupPassword === ''
+    if (signupEmail === '' || signupPassword === ''
       || signupPasswordAgain === ''
       || name === '') alert("모든 입력칸을 채워주세요.")
-    
-    if(signupPassword !== signupPasswordAgain) {
+
+    if (signupPassword !== signupPasswordAgain) {
       alert("비밀번호를 확인해주세요.")
     }
 
@@ -180,12 +180,12 @@ class LoginPage extends React.Component {
         name: resetName
       }
       this.props.stores.user.resetPassword(data)
-      .then(() => {
-        alert("비밀번호가 초기화되었습니다. 이메일로 전송된 임시 비밀번호로 로그인 후 비밀번호를 변경하세요.");
-        this._handleModalClose()
-      }).catch(() => {
-        alert("회원 정보를 확인 후 다시 시도해주세요.")
-      });
+        .then(() => {
+          alert("비밀번호가 초기화되었습니다. 이메일로 전송된 임시 비밀번호로 로그인 후 비밀번호를 변경하세요.");
+          this._handleModalClose()
+        }).catch(() => {
+          alert("회원 정보를 확인 후 다시 시도해주세요.")
+        });
     }
   }
 
@@ -200,15 +200,15 @@ class LoginPage extends React.Component {
         <DialogTitle id="form-dialog-title">
           {
             this.state.isPasswordReset
-            ? "Reset password"
-            : "Sign up"
+              ? "Reset password"
+              : "Sign up"
           }
         </DialogTitle>
-          {
-            this.state.isPasswordReset
+        {
+          this.state.isPasswordReset
             ? this._renderResetPasswordContent()
             : this._renderSingupContent()
-          }
+        }
       </Dialog>
     );
   };

@@ -857,6 +857,8 @@ export default class Chatroom {
                   res.data.param.chatroom_idx
                 )
               );
+              debugger;
+              // user_info.
               res.data.param.user_list.push(user_info);
             }
           }
@@ -874,7 +876,6 @@ export default class Chatroom {
       .catch(err => {
         console.log(err);
       });
-      this.root.view.searchUserList = null;
   };
 
   @action getChatroomIdx = chatroom_idx => {
