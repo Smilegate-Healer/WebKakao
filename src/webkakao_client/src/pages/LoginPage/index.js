@@ -39,7 +39,13 @@ class LoginPage extends React.Component {
         email,
         password
       })
-      .then(() => {
+      .then((success) => {
+        if(success === false) {
+          alert("이메일과 비밀번호를 확인해주세요.")
+        }   
+      })
+      .catch(() => {
+        alert("서버와 연결할 수 없습니다. 잠시후 다시 요청해주세요.")
       });
     }
   };
@@ -70,10 +76,10 @@ class LoginPage extends React.Component {
 
     if(signupEmail === '' || signupPassword === ''
       || signupPasswordAgain === ''
-      || name === '') alert("Fill the form")
+      || name === '') alert("모든 입력칸을 채워주세요.")
     
     if(signupPassword !== signupPasswordAgain) {
-      alert("Password is not same")
+      alert("비밀번호를 확인해주세요.")
     }
 
     this.props.stores.user.signUp({
@@ -82,11 +88,11 @@ class LoginPage extends React.Component {
       name
     })
       .then(() => {
-        alert("Success!")
+        alert("회원가입에 성공하였습니다.")
         this._handleModalClose()
       })
       .catch(() => {
-        alert("Fail!")
+        alert("실패하였습니다.")
       })
   }
 

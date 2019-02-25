@@ -81,30 +81,32 @@ export default class Chatroom {
    * Using long polling
    */
   @action updateWholeChatroomList = () => {
-    const chatroomIdxList = this.root.chatroom.getChatroomIdxList();
-    if(this.pollingCanceler === null) {
-      this.pollingCanceler = axios.CancelToken.source()
-    }
+    if(this.root.user.authorizedAxios) {
+      const chatroomIdxList = this.root.chatroom.getChatroomIdxList();
+      if(this.pollingCanceler === null) {
+        this.pollingCanceler = axios.CancelToken.source()
+      }
 
-    this.root.user.authorizedAxios
-      .post("http://localhost:8082/message/longpolling", {
-        user_idx: this.root.user.userInfo.user_idx,
-        rooms: chatroomIdxList,
-      }, {
-        cancelToken: this.pollingCanceler.token
-      })
-      .then(res => {
-        if (res.data.resultCode === 0) {
-          // alert(res.data.chatroom_idx + ' : ' + res.data.last_msg_idx + ' : ' + res.data.last_msg);
-          this.updatePollingdata(res.data);
-        }
-        return this.root.chatroom.updateWholeChatroomList();
-      })
-      .catch(err => {
-        console.log(err);
-        setTimeout(() => this.updateWholeChatroomList(), 10000);
-        // return this.root.chatroom.updateWholeChatroomList();
-      });
+      this.root.user.authorizedAxios
+        .post("/message/longpolling", {
+          user_idx: this.root.user.userInfo.user_idx,
+          rooms: chatroomIdxList,
+        }, {
+          cancelToken: this.pollingCanceler.token
+        })
+        .then(res => {
+          if (res.data.resultCode === 0) {
+            // alert(res.data.chatroom_idx + ' : ' + res.data.last_msg_idx + ' : ' + res.data.last_msg);
+            this.updatePollingdata(res.data);
+          }
+          return this.root.chatroom.updateWholeChatroomList();
+        })
+        .catch(err => {
+          console.log(err);
+          setTimeout(() => this.updateWholeChatroomList(), 10000);
+          // return this.root.chatroom.updateWholeChatroomList();
+        });
+    }
   };
 
   @action cancelPolling = () => {
@@ -243,7 +245,7 @@ export default class Chatroom {
     };
 
     this.root.user.authorizedAxios
-      .post("http://localhost:8081/api/chatroom/request", reqData)
+      .post("/api/chatroom/request", reqData)
       .then(res => {
         if (res.data.resultCode === 0) {
           res.data.param["user_list"] = [];
@@ -296,7 +298,7 @@ export default class Chatroom {
       this.startLoading();
       return new Promise((resolve, reject) => {
         this.root.user.authorizedAxios
-          .post("http://localhost:8081/api/chatroom/message/scroll", reqData)
+          .post("/api/chatroom/message/scroll", reqData)
           .then(res => {
             if (res.data.resultCode === 0) {
               resolve(res.data.param);
@@ -360,7 +362,7 @@ export default class Chatroom {
     };
 
     this.root.user.authorizedAxios
-      .post("http://localhost:8081/api/chatroom/message", reqData)
+      .post("/api/chatroom/message", reqData)
       .then(res => {
         if (res.data.resultCode === 0) {
           const responseMsg = res.data.param.data;
@@ -403,7 +405,7 @@ export default class Chatroom {
 
       this.isConnecting = true;
 
-      const sock = new SockJS("http://localhost:8080/chat");
+      const sock = new SockJS("/chat");
       this.stompClient = Stomp.over(sock, {
         heartbeat: false
       });
@@ -562,7 +564,7 @@ export default class Chatroom {
     const { authorizedAxios } = this.root.user;
     console.log(file);
     authorizedAxios
-      .post("http://localhost:8083/upload", {
+      .post("/upload", {
         sender_idx: this.root.user.userInfo.user_idx,
         chatroom_idx: chatroomId,
         fileType: "p",
@@ -574,7 +576,7 @@ export default class Chatroom {
         formData.append("file", file);
         const uploadUrl = res.data.param.uploadUrl;
         authorizedAxios
-          .post("http://localhost:8083" + uploadUrl, formData, {
+          .post(uploadUrl, formData, {
             header: {
               "Content-Type": "multipart/form-data"
             }
@@ -711,7 +713,7 @@ export default class Chatroom {
       chatroom_name: name
     };
     this.root.user.authorizedAxios
-      .post("http://localhost:8081/api/chatroom/rename", data)
+      .post("/api/chatroom/rename", data)
       .then(res => {
         if (res.data.resultCode === 0) {
           this.setNameChatroom(
@@ -762,7 +764,7 @@ export default class Chatroom {
       chatroom_idx: this.root.view.selectedChatroom
     };
     this.root.user.authorizedAxios
-      .post("http://localhost:8081/api/chatroom/checkin/users", reqData)
+      .post("/api/chatroom/checkin/users", reqData)
       .then(res => {
         if (res.data.resultCode === 0) {
           const chatroomList = this.root.chatroom.chatroomList;
@@ -796,7 +798,7 @@ export default class Chatroom {
       user_idx: this.root.user.userInfo.user_idx
     };
     this.root.user.authorizedAxios
-      .post("http://localhost:8081/api/chatroom/checkout", reqData)
+      .post("/api/chatroom/checkout", reqData)
       .then(res => {
         if (res.data.resultCode === 0) {
           const chatroomList = this.root.chatroom.chatroomList;
@@ -843,7 +845,7 @@ export default class Chatroom {
     };
 
     this.root.user.authorizedAxios
-      .post("http://localhost:8081/api/chatroom/request/users", reqData)
+      .post("/api/chatroom/request/users", reqData)
       .then(res => {
         if (res.data.resultCode === 0) {
           res.data.param["user_list"] = [];

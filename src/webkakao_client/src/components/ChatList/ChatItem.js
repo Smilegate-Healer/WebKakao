@@ -72,7 +72,7 @@ class ChatItem extends React.Component {
     const { chat } = this.props
 
     return (
-      <img className="media" src={"http://localhost:8083" + chat.msg} alt={chat.msg} />
+      <img className="media" src={chat.msg} alt={chat.msg} />
     )
 
   }
@@ -96,7 +96,7 @@ class ChatItem extends React.Component {
       <div>
         <Typography>
           <a 
-            href={`http://localhost:8083` + url}
+            href={url}
             download
             className="link"
           >

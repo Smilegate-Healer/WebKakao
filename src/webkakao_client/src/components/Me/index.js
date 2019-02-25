@@ -18,7 +18,7 @@ class Me extends React.Component {
       <img
         className="profile"
         alt="profile"
-        src={profile_img ? `http://localhost:8083/profile/${profile_img}` : DefaultProfileImg} 
+        src={profile_img ? `/profile/${profile_img}` : DefaultProfileImg} 
       />
     )
   }

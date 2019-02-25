@@ -10,7 +10,7 @@ export default class ProfileImage extends React.Component {
       <img
         className={`profile ${this.props.className}`}
         alt="profile"
-        src={image ? `http://localhost:8083/profile/${image}` : DefaultProfileImg} 
+        src={image ? `/profile/${image}` : DefaultProfileImg} 
       /> 
     )
   }

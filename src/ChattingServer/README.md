@@ -2,6 +2,8 @@
 
 WebSocket 과 Redis(Pub/Sub) 활용한 채팅 서버
 
+* STOMP over SockJs
+* Redisson
 
 
 ## Client send a message to the server
@@ -31,9 +33,12 @@ chatroomInfo로 key값을 하는 Redis의 HashValue
 {
   chatroomInfo: [
     {
-      {chatroom_id}: {
+      {chatroom_id}: {/Users/zeroho/Projects/Smilegate WinterDevCamp/team/WebKakao/src/fileserver/README.md
         object_id: /* MongoDB에 저장되는 Message block 의 키 값*/,
         last_msg_idx: /*마지막으로 전달된 메시지의 인덱스 값*/
+        last_msg: 마지막 메시지,
+        timestamp: 마지막 메시지의 업데이트 타임,
+        msg_type: 메시지 타입
       }
     },
   ...
@@ -51,10 +56,10 @@ object_id는 앞으로 Mongo에 메시지들을 저장할 키를 나타냄으로
 빠르게 이전 메시지들을 가져올 것으로 기대된다.
 
 
-object_id로 key값을 하는 Redis의 List
+chatroom_id로 key값을 하는 Redis의 List
 ```json
 {
-  {object_id}: [
+  [chatroom_id]: [
     {
       sender: /* 메시지의 보낸이 id */,
       msg: /* 메시지 */,
@@ -76,4 +81,39 @@ object_id로 key값을 하는 Redis의 List
 | "p" | 사진 photo |
 | "v" | 동영상 video |
 | "f" | 사진 동영상 외의 파일 |
+| "i" | 초대, 나가기 이벤트 |
+| "s" | 실시간 채팅 요청하는 경우 |
+| "ns" | 실시간 채팅중 새로운 사람이 채팅방을 읽을경우 발생하는 이벤트 |
+| "us" | 실시간 채팅중 한 명이 실시간 채팅을 그만 두는 이벤트 |
+
+
+## Messages
+
+### Case 1: 실시간 채팅 요청
+사용자는 *Subscribe*을 통해 선택된 채팅방의 실시간 채팅을 요청한다.
+서버는 이 Subscribe 이벤트를 받으면 사용자에게 Redis에 저장된 현재 실시간 채팅중인 사용자의 목록을 전달한다.
+
+### Case 2: 실시간 채팅 중 새로운 사용자 참여
+기존의 실시간 채팅을 이용중이던 사용자는 새로운 사용자가 실시간 채팅에 참여한것이므로, *"ns"* 메시지를 전달한다.
+
+### Case 3: 실시간 채팅 중 참여자가 나가는 경우
+참여하고있던 사용자가 나갔으므로 *"us"* 메시지를 채팅방에 전달한다. 
+
+### Case 4: 실시간 채팅 종료
+이는 *Unsubscribe* 이벤트 이므로 서버는 Redis에서 참여중인 사용자 목록에서 제거하고 Case3을 발생시킨다.
+
+### Case 5: Unsubscribe 이벤트 없는 채팅 종료
+이는 Websocket 연결이 끊어진 것이므로, Case 4와 같이 동일하게 처리한다.
+
+### Thread or Multiple Application
+한 어플리케시연 내에서의 Thread 혹은 다중 어플리케이션이 Redis를 동시에 접근하는 일이 자주 발생한다.
+채팅서버에서 동시에 접근하여 처리하는 경우 문제가 발생하는 지점은
+*사용자로 부터 채팅을 받아 인덱스를 부여하는 과정*이다
+
+Redis에 에 저장된 채팅방 정보 중 가장 마지막 인덱스에 +1을 하고 채팅방 정보를 업데이트하는 과정이기 때문에, 동시성이 문제가된다.
+
+따라서 이부분에 Redisson Lock인 RLock을 사용하여 동기화 문제를 해결한다.
+
+RLock은 key 기반으로 작동하므로, 채팅방별 key를 활용하여 lock이 일어난다. 따라서, 채팅방별로 락이 일어나기때문에 lock에 의한 전체 채팅방에 영향은 적을것으로 예상된다. 
+
 

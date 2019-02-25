@@ -1,7 +1,7 @@
 const SockJS = require("sockjs-client")
 const Stomp = require("webstomp-client")
 
-const sock = new SockJS("http://localhost:8000/chat")
+const sock = new SockJS("/chat")
 const stompClient = Stomp.over(sock, {
   heartbeat: false
 })

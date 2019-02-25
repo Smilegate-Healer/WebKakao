@@ -23,7 +23,7 @@ class MemberItem extends React.Component {
         alt="profile"
         src={
           profile_img
-            ? "http://localhost:8083/profile/" + profile_img
+            ? profile_img
             : DefaultProfileImg
         } 
       />

@@ -1,15 +1,6 @@
 import { observable, action } from 'mobx';
 import axios from 'axios'
 
-const dummyUser = {
-  user_idx: 2,
-  name: "조영호",
-  profile_img: "6",
-  access_token: 'i am token',
-  status_msg: "hi",
-  email: "email"
-}
-
 export default class User {
   _domain = "http://localhost"
   _axiosHeaders = {
@@ -20,7 +11,7 @@ export default class User {
   @observable authorizedAxios = null
   @observable friendAxios = null
 
-  @observable isLogin = false;  // test
+  @observable isLogin = false;  
   @observable userInfo = null
   @observable friendList = null
 
@@ -30,7 +21,6 @@ export default class User {
   interval = null
 
   constructor(root) {
-    // from index
     this.root = root;
   }
 
@@ -41,29 +31,29 @@ export default class User {
 
   @action signIn = (data) => {
     return new Promise((resolve, reject) => {
-      axios.post("http://localhost:8084/auth/signin", data).then(res => {
+      axios.post("/auth/signin", data).then(res => {
         console.log(res)
         if (res.data.resultCode === 0) {
           this.userInfo = res.data.param;
           sessionStorage.setItem("user", JSON.stringify(this.userInfo))
-          resolve()
+          resolve(true)
           this.doAfterSignIn()
+        } else if(res.data.resultCode === 100) {
+          resolve(true)
         }
-        reject()
       }).catch(err => {
         console.error(err)
-        reject()
+        reject(err)
       })
     })
   }
 
   @action doAfterSignIn = () => {
     this.authorizedAxios = axios.create({
-      baseURL: this._domain,
+      // baseURL: "http://localhost",
       timeout: 30000,
       headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
+        ...this._axiosHeaders,
         "access_token": this.userInfo.access_token
       }
     })
@@ -75,23 +65,20 @@ export default class User {
   @action signUp = (data) => {
     console.debug(data)
     return new Promise((resolve, reject) => {
-      axios.post("http://localhost:8084/auth/signup", data).then(res => {
+      axios.post("/auth/signup", data).then(res => {
         console.log(res)
         if (res.data.resultCode === 0) {
           resolve()
-          alert("회원가입 완료!")
-          // TODO:
         }
       }).catch(err => {
         console.error(err)
-        alert("회원가입 실패!")
         reject()
       })
     })
   }
 
   @action resetPassword = (data) => {
-    this.authorizedAxios.post("http://localhost:8084/auth/password/reset", data)
+    this.authorizedAxios.post("/auth/password/reset", data)
       .then(res => {
         console.log(res)
         if (res.data.resultCode === 0) {
@@ -117,7 +104,7 @@ export default class User {
   }
 
   @action getFriendList = () => {
-    this.authorizedAxios.post("http://localhost:8081/api/friend/list", { // TODO: REST???
+    this.authorizedAxios.post("/api/friend/list", { 
       user_idx: this.userInfo.user_idx
     })
       .then(res => {
@@ -130,7 +117,7 @@ export default class User {
   }
 
   @action getChatroomList = () => {
-    this.authorizedAxios.post('http://localhost:8081/api/chatroom/list', {
+    this.authorizedAxios.post('/api/chatroom/list', {
       user_idx: this.userInfo.user_idx
     })
       .then(res => {
@@ -138,7 +125,6 @@ export default class User {
         if (res.data.resultCode === 0) {
           this.root.chatroom.initChatroomList(res.data.param.list)
           this.root.chatroom.updateWholeChatroomList();
-          this.isLogin = true; // TODO: ?
         }
       })
       .catch(err => console.error(err))
@@ -155,7 +141,7 @@ export default class User {
    */
   @action
   requestFriend = (data) => {
-    this.authorizedAxios.post("http://localhost:8081/api/friend/request", data)
+    this.authorizedAxios.post("/api/friend/request", data)
       .then(res => {
         console.log(res)
         if (res.data.resultCode === 0) {
@@ -180,7 +166,7 @@ export default class User {
    */
   @action
   updateFriend = (data) => {
-    this.authorizedAxios.post("http://localhost:8081/api/friend/status", data)
+    this.authorizedAxios.post("/api/friend/status", data)
       .then(res => {
         console.log(res)
         if (res.data.resultCode === 0) {
@@ -200,7 +186,7 @@ export default class User {
    */
   @action
   searchFriend = (data) => {
-    this.authorizedAxios.post("http://localhost:8081/api/friend/search", data)
+    this.authorizedAxios.post("/api/friend/search", data)
       .then(res => {
         console.log(res)
         if (res.data.resultCode === 0) {
@@ -227,7 +213,7 @@ export default class User {
    */
   @action
   getUserInfo = (data) => {
-    this.authorizedAxios.post("http://localhost:8081/api/user/info", data)
+    this.authorizedAxios.post("/api/user/info", data)
       .then(res => {
         console.log(res)
         if (res.data.resultCode === 0) {
@@ -325,7 +311,7 @@ export default class User {
       var formData = new FormData()
       formData.append("file", image)
 
-      this.authorizedAxios.post("http://localhost:8083/profile/new/" + this.userInfo.user_idx, 
+      this.authorizedAxios.post("/profile/new/" + this.userInfo.user_idx, 
         formData, {
           header: {
             "Content-Type": "multipart/form-data"

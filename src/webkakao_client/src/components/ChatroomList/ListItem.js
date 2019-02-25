@@ -35,7 +35,7 @@ class ListItem extends React.Component {
     const getImg = (logo, classname) => {
       return (
         <img
-          src={logo ? "http://localhost:8083/profile/" + logo : DefaultProfileImg}
+          src={logo ? `/profile/${logo}` : DefaultProfileImg}
           alt="chatroomLogo"
           className={`logo ${classname ? classname : ''}`}
         />
