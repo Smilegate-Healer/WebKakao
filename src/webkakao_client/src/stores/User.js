@@ -91,14 +91,20 @@ export default class User {
   }
 
   @action resetPassword = (data) => {
-    this.authorizedAxios.post("http://localhost:8084/auth/password/reset", data)
+    debugger;
+    return new Promise((resolve, reject) => {
+    axios.post("http://localhost:8084/auth/password/reset", data)
       .then(res => {
         console.log(res)
         if (res.data.resultCode === 0) {
-          // TODO:
+          resolve()
+        } else {
+          reject();
         }
       })
-      .catch(err => console.error(err))
+      .catch(err => {console.error(err);
+        reject()})
+    })
   }
 
   @action logout = () => {

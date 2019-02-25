@@ -167,7 +167,21 @@ class LoginPage extends React.Component {
   }
 
   _onResetPasswordClick = event => {
-
+    debugger;
+    const { resetEmail, resetName } = this.state;
+    if (resetEmail !== "" && resetName !== "") {
+      const data = {
+        email: resetEmail,
+        name: resetName
+      }
+      this.props.stores.user.resetPassword(data)
+      .then(() => {
+        alert("비밀번호가 초기화되었습니다. 이메일로 전송된 임시 비밀번호로 로그인 후 비밀번호를 변경하세요.");
+        this._handleModalClose()
+      }).catch(() => {
+        alert("회원 정보를 확인 후 다시 시도해주세요.")
+      });
+    }
   }
 
 
