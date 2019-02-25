@@ -11,6 +11,7 @@
 	<groupId>com.webkakao.api</groupId>
 	<artifactId>APIServer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
 	<name>APIServer</name>
 	<description>Demo project for Spring Boot</description>
 
