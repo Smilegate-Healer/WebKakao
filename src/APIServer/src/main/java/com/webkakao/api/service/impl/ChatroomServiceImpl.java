@@ -141,10 +141,20 @@ public class ChatroomServiceImpl implements ChatroomService {
 
 		List<ChatroomInfo> list = chatroomMapper.getChatroomList(param);
 		GetChatroomListParam resultParam = new GetChatroomListParam();
+		
 		resultParam.setList(list);
-
+		
+		if(list != null)  {
+			for(int i=0; i<list.size(); i++) {
+				long last_read = redisService.getLastMsgIdx(list.get(i).getChatroom_idx(), param.getUser_idx());
+				list.get(i).setLast_read_msg_idx(last_read);
+			}
+		}
+		
 		List<ChatroomUserList> user_list = chatroomMapper.getChatroomUserList(param.getUser_idx());
+		
 		resultParam.setChatroomUserList(user_list, param.getUser_idx());
+		
 
 		// TODO: Get Last Msg
 		redisService.getLastMsg(list);
