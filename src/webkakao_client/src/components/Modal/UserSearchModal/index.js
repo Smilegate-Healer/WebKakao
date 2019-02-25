@@ -6,35 +6,17 @@ import { InputBase, Dialog, DialogContent, DialogTitle } from '@material-ui/core
 import SearchBtn from './SearchBtn';
 import CloseBtn from './CloseBtn';
 import InvalidUser from './InvalidUser';
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-};
+import { isolateGlobalState } from 'mobx/lib/internal';
 
 @inject('stores')
 @observer
 class UserSearchModal extends React.Component {
-
-  componentDidMount() {
-    Modal.setAppElement('body');
-  }
 
   openModal() {
     const { view } = this.props.stores
     view.showUserSearchModal();
   }
 
-  afterOpenModal = () => {
-    // references are now sync'd and can be accessed.
-    // alert("after open modal");
-  }
 
   closeModal = () => {
     const { view, user } = this.props.stores
