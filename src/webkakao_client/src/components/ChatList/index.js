@@ -15,15 +15,11 @@ class ChatList extends React.Component {
   _scrollToBottom = () => {
     this.div.scrollTop = this.div.scrollHeight // to scroll bottom
   }
-  componentWillUpdate() {
-    console.log(this.div.scrollTop) 
-    console.log(this.div.scrollHeight) 
-    this.div.onscroll = (e) => console.log(this.div.scrollTop,  this.div.scrollHeight)
-  }
+  
 
 
   componentDidUpdate = () => {
-    console.log('componentdidupdate')
+  
     const { chatroom, view } = this.props.stores;
     chatroom.endLoading();
     const check = view.scrollCheck();
@@ -36,13 +32,11 @@ class ChatList extends React.Component {
     }
 
     if(this.state.scrollLoad && this.div.scrollHeight > this.state.beforeLoadScrollHeight) {
-      console.log('scrolload is true')
+      
       this.setState({
         scrollLoad: false
       }, () => {
-        console.log('scroll to back')
-        console.log(this.state)
-        console.log(this.div.scrollHeight)
+        
         this.div.scrollTop = this.div.scrollHeight - this.state.beforeLoadScrollHeight
       })
     }

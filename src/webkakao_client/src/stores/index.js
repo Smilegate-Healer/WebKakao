@@ -58,6 +58,7 @@ class RootStore {
     const userInfo = sessionStorage.getItem("user")
     if(userInfo) {
       this.user.userInfo = JSON.parse(userInfo)
+      this.user.isLogin = true
       this.user.doAfterSignIn()
     } else {
       
