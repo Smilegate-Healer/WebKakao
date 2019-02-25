@@ -564,7 +564,7 @@ export default class Chatroom {
     const { authorizedAxios } = this.root.user;
     console.log(file);
     authorizedAxios
-      .post("/upload", {
+      .post("/file/upload", {
         sender_idx: this.root.user.userInfo.user_idx,
         chatroom_idx: chatroomId,
         fileType: "p",

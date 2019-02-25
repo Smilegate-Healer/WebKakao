@@ -1,10 +1,6 @@
 package com.healer.webkakao.fileserver.model;
 
 import lombok.*;
-import sun.java2d.cmm.Profile;
-
-import javax.websocket.server.ServerEndpoint;
-import java.security.Timestamp;
 
 @Getter
 @Setter
