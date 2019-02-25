@@ -112,7 +112,7 @@ public class RedisService {
 		Map<String, String> map = hash.entries("lastRead_" + chatroom_idx);
 		String idx = map.get(String.valueOf(user_idx));
 		if(idx == null) {
-			return 0;
+			return 1;
 		}
 		return Long.parseLong(idx);
 

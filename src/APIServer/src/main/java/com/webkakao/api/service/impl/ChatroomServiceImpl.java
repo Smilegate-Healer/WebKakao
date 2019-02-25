@@ -357,7 +357,11 @@ public class ChatroomServiceImpl implements ChatroomService {
 			chatroomMapper.checkInChatroom(map);
 
 			resultParam = chatroomMapper.getChatroomInfo(param.getChatroom_idx());
-
+			
+			resultParam.setLast_msg_idx(1);
+			resultParam.setStart_msg_idx(0);
+			resultParam.setLast_read_msg_idx(0);
+			
 			for (int i = 0; i < param.getTo_user_idx().size(); i++) {
 				map.put("user_idx", param.getTo_user_idx().get(i));
 				chatroomMapper.checkInChatroom(map);
