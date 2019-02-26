@@ -364,6 +364,7 @@ export default class Chatroom {
     this.root.user.authorizedAxios
       .post("/api/chatroom/message", reqData)
       .then(res => {
+        debugger;
         if (res.data.resultCode === 0) {
           const responseMsg = res.data.param.data;
           if (!this.chats[chatroom_idx]) {
@@ -531,8 +532,10 @@ export default class Chatroom {
             return
           }
 
-          this.chatroomList[idxOfChatroom2].lastReadReactions[unsubUserId]()
-          delete this.chatroomList[idxOfChatroom2].lastReadReactions[unsubUserId]
+          if(unsubUserId !== this.root.user.userInfo.user_idx) {
+            this.chatroomList[idxOfChatroom2].lastReadReactions[unsubUserId]()
+            delete this.chatroomList[idxOfChatroom2].lastReadReactions[unsubUserId]
+          }
         } else {
           this.chats[chatroomId].data.push(data);
         }

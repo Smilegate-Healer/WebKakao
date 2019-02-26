@@ -2,7 +2,7 @@ import { observable, action } from 'mobx';
 import axios from 'axios'
 
 export default class User {
-  _domain = "http://localhost"
+  _domain = "http://localhost:80"
   _axiosHeaders = {
     "Accept": "application/json",
     "Content-Type": "application/json"

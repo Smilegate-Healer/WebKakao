@@ -70,11 +70,11 @@ class ChatItem extends React.Component {
 
   _renderPhoto = () => {
     const { chat } = this.props
-
+    const indexOfSpace = chat.msg.indexOf(" ")
+    const url = chat.msg.substring(0, indexOfSpace) 
     return (
-      <img className="media" src={chat.msg} alt={chat.msg} />
+      <img className="media" src={`${url}`} alt={chat.msg} />
     )
-
   }
 
   _renderProfile = (profile) => {
@@ -96,7 +96,7 @@ class ChatItem extends React.Component {
       <div>
         <Typography>
           <a 
-            href={url}
+            href={`${window.location.protocol}//${window.location.hostname}${url}`}
             download
             className="link"
           >
@@ -172,14 +172,9 @@ class ChatItem extends React.Component {
   _renderInvite = () => {
     const { chat } = this.props;
     const { user } = this.props.stores;
-    // const user_idxs = chat.msg.trim().split(" ");
     const senderName = user.getNameOnChatroom(chat.sender)
     const users = chat.msg.trim().split("/");
     const user_names = users[1];
-    // let names = '';
-    // for(var i=0; i<user_idxs.length; i++) {
-    //   names = names.concat(user.getNameOnChatroom(+user_idxs[i]) + ' ')
-    // }
     return (<div className="info"><Typography>{senderName} 님이 {user_names} 님을 초대하였습니다.</Typography></div>)
   }
 
@@ -190,16 +185,19 @@ class ChatItem extends React.Component {
 
   render() {
     const { chat } = this.props;
-    if (chat.msg_type === 'm') {
-      if (this.props.isMine) {
-        return this._renderMine();
-      }
-      return this._renderNotMine();
-    }
-    else if(chat.msg_type === 'i') {
-      return this._renderInvite();
-    } else if(chat.msg_type === 'e') {
-      return this._renderExit();
+    const { user_idx } = this.props.stores.user.userInfo
+
+    switch(chat.msg_type) {
+      case "i":
+        return this._renderInvite()
+      case "e":
+        return this._renderExit()
+      default:
+        if(chat.sender === user_idx) {
+          return this._renderMine()
+        } else {
+          return this._renderNotMine()
+        }
     }
   }
 }

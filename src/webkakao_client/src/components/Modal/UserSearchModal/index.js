@@ -6,7 +6,6 @@ import { InputBase, Dialog, DialogContent, DialogTitle } from '@material-ui/core
 import SearchBtn from './SearchBtn';
 import CloseBtn from './CloseBtn';
 import InvalidUser from './InvalidUser';
-import { isolateGlobalState } from 'mobx/lib/internal';
 
 @inject('stores')
 @observer

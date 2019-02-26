@@ -46,9 +46,20 @@ class EditProfilePage extends React.Component {
   };
 
   _handleClose = () => {
+    this.setState({
+      dialog: false,
+      disable: false,
+      changePassword: false,
+      input: ''
+    })
+    
+    
+  }
+
+  _handleApply = (e) => {
+    const { input } = this.state;
     const { user } = this.props.stores;
     if (this.state.changingPassword === true) {
-      const { input } = this.state;
       if (input !== "") {
         this.setState({
           disable: true
@@ -59,15 +70,13 @@ class EditProfilePage extends React.Component {
             this.setState({
               disable: false
             })
-            this.setState({
-              dialog: false,
-              isChagningPassword: false,
-              input: ''
-            })
+            this._handleClose()
           }).catch(() => {
             alert("비밀번호 변경 오류")
           });
       }
+    } else {
+      // TODO: statsu message
     }
   }
 
@@ -151,7 +160,7 @@ class EditProfilePage extends React.Component {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={this._handleClose}>
+            <Button onClick={this._handleApply}>
               취소
             </Button>
             <Button disabled={this.state.disable} onClick={this._handleClose}>
