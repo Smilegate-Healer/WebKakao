@@ -29,13 +29,13 @@ public class ProfileController {
     return profileService.getProfileImage(userId);
   }
 
-  @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-  public APIResponseWrapper getProfilesList(@PathVariable long userId) {
-    return profileService.getProfilesList(userId);
-  }
+//  @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
+//  public APIResponseWrapper getProfilesList(@PathVariable long userId) {
+//    return profileService.getProfilesList(userId);
+//  }
 
   @RequestMapping(value = "/{profileId}", method = RequestMethod.GET)
-  public ResponseEntity<Resource> getProfileById(@PathVariable long profileId) {
+  public ResponseEntity<Resource> getProfileById(@PathVariable("profileId") long profileId) {
     return profileService.getProfileImageById(profileId);
   }
 }

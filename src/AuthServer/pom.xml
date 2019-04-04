@@ -90,7 +90,12 @@
 			<version>1.18.2</version>
 			<scope>provided</scope>
 		</dependency>
-
+		<!-- exclude tomcat-jdbc, Spring Boot will use HikariCP automatically -->
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>2.6.0</version>
+		</dependency>
 		<!-- Redis -->
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis -->
 		<dependency>
@@ -107,14 +112,21 @@
 			<groupId>it.ozimov</groupId>
 			<artifactId>embedded-redis</artifactId>
 			<version>0.7.2</version>
-			<!--<scope>test</scope>-->
+			<!--<scope>test</scope> -->
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.2</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- tomcat-jdbc -->
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-jdbc</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
