@@ -70,7 +70,7 @@
 
 </a>  
   
-  ![JOB](data/sample.mp4)
+![demoVideo](data/sample.mp4)
 
   
 [맨 위로 가기](#top)
