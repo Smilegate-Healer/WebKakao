@@ -69,9 +69,8 @@
 ### 4. 데모 영상
 
 </a>  
-  
-![demoVideo](data/sample.mp4)
 
+[![Watch the video](https://img.youtube.com/vi/sjIW45YZQ0U/0.jpg)](https://www.youtube.com/watch?v= sjIW45YZQ0U)
   
 [맨 위로 가기](#top)
 </br>
