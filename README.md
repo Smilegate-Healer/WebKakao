@@ -70,7 +70,8 @@
 
 </a>  
   
-<iframe width="560" height="315" src="data/sample.mp4" frameborder="0" allowfullscreen></iframe>
+  ![JOB](data/sample.mp4)
+
   
 [맨 위로 가기](#top)
 </br>
