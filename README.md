@@ -17,8 +17,10 @@
 
 </br>
 
-<a name="about_project">
+<a name="about_project">  
+
 ### 1. 프로젝트 설명
+
 </a>
   
 ##### 1-1. 프로젝트 기획
@@ -36,7 +38,9 @@
 
 
 <a name="functions">  
+
 ### 2. WebKakao 기능
+
 </a>
 
  - 실기간 채팅
@@ -49,8 +53,10 @@
 [맨 위로 가기](#top)
 </br>
   
-<a name="architecture">
+<a name="architecture">  
+
 ### 3. 아키텍처
+
 </a>
   
 ![Architecture](data/architecture.png)  
@@ -58,17 +64,21 @@
 [맨 위로 가기](#top)
 </br>
   
-<a name="demo_video">
+<a name="demo_video">  
+
 ### 4. 데모 영상
-</a>
+
+</a>  
   
 <iframe width="560" height="315" src="data/sample.mp4" frameborder="0" allowfullscreen></iframe>
   
 [맨 위로 가기](#top)
 </br>
   
-<a name="performance_test">
+<a name="performance_test">  
+
 ### 5. 성능 테스트
+
 </a>  
 
  - 테스트 환경
@@ -106,8 +116,10 @@
 [맨 위로 가기](#top)
 </br>
   
-<a name="docs_link">
+<a name="docs_link">  
+  
 ### 6. 문서 링크
+
 </a>
   
 #### Authorization Server
