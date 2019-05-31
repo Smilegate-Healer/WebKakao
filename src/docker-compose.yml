@@ -1,0 +1,85 @@
+version: '3'
+services:
+  chatting: &server
+    container_name: chatting
+    depends_on:
+      - mysql
+      - redis
+      - mongo
+    build: ChattingServer
+    environment: 
+      SPRING_APPLICATION_JSON: '{
+        "server.port": "8080",
+        "spring.datasource.driver-class-name": "com.mysql.cj.jdbc.Driver",
+        "spring.datasource.url": "jdbc:mysql://mysql:3306/webkakao?serverTimezone=Asia/Seoul",
+        "spring.datasource.username": "root",
+        "spring.redis.host": "redis",
+        "spring.redis.port": "6379",
+        "spring.data.mongodb.uri": "mongodb://mongo:27017",
+        "spring.data.mongodb.database": "chatroom"
+      }'
+    networks: 
+      - frontend
+      - backend
+
+  auth: 
+    <<: *server
+    container_name: auth
+    build: AuthServer
+
+  api:
+    <<: *server
+    container_name: api
+    build: APIServer
+
+  nginx:
+    container_name: api_gateway
+    build:
+      context: .
+      dockerfile: ./Dockerfile.nginx
+      args:
+        conf: ./conf
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    networks:
+      - frontend
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    ports:
+      - 3306:3306
+    networks:
+      - backend
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=smilegate
+      - MYSQL_DATABASE=webkakao
+    volumes:
+      - ./_data:/var/lib/mysql # database path
+      - ./conf/webkakao.sql:/docker-entrypoint-initdb.d/webkakao.sql
+  
+  redis:
+    image: zeroho/auth_redis:latest
+    container_name: redis
+    ports:
+      - 6379:6379
+    networks:
+      - backend
+  
+  mongo:
+    image: zeroho/mongo:latest
+    container_name: mongo_compose
+    ports:
+      - 27017:27017
+    networks:
+      - backend
+
+
+networks: 
+  backend:
+    driver: bridge
+  frontend:
+    driver: bridge
