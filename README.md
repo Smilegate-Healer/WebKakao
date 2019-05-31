@@ -13,6 +13,7 @@
 #### [4. 데모 영상](#demo_video)
 #### [5. 성능 테스트](#performance_test)
 #### [6. 문서 링크](#docs_link)
+#### [7. Docker](#docker)
 
 
 </br>
@@ -131,7 +132,29 @@
 #### MongoDB Data Type
 #### MySQL Data Type
 #### Redis Data Type
-  
+
+[맨 위로 가기](#top)
+</br>
+
+<a name="docker">
+
+#### 7. Docker
+
+실행방법
+각 Project 빌드 후
+`docker-compose up -d`
+
+기존의 Database를 사용하기 위해서는 DB path를 수정
+```
+# docker-compose.yml
+...
+  mysql: 
+    ...
+    volumes:
+      ...
+      <DB path>:/var/lib/mysql
+```
+
 [맨 위로 가기](#top)
 </br>
 
