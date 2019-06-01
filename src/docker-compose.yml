@@ -31,6 +31,11 @@ services:
     <<: *server
     container_name: api
     build: APIServer
+    
+  polling:
+    <<: *server
+    container_name: polling
+    build: MessagePollingServer
 
   nginx:
     container_name: api_gateway
