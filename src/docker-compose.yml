@@ -37,6 +37,13 @@ services:
     container_name: polling
     build: MessagePollingServer
 
+  file:
+    <<: *server
+    container_name: file
+    build: fileserver
+    volumes:
+      - ./_data/files:/files
+
   nginx:
     container_name: api_gateway
     build:
