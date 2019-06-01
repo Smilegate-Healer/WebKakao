@@ -8,6 +8,7 @@ import com.healer.webkakao.fileserver.response.wrapper.APIResponseWrapper;
 import com.healer.webkakao.fileserver.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URLConnection;
 import java.nio.file.Files;
@@ -25,6 +27,9 @@ import java.nio.file.Paths;
 @Service("fileService")
 @Slf4j
 public class FileServiceImpl implements FileService {
+
+  @Value("${directoryPath}")
+  private String UPLOAD_FOLDER;
 
   @Autowired
   private FileMapper fileMapper;

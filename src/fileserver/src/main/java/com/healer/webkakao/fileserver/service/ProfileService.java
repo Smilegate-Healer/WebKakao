@@ -7,8 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ProfileService {
 
-  String ROOT = "/Users/zeroho/Downloads/temp/profiles/";
-
   APIResponseWrapper saveProfileImageAndUpdate(long userId, MultipartFile image);
 
   ResponseEntity<Resource> getProfileImage(long userId);

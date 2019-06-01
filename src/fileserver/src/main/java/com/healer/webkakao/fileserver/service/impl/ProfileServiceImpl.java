@@ -7,6 +7,7 @@ import com.healer.webkakao.fileserver.response.wrapper.APIResponseWrapper;
 import com.healer.webkakao.fileserver.service.ProfileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
@@ -24,6 +25,9 @@ import java.util.List;
 @Service("profileService")
 @Slf4j
 public class ProfileServiceImpl implements ProfileService {
+
+  @Value("${directoryPath}/profiles")
+  private String ROOT;
 
   @Autowired
   private ProfileMapper profileMapper;

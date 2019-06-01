@@ -3,6 +3,7 @@ import com.healer.webkakao.fileserver.model.FileModel;
 import com.healer.webkakao.fileserver.model.request.FileUploadCompleteReqModel;
 import com.healer.webkakao.fileserver.model.request.FileUploadReqModel;
 import com.healer.webkakao.fileserver.response.wrapper.APIResponseWrapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,8 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Path;
 
 public interface FileService {
-
-  String UPLOAD_FOLDER = "/Users/zeroho/Downloads/temp/";
 
   APIResponseWrapper uploadRequest(FileUploadReqModel req);
 
