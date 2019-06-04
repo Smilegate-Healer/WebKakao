@@ -1,8 +1,4 @@
 FROM openjdk:8-jdk-alpine
-
-# Build java project
-RUN ./gradlew build -x test
-
 VOLUME /tmp
 ARG DEPENDENCY=./build/dependency
 COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
