@@ -152,18 +152,26 @@
 
 실행방법
 각 Project 빌드 후
+
 `docker-compose up -d`(daemon)
+
+
 상황에 맞게 docker-compose.yml 변경하여 사용
+
 `docker-compose -f "filepath" up -d`
 
 **Maven project**
+
+
 maven 설치 후
 `mvn package`
 
 **Gradle project**
+
 `./gradlew build`
 
 **Node project(React)**
+
 `npm run-script build`
 
 기존의 Database를 사용하기 위해서는 DB path를 수정
