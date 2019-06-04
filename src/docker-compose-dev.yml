@@ -2,11 +2,11 @@ version: '3'
 services:
   chatting: &server
     container_name: chatting
-    image: zeroho/chat:latest
     depends_on:
       - mysql
       - redis
       - mongo
+    build: ChattingServer
     environment: 
       SPRING_APPLICATION_JSON: '{
         "server.port": "8080",
@@ -18,7 +18,6 @@ services:
         "spring.data.mongodb.uri": "mongodb://mongo:27017",
         "spring.data.mongodb.database": "chatroom"
       }'
-      
     networks: 
       - frontend
       - backend
@@ -26,28 +25,32 @@ services:
   auth: 
     <<: *server
     container_name: auth
-    image: zeroho/auth:latest
+    build: AuthServer
 
   api:
     <<: *server
     container_name: api
-    image: zeroho/api:latest
+    build: APIServer
     
   polling:
     <<: *server
     container_name: polling
-    image: zeroho/polling:latest
+    build: MessagePollingServer
 
   file:
     <<: *server
     container_name: file
-    image: zeroho/file:latest
+    build: fileserver
     volumes:
       - ./_data/files:/files
 
   nginx:
     container_name: api_gateway
-    image: zeroho/nginx:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile.nginx
+      args:
+        conf: ./conf
     ports:
       - 80:80
       - 443:443
