@@ -125,7 +125,7 @@
   
 #### Authorization Server
 #### API Server
-#### Chatting Server
+#### [Chatting Server](src/ChattingServer)
 #### Polling Server
 #### File Server
 #### React Client
@@ -138,7 +138,7 @@
 
 <a name="docker">
 
-#### 7. Docker
+### 7. Docker
 
 실행방법
 각 Project 빌드 후
@@ -166,6 +166,7 @@ maven 설치 후
       ...
       <DB path>:/var/lib/mysql
 ```
+
 
 [맨 위로 가기](#top)
 </br>
