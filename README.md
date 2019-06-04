@@ -168,7 +168,7 @@ maven 설치 후
 
 **Gradle project**
 
-`./gradlew build`
+`./gradlew build docker`
 
 **Node project(React)**
 
