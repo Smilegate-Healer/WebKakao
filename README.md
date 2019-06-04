@@ -61,6 +61,16 @@
 </a>
   
 ![Architecture](data/architecture.png)  
+
+
+**기술 스택**
+* Spring Boot + WebSocket(STOMP, SockJS)
+* Redis & pub/sub
+* MySQL
+* MongoDB
+* NginX
+* HAProxy
+* React, MobX, SASS
   
 [맨 위로 가기](#top)
 </br>
