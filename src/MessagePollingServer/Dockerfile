@@ -1,4 +1,6 @@
 FROM openjdk:8-jdk-alpine
+# Build project 
+RUN mvn package 
 VOLUME /tmp
 ARG DEPENDENCY=./target/dependency
 COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib

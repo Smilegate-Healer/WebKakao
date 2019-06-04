@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-alpine
+FROM hypriot/rpi-java
 # Build project 
 RUN mvn package 
 VOLUME /tmp
